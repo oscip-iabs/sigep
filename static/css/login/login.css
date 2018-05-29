@@ -1,0 +1,99 @@
+html, body {
+    height: 100%;
+    margin: 0px;
+    font-family: "helvetica";
+}
+.container-login {
+    height: 100%;
+    background: #f0e68c;
+    display: flex;
+}
+.col-login-6 {
+	height: 100%;
+	width: 70%;
+	background-image: url("https://picsum.photos/1800/1400/?random");
+	background-color: #FAF0E6;
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+}
+img.displayed {
+	width: 200px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: 40%;
+}
+.col-login-4 {
+	height: 100%;
+	width: 30%;
+	background-color: #FFFFFF;
+    box-shadow: -5px 0px 30px #000000;
+    /* box-shadow: -6px 0px 20px #888888; */
+}
+.form-login {
+	margin: 0px 5%;
+	position: absolute;
+	top: 30%;
+}
+.input-login {
+	width: 100%;
+    height: 40px;
+    margin: 10px 0px;
+    font-size: 18px;
+}
+.text-center {
+	text-align: center;
+}
+.header-form {
+	color: #696969;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	font-family: 'Muli', "Helvetica", Arial, sans-serif; 
+}
+
+.alert-error {
+	font-weight: bold;
+	color: red;
+}
+
+.button {
+	display: inline-block;
+	border-radius: 4px;
+	background-color: #00B8D0;
+	border: none;
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 18px;
+	padding: 10px;
+	width: 100%;
+	transition: all 0.5s;
+	cursor: pointer;
+}
+
+.button span {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+}
+
+.button span:after {
+	content: '\00bb';
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	right: -20px;
+	transition: 0.5s;
+}
+
+.button:hover span {
+	padding-right: 25px;
+}
+
+.button:hover span:after {
+	opacity: 1;
+	right: 0;
+}

@@ -1,0 +1,32 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+	<link href="{% static "css/projeto/cadastro_projeto.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_side %}
+	{% include 'projeto/include_page/sidebar_active_projeto.html' %}
+{% endblock %}
+
+{% block name_page %} Cadastro de possibilidade projeto {% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Finalize o cadastro da Possibilidade <small>[{{ obj_projeto.chave }}]</small></h4>
+                    <p class="category">Preencha as abas até que todas elas estejam com o simbolo verde</p>
+                    {% block base_cadastro_completo_menu_tabs %}{% endblock %}
+                </div>
+                <div class="content">
+                    {% block base_cadastro_completo %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

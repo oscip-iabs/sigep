@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Login - IABS</title>
+	<link rel="stylesheet" href="{% static "css/login/login.css" %}">
+
+</head>
+<body>
+
+	<div class="container-login">
+		<div class="col-login-6">
+			<!-- <img src="{% static "img/login/logo-iabs.png" %}" class="displayed"> -->
+			<img src="{% static "img/login/logo-sigep.png" %}" class="displayed">
+		</div>
+		<div class="col-login-4">
+			<div class="form-login">
+				<form method="POST" action="{% url 'usuario:login' %}">
+					{% csrf_token %}
+					<div class="text-center header-form">
+						<h1>Acesso Restrito</h1>
+						{% if login_error %}
+						<div class="alert-error">
+							<small>Senha ou Usuário incorreto</small>
+						</div>
+						{% endif %}
+					</div>
+					<input class="input-login" type="text" name="username">
+					<input class="input-login" type="password" name="password">
+					<!-- <input type="submit" value="Acessar" class="acesso-btn"> -->
+					<button type="submit" class="button acesso-btn style="vertical-align:middle"><span>Acessar</span></button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

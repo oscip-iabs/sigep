@@ -1,0 +1,90 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_side %}
+	{% include 'projeto/include_page/sidebar_active_projeto.html' %}
+{% endblock %}
+
+{% block name_page %} Cadastro de possibilidade projeto {% endblock %}
+
+{% block base_content %}
+
+<form method="POST">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-lg-12 col-col-xs-12">
+			<div class="form-group">
+				<label>Título da Possibilidade de Projeto Descreva o Título/Objetivo da possibilidade:</label>
+				{{formPossibilidade.titulo}}
+			</div>
+		</div>
+		<div class="col-lg-8 col-col-xs-12">
+			<div class="form-group">
+				<label>Instituição financiadora ou possível apoiador</label>
+				{{formPossibilidade.apoiador}}
+			</div>
+		</div>
+		<div class="col-lg-4 col-col-xs-12">
+			<div class="form-group">
+				<label>localização da possibilidade</label>
+				{{formPossibilidade.localizacao_mundial}}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-4 col-col-xs-12">
+			<div class="form-group">
+				<label>Valor Estimado</label>
+				{{formPossibilidade.valor_estimado}}
+			</div>
+		</div>
+		<div class="col-lg-4 col-col-xs-12">
+			<div class="form-group">
+				<label>Periodo para execução em meses</label>
+				{{formPossibilidade.periodo_execucao}}
+			</div>
+		</div>
+		<div class="col-lg-4 col-col-xs-12">
+			<div class="form-group">
+				<label>Prazo limite</label>
+				{{formPossibilidade.prazo_limite}}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12 col-col-xs-12">
+			<div class="form-group">
+				<label>Tema da possibilidade</label>
+				{{formPossibilidade.tema_possibilidade}}
+			</div>
+		</div>
+		
+		<div class="col-lg-12 col-col-xs-12">
+			<div class="form-group">
+				<label>Descrição da possibilidade</label>
+				{{formPossibilidade.descricao}}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12 col-xs-12">
+			<div class="text-center">
+				<button type="submit" class="btn btn-info btn-fill btn-wd">Cadastrar Possibilidade</button>
+			</div>
+		</div>
+	</div>
+
+
+
+</form>
+
+
+
+{% endblock %}

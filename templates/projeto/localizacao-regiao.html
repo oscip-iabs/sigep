@@ -1,0 +1,97 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_side %}
+	<ul class="nav">
+	    <li>
+	        <a href="{% url 'iabs:inicio'%}">
+	            <i class="ti-layout"></i>
+	            <p>Início</p>
+	        </a>
+	    </li>
+	    <li class="active">
+	        <a href="{% url 'projeto:inicio'%}">
+	            <i class="ti-pencil-alt"></i>
+	            <p>Projetos</p>
+	        </a>
+	    </li>
+	    <li class="dropdown">
+	        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	            <i class="ti-bell"></i>
+	            <p>Minhas notificações <b class="caret"></b></p>
+	        </a>
+	        <ul class="dropdown-menu">
+	            <li><a href="#">Notificações 1</a></li>
+	            <li><a href="#">Notificações 2</a></li>
+	            <li><a href="#">Notificações 3</a></li>
+	            <li><a href="#">Notificações 4</a></li>
+	            <li><a href="#">Outras Notificações</a></li>
+	        </ul>
+	    </li>
+
+	    <li class="active-pro">
+	        <a href="{% url 'usuario:inicio' %}">
+	            <i class="ti-user"></i>
+	            <p>Usuários</p>
+	        </a>
+	    </li> 		
+	</ul>
+{% endblock %}
+
+{% block name_page %} Localização de possibilidade projeto {% endblock %}
+
+{% block base_content %}
+
+
+
+{% if localCadastro == 'nac' %}
+<h2>Informe a região da possibilidade</h2>
+<form method="POST">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-lg-12 col-col-xs-12">
+			<div class="form-group">
+				<label></label>
+				{{formLocalRegiao.localizacao_area_nac}}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12 col-xs-12">
+			<div class="text-center">
+				<button type="submit" class="btn btn-info btn-fill btn-wd">Proxima etapa</button>
+			</div>
+		</div>
+	</div>
+</form>
+{% endif %}
+
+{% if localCadastro == 'inter' %}
+<h2>Informe o país da possibilidade</h2>
+<form method="POST">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-lg-12 col-col-xs-12">
+			<div class="form-group">
+				<label></label>
+				{{formLocalPais.local_pais}}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12 col-xs-12">
+			<div class="text-center">
+				<button type="submit" class="btn btn-info btn-fill btn-wd">Cadastrar Possibilidade</button>
+			</div>
+		</div>
+	</div>
+</form>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_side %}
+	<ul class="nav">
+	    <li>
+	        <a href="{% url 'iabs:inicio'%}">
+	            <i class="ti-layout"></i>
+	            <p>Início</p>
+	        </a>
+	    </li>
+	    <li class="active">
+	        <a href="{% url 'projeto:inicio'%}">
+	            <i class="ti-pencil-alt"></i>
+	            <p>Projetos</p>
+	        </a>
+	    </li>
+	    <li class="dropdown">
+	        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	            <i class="ti-bell"></i>
+	            <p>Minhas notificações <b class="caret"></b></p>
+	        </a>
+	        <ul class="dropdown-menu">
+	            <li><a href="#">Notificações 1</a></li>
+	            <li><a href="#">Notificações 2</a></li>
+	            <li><a href="#">Notificações 3</a></li>
+	            <li><a href="#">Notificações 4</a></li>
+	            <li><a href="#">Outras Notificações</a></li>
+	        </ul>
+	    </li>
+
+	    <li class="active-pro">
+	        <a href="{% url 'usuario:inicio' %}">
+	            <i class="ti-user"></i>
+	            <p>Usuários</p>
+	        </a>
+	    </li> 		
+	</ul>
+{% endblock %}
+
+{% block name_page %} Localização de possibilidade projeto {% endblock %}
+
+{% block base_content %}
+
+{% if cadastroForm == 'Regional' %}
+	<h1>Regional</h1>
+	<form method="POST">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col-lg-12 col-col-xs-12">
+				<div class="form-group">
+					<label>Informe a região da possibilidade</label>
+					{{formLocalRegiao.nome_regiao}}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6 col-xs-12">
+				<div class="text-center">
+					<input type="hidden" id="btn-finalizar" name="cadastro" value="cadastro_finalizar">
+					<button type="submit" class="btn btn-info btn-fill btn-wd btn-estado" data-btn="finalizar">Finalizar cadastro</button>
+				</div>
+			</div>
+			<div class="col-lg-6 col-xs-12">
+				<div class="text-center">
+					<input type="hidden" id="btn-novo" name="cadastro" value="cadastro_novo">
+					<button type="submit" class="btn btn-info btn-fill btn-wd btn-estado" data-btn="novo">Cadastrar nova região</button>
+				</div>
+			</div>
+		</div>
+	</form>
+{% endif %}
+
+{% if cadastroForm == 'Estadual' %}
+	<h1>Estadual</h1>
+	<form method="POST">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col-lg-12 col-col-xs-12">
+				<div class="form-group">
+					<label>Informe o estado da possibilidade</label>
+					{{formLocalEstado.nome_estado}}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6 col-xs-12">
+				<div class="text-center">
+					<input type="hidden" id="btn-finalizar" name="cadastro" value="cadastro_finalizar">
+					<button type="submit" class="btn btn-info btn-fill btn-wd btn-estado" data-btn="finalizar">Finalizar cadastro</button>
+				</div>
+			</div>
+			<div class="col-lg-6 col-xs-12">
+				<div class="text-center">
+					<input type="hidden" id="btn-novo" name="cadastro" value="cadastro_novo">
+					<button type="submit" class="btn btn-info btn-fill btn-wd btn-estado" data-btn="novo">Cadastrar novo estado</button>
+				</div>
+			</div>
+		</div>
+	</form>
+{% endif %}
+
+{% if cadastroForm == 'Municipal' %}
+	<h1>Municipal</h1>
+	<form method="POST">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col-lg-12 col-col-xs-12">
+				<div class="form-group">
+					<label>Informe o municipio da possibilidade</label>
+					{{formLocalMunicipio.nome_municipio}}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6 col-xs-12">
+				<div class="text-center">
+					<input type="hidden" id="btn-finalizar" name="cadastro" value="cadastro_finalizar">
+					<button type="submit" class="btn btn-info btn-fill btn-wd btn-estado" data-btn="finalizar">Finalizar cadastro</button>
+				</div>
+			</div>
+			<div class="col-lg-6 col-xs-12">
+				<div class="text-center">
+					<input type="hidden" id="btn-novo" name="cadastro" value="cadastro_novo">
+					<button type="submit" class="btn btn-info btn-fill btn-wd btn-estado" data-btn="novo">Cadastrar novo município</button>
+				</div>
+			</div>
+		</div>
+	</form>
+{% endif %}
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('.container-fluid').on('mousedown', '.btn-estado', function(event) {
+        		if (this.getAttribute('data-btn') == 'novo'){
+        			$('#btn-finalizar').remove()
+        		}
+        		if (this.getAttribute('data-btn') == 'finalizar'){
+        			$('#btn-novo').remove()
+        		}
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base/base-main.html" %}
+
+{% block navbar_side %}
+	<ul class="nav">
+	    <li class="active">
+	        <a href="{% url 'iabs:inicio'%}">
+	            <i class="ti-layout"></i>
+	            <p>Início</p>
+	        </a>
+	    </li>
+	    <li>
+	        <a href="{% url 'projeto:inicio'%}">
+	            <i class="ti-pencil-alt"></i>
+	            <p>Projetos</p>
+	        </a>
+	    </li>
+	    <li class="dropdown">
+	        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	            <i class="ti-bell"></i>
+	            <p>Minhas notificações <b class="caret"></b></p>
+	        </a>
+	        <ul class="dropdown-menu">
+	            <li><a href="#">Notificações 1</a></li>
+	            <li><a href="#">Notificações 2</a></li>
+	            <li><a href="#">Notificações 3</a></li>
+	            <li><a href="#">Notificações 4</a></li>
+	            <li><a href="#">Outras Notificações</a></li>
+	        </ul>
+	    </li>
+
+	    <li class="active-pro">
+	        <a href="{% url 'usuario:inicio' %}">
+	            <i class="ti-user"></i>
+	            <p>Usuários</p>
+	        </a>
+	    </li>
+	</ul>
+{% endblock %}
+
+{% block name_page %}Início{% endblock %}
+
+{% block base_content %}
+
+<div class="row">
+	<div class="col-lg-12 col-sm-12">
+		<h2>Bem vindo ao Gestor de Projetos do IABS</h2>
+	</div>
+</div>
+
+
+{% endblock %}

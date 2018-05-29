@@ -1,0 +1,61 @@
+{% extends "projeto/cadastro_possibilidade/base_cadastro_completo.html" %}
+{% load static %}
+
+
+{% block base_cadastro_completo_menu_tabs %}
+    <div class="tabbable-line">
+        <ul class="nav nav-tabs ">
+            <li>
+                <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosbasicos/">
+                    {% if obj_projeto.check_possibilidade_cadastro_basico %}
+                    <span class="ti-save" style="color: #00A253;"></span> Dados Básicos
+                    {% else %}
+                    <span class="ti-na" style="color: red;"></span> Dados Básicos
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosfinanceiros/">
+                    {% if obj_projeto.check_possibilidade_cadastro_financeiro %}
+                    <span class="ti-save" style="color: #00A253;"></span> Dados Financeiros
+                    {% else %}
+                    <span class="ti-na" style="color: red;"></span> Dados Financeiros
+                    {% endif %}
+                </a>
+            </li>
+            <li class="active">
+                <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosfinanciador/">
+                    {% if obj_projeto.check_possibilidade_cadastro_financiador %}
+                    <span class="ti-save" style="color: #00A253;"></span> Dados do Financiador
+                    {% else %}
+                    <span class="ti-na" style="color: red;"></span> Dados do Financiador
+                    {% endif %}
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block base_cadastro_completo %}
+    <div class="tab-content">
+        <div class="tab-pane" id="tab_default_1">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="title">Cadastro de dados básicos</h4>
+                    <p class="category">Informações básicas do projeto</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="tab_default_2">
+            <h4 class="title">Cadastro de dados financeiros</h4>
+            <p class="category">Informações dos dados financeiros do projeto</p>
+        </div>
+
+        <div class="tab-pane active" id="tab_default_3">
+            <h4 class="title">Cadastro de dados do financiador</h4>
+            <p class="category">Informações dos dados do financiador do projeto</p>
+        </div>
+    </div>
+{% endblock %}
+

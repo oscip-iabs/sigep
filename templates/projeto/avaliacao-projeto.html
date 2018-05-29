@@ -1,0 +1,315 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_side %}
+	<ul class="nav">
+	    <li>
+	        <a href="{% url 'iabs:inicio'%}">
+	            <i class="ti-layout"></i>
+	            <p>Início</p>
+	        </a>
+	    </li>
+	    <li class="active">
+	        <a href="{% url 'projeto:inicio'%}">
+	            <i class="ti-pencil-alt"></i>
+	            <p>Projetos</p>
+	        </a>
+	    </li>
+	    <li class="dropdown">
+	        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	            <i class="ti-bell"></i>
+	            <p>Minhas notificações <b class="caret"></b></p>
+	        </a>
+	        <ul class="dropdown-menu">
+	            <li><a href="#">Notificações 1</a></li>
+	            <li><a href="#">Notificações 2</a></li>
+	            <li><a href="#">Notificações 3</a></li>
+	            <li><a href="#">Notificações 4</a></li>
+	            <li><a href="#">Outras Notificações</a></li>
+	        </ul>
+	    </li>
+
+	    <li class="active-pro">
+	        <a href="{% url 'usuario:inicio' %}">
+	            <i class="ti-user"></i>
+	            <p>Usuários</p>
+	        </a>
+	    </li>
+	</ul>
+{% endblock %}
+
+{% block name_page %} Projetos {% endblock %}
+
+{% block base_content %}
+
+
+<div class="row">
+    <div class="col-lg-offset-1 col-lg-10 col-sm-12">
+    	<div class="card">
+			<div class="header text-center">
+				<h4 class="title">Avaliação da Possibilidade</h4>
+			</div>
+			<div class="content">
+				<div class="row">
+					<div class="col-lg-12 col-xs-12">
+						<div class="form-group">
+							<label><h6>Titulo / Objetivo da possibilidade</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.titulo }}">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-4 col-xs-12">
+						<div class="form-group">
+							<label><h6>Valor estimado</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.valor_estimado }}">
+						</div>
+					</div>
+					<div class="col-lg-4 col-xs-12">
+						<div class="form-group">
+							<label><h6>Periodo para execução(meses)</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.periodo_execucao }}">
+						</div>
+					</div>
+					<div class="col-lg-4 col-xs-12">
+						<div class="form-group">
+							<label><h6>Titulo da possibilidade</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.prazo_limite|date:'Y-m-d' }}">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-xs-12">
+						<div class="form-group">
+							<label><h6>Apoiador / Financiador da possibilidade</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.apoiador }}">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 col-xs-12">
+						<div class="form-group">
+							<label><h6>Tipo da possibilidade</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.possibilidade }}">
+						</div>
+					</div>
+					<div class="col-lg-6 col-xs-12">
+						<div class="form-group">
+							<label><h6>Tema da possibilidade</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.tema_possibilidade }}">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					{% if projetoObj.localizacao_mundial == 0 %}
+						<div class="col-lg-3 col-xs-12">
+							<div class="form-group">
+								<label><h6>Localização</h6></label>
+								<input type="text" class="form-control border-input" disabled value="{%if projetoObj.localizacao_mundial == 0%}Nacional{%endif%}{%if projetoObj.localizacao_mundial == 1%}Internacional{%endif%}">
+							</div>
+						</div>
+						<div class="col-lg-3 col-xs-12">
+							<div class="form-group">
+								<label><h6>Área nacional</h6></label>
+								<input type="text" class="form-control border-input" disabled value="{% if projetoObj.localizacao_area_nac > 0 %}{% if projetoObj.localizacao_area_nac == 1 %}Regional{% endif %}{% if projetoObj.localizacao_area_nac == 2 %}Estadual{% endif %}{% if projetoObj.localizacao_area_nac == 3 %}Municipal{% endif %}{% endif %}">
+							</div>
+						</div>
+						{% if projetoObj.localizacao_area_nac == 1 %}
+						<div class="col-lg-6 col-xs-12">
+							<div class="form-group">
+								<label><h6>Regiões da possibilidade</h6></label>
+								<h6>
+								{% for regiao in regiaoObj %}
+									{{regiao.nome_regiao}},
+								{% endfor %}
+								</h6>
+							</div>
+						</div>
+						{% endif %}
+						{% if projetoObj.localizacao_area_nac == 2 %}
+						<div class="col-lg-6 col-xs-12">
+							<div class="form-group">
+								<label><h6>Estados da possibilidade</h6></label>
+								<h6>
+								{% for estado in estadoObj %}
+									{% if estado.nome_estado == 'AC' %}Acre, {% endif %}
+									{% if estado.nome_estado == 'AL' %}Alagoas, {% endif %}
+									{% if estado.nome_estado == 'AP' %}Amapá, {% endif %}
+									{% if estado.nome_estado == 'AM' %}Amazonas, {% endif %}
+									{% if estado.nome_estado == 'BA' %}Bahia, {% endif %}
+									{% if estado.nome_estado == 'CE' %}Ceará, {% endif %}
+									{% if estado.nome_estado == 'DF' %}Distrito Federal, {% endif %}
+									{% if estado.nome_estado == 'ES' %}Espírito Santo, {% endif %}
+									{% if estado.nome_estado == 'GO' %}Goiás, {% endif %}
+									{% if estado.nome_estado == 'MA' %}Maranhão, {% endif %}
+									{% if estado.nome_estado == 'MT' %}Mato Grosso, {% endif %}
+									{% if estado.nome_estado == 'MS' %}Mato Grosso do Sul, {% endif %}
+									{% if estado.nome_estado == 'MG' %}Minas Gerais, {% endif %}
+									{% if estado.nome_estado == 'PA' %}Pará, {% endif %}
+									{% if estado.nome_estado == 'PB' %}Paraíba, {% endif %}
+									{% if estado.nome_estado == 'PR' %}Paraná, {% endif %}
+									{% if estado.nome_estado == 'PE' %}Pernambuco, {% endif %}
+									{% if estado.nome_estado == 'PI' %}Piauí, {% endif %}
+									{% if estado.nome_estado == 'RJ' %}Rio de Janeiro, {% endif %}
+									{% if estado.nome_estado == 'RN' %}Rio Grande do Norte, {% endif %}
+									{% if estado.nome_estado == 'RS' %}Rio Grande do Sul, {% endif %}
+									{% if estado.nome_estado == 'RO' %}Rondônia, {% endif %}
+									{% if estado.nome_estado == 'RR' %}Roraima, {% endif %}
+									{% if estado.nome_estado == 'SC' %}Santa Catarina, {% endif %}
+									{% if estado.nome_estado == 'SP' %}São Paulo, {% endif %}
+									{% if estado.nome_estado == 'SE' %}Sergipe, {% endif %}
+									{% if estado.nome_estado == 'TO' %}Tocantins, {% endif %}
+								{% endfor %}
+								</h6>
+							</div>
+						</div>
+						{% endif %}
+						{% if projetoObj.localizacao_area_nac == 3 %}
+						<div class="col-lg-6 col-xs-12">
+							<div class="form-group">
+								<label><h6>Municipios da possibilidade</h6></label>
+								<h6>
+								{% for municipio in municipioObj %}
+									{{municipio.nome_municipio}},
+								{% endfor %}
+								</h6>
+							</div>
+						</div>
+						{% endif %}
+					{% endif %}
+
+					{% if projetoObj.localizacao_mundial == 1 %}
+						<div class="col-lg-6 col-xs-12">
+							<div class="form-group">
+								<label><h6>Localização</h6></label>
+								<input type="text" class="form-control border-input" disabled value="{%if projetoObj.localizacao_mundial == 0%}Nacional{%endif%}{%if projetoObj.localizacao_mundial == 1%}Internacional{%endif%}">
+							</div>
+						</div>
+						<div class="col-lg-6 col-xs-12">
+							<div class="form-group">
+								<label><h6>País da possibilidade</h6></label>
+								<input type="text" class="form-control border-input" disabled value="{{projetoObj.local_pais}}">
+							</div>
+						</div>
+					{% endif %}
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-xs-12">
+						<div class="form-group">
+							<label><h6>Descrição da possibilidade</h6></label>
+							<!-- <input type="text" class="form-control border-input" disabled value="{{ projetoObj.descricao_possibilidade }}"> -->
+							<textarea rows="8" class="form-control border-input" disabled>{{ projetoObj.descricao_possibilidade }}</textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 col-xs-12">
+						<div class="form-group">
+							<label><h6>Nucleo responsavel do IABS</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.nucleo_iabs }}">
+						</div>
+					</div>
+					<div class="col-lg-6 col-xs-12">
+						<div class="form-group">
+							<label><h6>Fontes de captação da informação</h6></label>
+							<input type="text" class="form-control border-input" disabled value="{{ projetoObj.fonte_informacao }}">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
+
+<div class="row">
+	<div class="col-lg-offset-1 col-lg-10 col-xs-12">
+		<div class="card">
+			<div class="header text-center">
+				<h4 class="title">Envio da possibilidade para análise</h4>
+			</div>
+			<div class="content">
+				<div class="row">
+					<div class="col-lg-12 col-xs-12">
+						<div class="form-group">
+							<label><h6>Consideração a ser avaliada na possibilidade</h6></label>
+							<textarea rows="8" class="form-control border-input"></textarea>
+						</div>
+					</div>
+					<div class="col-lg-5 col-xs-12">
+						<div class="form-group">
+							<label></label>
+							<h5>Enviar possibilidade para a avaliação do(a)</h5>
+						</div>
+					</div>
+					<div class="col-lg-5 col-xs-12">
+						<div class="form-group">
+							<label>Tipo da possibilidade</label>
+								<select name="possibilidade" required="" class="form-control border-input" id="id_possibilidade">
+								<option value="">Luís Tadeu Assad</option>
+								<option value="">Jannyne Barbosa</option>
+								<option value="">Alejandro Muñoz Muñoz</option>
+								<option value="">Lúcio Motta Fonteles</option>
+								<option value="">Eric Jorge Sawyer</option>
+								<option value="">Patrícia Reis Pereira</option>
+								<option value="">Rodrigo Diniz Torres</option>
+								<option value="">Flávio Silva Ramos</option>
+								<option value="">Marília Beatriz de Castro Ramos</option>
+								<option value="">Roberta Roxilene dos Santos</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-2 col-xs-12 text-center">
+						<div class="form-group">
+							<label>Enviar para avaliação</label>
+							<button type="submit" class="btn btn-info btn-fill btn-wd">Enviar <span class="ti-arrow-top-right"></span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<br><br>
+
+<div class="row">
+	<div class="col-lg-offset-1 col-lg-10 col-xs-12 text-center">
+		<div class="row">
+			<div class="col-lg-6 col-xs-12 text-center">
+				<button class="btn btn-info btn-fill btn-wd btn-block">Aprovar possibilidade</button>
+			</div>
+			<div class="col-lg-6 col-xs-12 text-center">
+				<button class="btn btn-default btn-block">Eliminar possibilidade</button>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+
+{% endblock %}
+
+
+
+<!--  
+  
+
+
+
+
+
+
+    
+
+   
+     
+
+
+
+
+  -->
+

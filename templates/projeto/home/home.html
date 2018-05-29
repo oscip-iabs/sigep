@@ -1,0 +1,139 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_side %}
+	{% include 'projeto/include_page/sidebar_active_projeto.html' %}
+{% endblock %}
+
+{% block name_page %} Projetos {% endblock %}
+
+{% block base_content %}
+
+
+<div class="row">
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="content">
+        	<a href="{% url 'projeto:add_possibilidade' %}">
+	                <div class="row">
+	                    <div class="col-xs-5">
+	                        <div class="icon-big icon-warning text-center">
+	                            <i class="ti-marker-alt"></i>
+	                        </div>
+	                    </div>
+	                    <div class="col-xs-7">
+	                        <div class="numbers">
+	                            <p>Projeto</p>
+	                            Possibilidade
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="footer">
+	                    <hr />
+	                    <div class="stats">
+	                        <i class="ti-clip"></i> Cadastro de Possibilidade de Projetos
+	                    </div>
+	                </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="content">
+            	<a href="">
+	                <div class="row">
+	                    <div class="col-xs-5">
+	                        <div class="icon-big icon-success text-center">
+	                            <i class="ti-check-box"></i>
+	                        </div>
+	                    </div>
+	                    <div class="col-xs-7">
+	                        <div class="numbers">
+	                            <p>Projeto</p>
+	                            Aprovado
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="footer">
+	                    <hr />
+	                    <div class="stats">
+	                        <i class="ti-clip"></i> Andamento das possibilidade aprovada
+	                    </div>
+	                </div>
+	            </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="content">
+            	<a href="">
+	                <div class="row">
+	                    <div class="col-xs-5">
+	                        <div class="icon-big icon-danger text-center">
+	                            <i class="ti-na"></i>
+	                        </div>
+	                    </div>
+	                    <div class="col-xs-7">
+	                        <div class="numbers">
+	                            <p>Projeto</p>
+	                            Eliminado
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="footer">
+	                    <hr />
+	                    <div class="stats">
+	                        <i class="ti-clip"></i> Projeto eliminado
+	                    </div>
+	                </div>
+	            </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Possibilidades de Projetos</h4>
+                    <p class="category">Abra o projeto para avaliar a possibilidade</p>
+                </div>
+
+                <ul class="nav nav-tabs">
+                    <li><a data-toggle="tab" href="#cadastroDone"><span class="ti-check-box"></span> Possibilidade cadastrada</a></li>
+                    <li><a data-toggle="tab" href="#cadastroRun"><span class="ti-pencil"></span> Cadastro completo em andamento</a></li>
+                    <li class="active"><a data-toggle="tab" href="#cadastroBasic"><span class="ti-direction"></span> Cadastro básico iniciado</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="cadastroDone" class="tab-pane fade">
+                        {% include 'projeto/home/projeto_cadastro_completo.html' %}
+                    </div>
+                    <div id="cadastroRun" class="tab-pane fade">
+                        {% include 'projeto/home/projeto_cadastro_andamento.html' %}
+                    </div>
+                    <div id="cadastroBasic" class="tab-pane fade in active">
+                        {% include 'projeto/home/projeto_cadastro_inicial.html' %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
