@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import random
 from django.shortcuts import render, redirect
+import datetime
 
 from iabs_main.models import Geral_Status
-
-from projeto.models import Projeto
-from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm
+from usuario.models import Usuario_Perfil
+from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto
 from projeto.utils import generate_project_key
+
+from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
+    CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm
+
+
 
 
 def inicio(request):
 	projetoObj = Projeto.objects.all()
-	
+
 	return render(request, 'projeto/home/home.html', locals())
 
 
@@ -22,122 +26,173 @@ def add_possibilidade(request):
     if request.method == 'POST':
         if formPossibilidade.is_valid():
             chave_projeto = 'PRO-'+str(generate_project_key())
-            status_form = Geral_Status.objects.get(referencia='CADASTRO INICIAL DA POSSIBILIDADE', chave='CADASTRO_BASICO_NOVO')
-                
+            status_form = Geral_Status.objects.get(referencia='CADASTRO COMPLETO INICIADO', chave='CADASTRO_COMPLETO_INICIADO')
+
             projeto_obj = formPossibilidade.save(commit=False)
             projeto_obj.chave = chave_projeto
             projeto_obj.status = status_form
-
             projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao = now,
+                texto = 'Inicio do cadastro de uma nova possibilidade',
+                tipo = 'CADASTRO_POSSIBILIDADE',
+                projeto = projeto_obj,
+                modified_user = usuario
+            )
+
+            historicProject.save()
+
             return redirect('/projeto')
 
     return render(request, 'projeto/cadastro_possibilidade/possibilidade_inicio.html', locals(),)
 
 
 def cadastro_dados_basicos_possibilidade(request, id_pos, chave_pos):
+    TABS = 'BASICO'
     obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
     formPossibilidade = CadastroDadosBasicosForm(request.POST or None, instance=obj_projeto)
 
     if request.method == 'POST':
-        print 'cadastro basico'
+        if formPossibilidade.is_valid():
+            projeto_obj = formPossibilidade.save(commit=False)
+            projeto_obj.check_possibilidade_cadastro_basico = True
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro dos dados básicos da possibilidade '+obj_projeto.chave,
+                tipo='CADASTRO_POSSIBILIDADE',
+                projeto=obj_projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
+
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_basicos.html', locals(), )
 
+
 def cadastro_dados_financeiros_possibilidade(request, id_pos, chave_pos):
+    TABS = 'FINANCEIRO'
     obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
+    formFinanceiro = CadastroDadosFinanceiroForm(request.POST or None, instance=obj_projeto)
+
+    if request.method == 'POST':
+        if formFinanceiro.is_valid():
+            projeto_obj = formFinanceiro.save(commit=False)
+            projeto_obj.check_possibilidade_cadastro_financeiro = True
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro das informações financeiras da possibilidade ' + obj_projeto.chave,
+                tipo='CADASTRO_POSSIBILIDADE',
+                projeto=obj_projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros' % (id_pos, chave_pos))
+
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_financeiros.html', locals(), )
 
-def cadastro_dados_financiador_possibilidade(request, id_pos, chave_pos):
+
+def cadastro_nucleo_possibilidade(request, id_pos, chave_pos):
+    TABS = 'NUCLEO'
     obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
-    return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_financiador.html', locals(), )
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
 
-# def cadastro_localizacao(request, chave):
+    try:
+        nucleo_cadastrado = Nucleo_x_Projeto.objects.filter(projeto=obj_projeto)
+    except:
+        nucleo_empty = True
 
-# 	projetoObj = Projeto.objects.get(chave_projeto=chave)
+    formNucleo = CadastroNucleoForm(request.POST or None)
 
-# 	if projetoObj.localizacao_mundial == 0:
-# 		localCadastro = 'nac'
-# 		formLocalRegiao = localizacaoRegialNacional(request.POST or None, instance=projetoObj)
-# 		if request.method == 'POST':
-# 			if formLocalRegiao.is_valid():
-# 				formRegiao = formLocalRegiao.save(commit=False)
-# 				formRegiao.status_projeto = 100011001
-# 				formRegiao.save()
+    if request.method == 'POST':
+        if formNucleo.is_valid():
+            projeto_obj = formNucleo.save(commit=False)
+            projeto_check = Projeto.objects.filter(id=id_pos, chave=chave_pos).update(check_possibilidade_cadastro_nucleo=True)
+            projeto_obj.projeto = obj_projeto
+            projeto_obj.save()
 
-# 				return redirect('/projeto/%s/%s'%(chave, formRegiao.localizacao_area_nac))
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro do(s) Núcleo(s) da possibilidade ' + obj_projeto.chave,
+                tipo='CADASTRO_POSSIBILIDADE',
+                projeto=obj_projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
 
-# 	if projetoObj.localizacao_mundial == 1:
-# 		localCadastro = 'inter'
-# 		formLocalPais = LocalPaisForm(request.POST or None, instance=projetoObj)
-# 		if request.method == 'POST':
-# 			if formLocalPais.is_valid():
-# 				formPais = formLocalPais.save(commit=False)
-# 				formPais.status_projeto = 100012000
-# 				formPais.save()
+            return redirect('/projeto/%s/cadastro/%s/nucleo' % (id_pos, chave_pos))
 
-# 				return redirect('/projeto/')		
-
-
-# 	return render(request, 'projeto/localizacao-regiao.html', locals(),)
-
-
-# def regiao_possibilidade(request, chave, regiao):
-
-# 	projetoObj = Projeto.objects.get(chave_projeto=chave)	
-# 	# import pdb; pdb.set_trace()
-# 	if int(regiao) == 1:
-# 		cadastroForm = 'Regional'
-# 		formLocalRegiao = localizacaoRegiao(request.POST or None, instance=projetoObj)
-		
-# 		if request.method == 'POST':
-# 			if formLocalRegiao.is_valid():
-# 				acaoCadastro = request.POST['cadastro']
-# 				estado = request.POST['nome_regiao']
-# 				localizacao_regiao.objects.create(projeto=projetoObj, nome_regiao=estado)
-
-# 				if acaoCadastro == 'cadastro_finalizar':
-# 					return redirect('/projeto/')
-# 				if acaoCadastro == 'cadastro_novo':
-# 					return redirect('/projeto/%s/%s'%(chave, regiao))
-
-# 	if int(regiao) == 2:
-# 		cadastroForm = 'Estadual'
-# 		formLocalEstado = localizacaoEstado(request.POST or None, instance=projetoObj)
-		
-# 		if request.method == 'POST':
-# 			if formLocalEstado.is_valid():
-# 				acaoCadastro = request.POST['cadastro']
-# 				regiao = request.POST['nome_estado']
-# 				localizacao_estado.objects.create(projeto=projetoObj, nome_estado=regiao)
-
-# 				if acaoCadastro == 'cadastro_finalizar':
-# 					return redirect('/projeto/')
-# 				if acaoCadastro == 'cadastro_novo':
-# 					return redirect('/projeto/%s/%s'%(chave, regiao))
-
-# 	if int(regiao) == 3:
-# 		cadastroForm = 'Municipal'
-# 		formLocalMunicipio = localizacaoMunicipio(request.POST or None, instance=projetoObj)
-		
-# 		if request.method == 'POST':
-# 			if formLocalMunicipio.is_valid():
-# 				acaoCadastro = request.POST['cadastro']
-# 				estado = request.POST['nome_municipio']
-# 				localizacao_municipio.objects.create(projeto=projetoObj, nome_municipio=estado)
-
-# 				if acaoCadastro == 'cadastro_finalizar':
-# 					return redirect('/projeto/')
-# 				if acaoCadastro == 'cadastro_novo':
-# 					return redirect('/projeto/%s/%s'%(chave, regiao))
-
-# 	return render(request, 'projeto/local-regional.html', locals(),)
+    return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_nucleo.html', locals(), )
 
 
-# def avaliacao_possibilidade(request, chave):	
+def cadastro_localizacao_possibilidade(request, id_pos, chave_pos):
+    TABS = 'LOCALIZACAO'
+    obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
+    formLocalizacao = CadastroDadosLocalizacaoForm(request.POST or None, instance=obj_projeto)
 
-# 	projetoObj = Projeto.objects.get(id=chave)
-# 	municipioObj = localizacao_municipio.objects.filter(projeto=projetoObj)	
-# 	estadoObj = localizacao_estado.objects.filter(projeto=projetoObj)	
-# 	regiaoObj = localizacao_regiao.objects.filter(projeto=projetoObj)	
+    if request.method == 'POST':
+        if formLocalizacao.is_valid():
+            localizacao_obj = formLocalizacao.save(commit=False)
+            localizacao_obj.check_possibilidade_cadastro_localizacao = True
+            localizacao_obj.save()
 
-# 	return render(request, 'projeto/avaliacao-projeto.html', locals(),)
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro da localização da possibilidade ' + obj_projeto.chave,
+                tipo='CADASTRO_POSSIBILIDADE',
+                projeto=obj_projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+
+    return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_localizacao.html', locals(), )
+
+
+def cadastro_finalizar_possibilidade(request, id_pos, chave_pos):
+    obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
+
+    if request.method == 'POST':
+        if formFinalizar.is_valid():
+            finalizar_obj = formFinalizar.save(commit=False)
+            statusConcluido = Geral_Status.objects.get(referencia='CADASTRO DA POSSIBILIDADE CONCLUIDO', chave='CADASTRO_POSSIBILIDADE_CONCLUIDO')
+            finalizar_obj.status = statusConcluido
+            finalizar_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro da possibilidade ' + obj_projeto.chave + ' foi finalizado',
+                tipo='CADASTRO_POSSIBILIDADE',
+                projeto=obj_projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/')
+
+    return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_localizacao.html', locals(), )

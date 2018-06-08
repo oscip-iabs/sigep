@@ -2,48 +2,42 @@
 {% load static %}
 
 
-{% block base_cadastro_completo_menu_tabs %}
-    <div class="tabbable-line">
-        <ul class="nav nav-tabs ">
-            <li>
-                <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosbasicos/">
-                    {% if obj_projeto.check_possibilidade_cadastro_basico %}
-                    <span class="ti-save" style="color: #00A253;"></span> Dados Básicos
-                    {% else %}
-                    <span class="ti-na" style="color: red;"></span> Dados Básicos
-                    {% endif %}
-                </a>
-            </li>
-            <li class="active">
-                <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosfinanceiros/">
-                    {% if obj_projeto.check_possibilidade_cadastro_financeiro %}
-                    <span class="ti-save" style="color: #00A253;"></span> Dados Financeiros
-                    {% else %}
-                    <span class="ti-na" style="color: red;"></span> Dados Financeiros
-                    {% endif %}
-                </a>
-            </li>
-            <li>
-                <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosfinanciador/">
-                    {% if obj_projeto.check_possibilidade_cadastro_financiador %}
-                    <span class="ti-save" style="color: #00A253;"></span> Dados do Financiador
-                    {% else %}
-                    <span class="ti-na" style="color: red;"></span> Dados do Financiador
-                    {% endif %}
-                </a>
-            </li>
-        </ul>
-    </div>
-{% endblock %}
-
 {% block base_cadastro_completo %}
     <div class="tab-content">
-
         <div class="tab-pane active" id="tab_default_2">
             <h4 class="title">Cadastro de dados financeiros</h4>
-            <p class="category">Informações dos dados financeiros do projeto</p>
+            <p class="category">Informações dos dados financeiros da possibilidade</p>
         </div>
-
     </div>
+
+    <br><br>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <h3 class="title">Informe o valor estimado da possibilidade</h3>
+        </div>
+    </div>
+    <br><br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label>Valor (R$):</label>
+                    {{ formFinanceiro.valor_estimado }}
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-xs-12">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-info btn-fill btn-wd">Salvar Informação</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
 {% endblock %}
+
+
 

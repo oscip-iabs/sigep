@@ -1,3 +1,4 @@
+{% load static %}
 html, body {
     height: 100%;
     margin: 0px;
@@ -11,7 +12,10 @@ html, body {
 .col-login-6 {
 	height: 100%;
 	width: 70%;
-	background-image: url("https://picsum.photos/1800/1400/?random");
+	/*background-image: url("https://picsum.photos/1800/1400/?random");*/
+	background-image: url('../../img/login/bg_login_sigep.jpg');
+	/*background-image: url("http://blog.acelerato.com/wp-content/uploads/2015/06/projeto.jpg");*/
+	/*background-image: url("http://blog.aevo.com.br/wp-content/uploads/2017/05/conheca-7-ferramentas-gratuitas-para-gestao-de-projetos-1000x640.jpeg");*/
 	background-color: #FAF0E6;
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
@@ -19,12 +23,13 @@ html, body {
 	background-size: cover;
 }
 img.displayed {
-	width: 200px;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	position: relative;
-	top: 40%;
+    width: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: 40%;
+    background-color: #ffffff9e;
 }
 .col-login-4 {
 	height: 100%;

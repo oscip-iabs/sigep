@@ -17,7 +17,7 @@ Licensed under MIT
 }
 .tabbable-line > .nav-tabs > li {
     margin-right: 2px;
-    width: 33%;
+    width: 24%;
     text-align: center;
 }
 .tabbable-line > .nav-tabs > li > a {
@@ -86,4 +86,13 @@ Licensed under MIT
   border-top: 0;
   border-bottom: 1px solid #eee;
   padding-bottom: 15px;
+}
+
+.piscar {
+  background-color: #7A9E9F;
+  color: #FFF;
+}
+
+.modal-backdrop {
+     z-index: 0 !important;
 }

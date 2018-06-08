@@ -16,3 +16,6 @@ class Geral_Status(models.Model):
 	chave      = models.CharField(max_length=1000, blank=True, null=True)
 	texto      = models.CharField(max_length=1000, blank=True, null=True)
 
+	def __str__(self):
+		return self.texto.encode('utf-8').strip()
+

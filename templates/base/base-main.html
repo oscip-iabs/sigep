@@ -227,7 +227,7 @@
 
     <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
     
-
+    <script src="https://s3.amazonaws.com/rural-sustentavel/static_portal/js/jquery.mask.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('.change-color').click(function(){
@@ -251,7 +251,10 @@
             //     timer: 4000
             // });
 
+            {% block base_java_script %}{% endblock %}
         });
     </script>
+
+
 
 </html>

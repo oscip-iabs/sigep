@@ -20,3 +20,4 @@ def generate_project_key():
         return nextkey
     else:
         generate_project_key()
+

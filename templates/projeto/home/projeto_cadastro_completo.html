@@ -8,13 +8,13 @@
         </thead>
         <tbody>
             {% for item in projetoObj %}
-                {% if item.status.cod_status == 101003000 %}
+                {% if item.status.cod_status == 102001000 %}
                 <tr>
                     <td>{{ item.date_created }}</td>
                     <td>{{ item.chave }}</td>
                     <td>{{ item.titulo }}</td>
                     <td>{{ item.status.texto }}</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">Continuar</button></td>
+                    <td><button type="button" class="btn btn-info btn-fill">Avaliar</button></td>
                 </tr>
                 {% endif %}
             {% endfor %}
