@@ -1,6 +1,7 @@
 .idea
 *.sqlite3
 .vEnv
+*vEnv
 *pyc
 .env
 *.dump
