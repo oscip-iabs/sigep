@@ -6,10 +6,6 @@
 	<link href="{% static "css/projeto/cadastro_projeto.css" %}" rel="stylesheet">
 {% endblock %}
 
-{% block navbar_side %}
-	{% include 'projeto/include_page/sidebar_active_projeto.html' %}
-{% endblock %}
-
 {% block name_page %} Cadastro de possibilidade projeto {% endblock %}
 
 {% block base_content %}
@@ -122,42 +118,42 @@
 {% endblock %}
 
 {% block base_java_script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#id_valor_estimado').mask('000.000.000.000.000,00', {reverse: true});
 
-{#    <script src="https://s3.amazonaws.com/rural-sustentavel/static_portal/js/jquery.mask.js"></script>#}
+        setInterval(function(){
+            $('#finalizar-cadastro').toggleClass('piscar')
+        }, 1000);
 
-    $('#id_valor_estimado').mask('000.000.000.000.000,00', {reverse: true});
-
-    setInterval(function(){
-        $('#finalizar-cadastro').toggleClass('piscar')
-    }, 1000);
-
-    {% if obj_projeto.check_possibilidade_cadastro_basico and obj_projeto.check_possibilidade_cadastro_financeiro and obj_projeto.check_possibilidade_cadastro_localizacao %}
-    $.notify({
-        icon: 'ti-bell',
-        title: 'Cadastro Finalizado',
-        message: 'Pronto, o cadastro da possibilidade foi completo, agora salve clicando em "Salvar Possibilidade" '
-    },{
-        element: 'body',
-        type: "warning",
-        allow_dismiss: true,
-        newest_on_top: false,
-        placement: {
-            from: "top",
-            align: "center"
-        },
-        offset: 20,
-        spacing: 10,
-        z_index: 1031,
-        delay: 5000,
-        timer: 1000,
-        mouse_over: null,
-        animate: {
-            enter: 'animated fadeInDown',
-            exit: 'animated fadeOutUp'
-        },
-        icon_type: 'class'
+        {% if obj_projeto.check_possibilidade_cadastro_basico and obj_projeto.check_possibilidade_cadastro_financeiro and obj_projeto.check_possibilidade_cadastro_localizacao %}
+        $.notify({
+            icon: 'ti-bell',
+            title: 'Cadastro Finalizado',
+            message: 'Pronto, o cadastro da possibilidade foi completo, agora salve clicando em "Salvar Possibilidade" '
+        },{
+            element: 'body',
+            type: "warning",
+            allow_dismiss: true,
+            newest_on_top: false,
+            placement: {
+                from: "top",
+                align: "center"
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1031,
+            delay: 5000,
+            timer: 1000,
+            mouse_over: null,
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+            icon_type: 'class'
+        });
+        {% endif %}
     });
-    {% endif %}
-
+</script>
 
 {% endblock %}

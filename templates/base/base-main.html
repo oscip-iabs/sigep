@@ -41,8 +41,8 @@
     <div class="sidebar" data-background-color="white" data-active-color="danger">
 
     <!--
-        Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-        Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+        Lembrete 1: pode mudar a cor do fundo da barra lateral usando: data-background-color="white | black"
+        Lembrete 2: pode mudar a cor do botão ativo usando o data-active-color="primary | info | success | warning | danger"
     -->
 
         <div class="sidebar-wrapper">
@@ -53,6 +53,29 @@
             </div>
             
             {% block navbar_side %}{% endblock %}
+            <div class="text-center"><small><small>{{ request.user.email }}</small></small></div>
+            <ul class="nav">
+                <li>
+                    <a href="{% url 'iabs:inicio'%}">
+                        <i class="ti-layout"></i>
+                        <p>Início</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'projeto:inicio'%}">
+                        <i class="ti-pencil-alt"></i>
+                        <p>Projetos</p>
+                    </a>
+                </li>
+
+
+                <li class="active-pro active">
+                    <a href="{% url 'usuario:inicio' %}">
+                        <i class="ti-user"></i>
+                        <p>Usuários</p>
+                    </a>
+                </li>
+            </ul>
             <!--
             <ul class="nav">
                 <li class="active">
@@ -175,6 +198,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/usuario/logout"><i class="ti-exchange-vertical"> </i> Sair</a></li>
                                 <li><a href="#"><i class="ti-user"> </i> Meu Perfil</a></li>
+                                <li><a href="{% url 'usuario:minhas_acoes' %}"><i class="ti-pulse"> </i> Minhas ações</a></li>
                                 <li><a class="change-color"><i class="ti-wand"> </i> Contraste</a></li>
                             </ul>
                         </li>
@@ -230,6 +254,8 @@
     <script src="https://s3.amazonaws.com/rural-sustentavel/static_portal/js/jquery.mask.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+
             $('.change-color').click(function(){
                 elementColor = $('.sidebar')[0]
 
@@ -251,10 +277,11 @@
             //     timer: 4000
             // });
 
-            {% block base_java_script %}{% endblock %}
+
+
         });
     </script>
-
+    {% block base_java_script %}{% endblock %}
 
 
 </html>

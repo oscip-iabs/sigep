@@ -72,6 +72,21 @@ class Nucleo_x_Projeto(models.Model):
         return self.texto
 
 
+class Avaliacao_Possibilidade(models.Model):
+    CATEGORIA_ADEQUACAO = (
+        (0, 'Informações Básicas'),
+        (1, 'Informaçoes Finaceiras'),
+        (2, 'Núcleos'),
+        (3, 'Area de Atuação'),
+    )
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    adequacao = models.TextField(max_length=5000, blank=True, null=True, verbose_name=u'Descrição resumida')
+    categoria = models.IntegerField(null=False, blank=True, default=0, verbose_name=u'Categoria da adequação', choices=CATEGORIA_ADEQUACAO)
+    projeto = models.ForeignKey(Projeto, blank=True, null=True)
+    user_avaliador = models.ForeignKey(Usuario_Perfil, blank=True, null=True)
+
+
 class Historico_Projeto(models.Model):
     date_created     = models.DateTimeField(auto_now_add=True)
     date_modificacao = models.DateField(default=datetime.date.today)

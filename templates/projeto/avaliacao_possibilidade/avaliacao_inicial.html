@@ -1,0 +1,361 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+<style>
+.area-recomendacao {
+    height: 200px !important;
+    margin-bottom: 5px;
+}
+.recomendacao-cadastrada {
+    border: 1px solid #888888;
+    height: 230px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px #d4c2c2;
+    padding: 5px;
+}
+.item-recomendacao {
+    border: 1px dashed #d4cccc;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 2px;
+}
+
+</style>
+{% endblock %}
+
+{% block name_page %} Avaliação/Aprovação da Possibilidade: {{ chave_pos }}{% endblock %}
+
+{% block base_content %}
+
+<div class="row">
+    <div class="col-xs-12 col-lg-4">
+        <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosbasicos" >
+            <button type="button" class="btn btn-wd btn-primary btn-block">
+                <span class="btn-label"><i class="ti-pencil-alt"></i></span> Atualizar Possibilidade
+            </button>
+        </a >
+    </div>
+    <div class="col-xs-12 col-lg-4">
+        <button type="button" class="btn btn-wd btn-danger btn-block">
+            <span class="btn-label"><i class="ti-control-shuffle"></i></span> Trocar Responsável
+        </button>
+    </div>
+    <div class="col-xs-12 col-lg-4">
+        <button type="button" class="btn btn-wd btn-success btn-block" id="aprovar-possibilidade-js">
+            <span class="btn-label"><i class="fa fa-check"></i></span> Aprovar Possibilidade
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-lg-12">
+        <div class="card">
+            <div class="header text-center">
+                <h4 class="title">Informações básicas da possibilidade</h4>
+            </div>
+            <div class="content">
+                <div class="row">
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Título da possibilidade</label>
+                            {{ avaliacaoDadosForm.titulo }}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Apoiador da possibilidade</label>
+                            {{ avaliacaoDadosForm.apoiador }}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-12">
+                        <div class="form-group">
+                            <label>Tema do possibilidade</label>
+                            {{ avaliacaoDadosForm.tema_possibilidade }}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Prazo limite</label>
+                            {{ avaliacaoDadosForm.prazo_limite }}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Periodo de execução em meses</label>
+                            {{ avaliacaoDadosForm.periodo_execucao }}
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-lg-12">
+                        <div class="form-group">
+                            <label>Descrição resumida da possibilidade</label>
+                            {{ avaliacaoDadosForm.descricao }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <form method="POST" >
+                                {% csrf_token %}
+                                <input type="hidden" name="categoria_adequacao" value="0">
+                                <label>Adequação das informações básicas: </label>
+                                {{ novaAdequacao.adequacao }}
+                                <button type="submit" class="btn btn-info btn-fill btn-block btn-xs"><span class="ti-plus"></span></button>
+                            </form >
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label>Recomendação ou adequação cadastradas: </label>
+                            <div class="recomendacao-cadastrada">
+                                {% for recomendacao in adequacoes_basico %}
+                                <div class="item-recomendacao">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>To.: {{ recomendacao.user_avaliador }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>Data: {{ recomendacao.date_created|date:"d-m-Y" }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-12">
+                                            <small>{{ recomendacao.adequacao }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                    <div class="text-center">Nenhuma adequação cadastrada.</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-lg-12">
+        <div class="card">
+            <div class="header text-center">
+                <h4 class="title">Informações financeiras da possibilidade</h4>
+            </div>
+            <div class="content">
+                <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="form-group">
+                                    <label>Valor da possibilidade (R$):</label>
+                                    {{ avaliacaoDadosForm.valor_estimado }}
+                                </div>
+                            </div>
+                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <form method="POST" >
+                                {% csrf_token %}
+                                <input type="hidden" name="categoria_adequacao" value="1">
+                                <label>Adequação das informações financeiras: </label>
+                                {{ novaAdequacao.adequacao }}
+                                <button type="submit" class="btn btn-info btn-fill btn-block btn-xs"><span class="ti-plus"></span></button>
+                            </form >
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label>Recomendação ou adequação cadastradas: </label>
+                            <div class="recomendacao-cadastrada">
+                                {% for recomendacao in adequacoes_financeiro %}
+                                <div class="item-recomendacao">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>To.: {{ recomendacao.user_avaliador }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>Data: {{ recomendacao.date_created|date:"d-m-Y" }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-12">
+                                            <small>{{ recomendacao.adequacao }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                    <div class="text-center">Nenhuma adequação cadastrada.</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-lg-12">
+        <div class="card">
+            <div class="header text-center">
+                <h4 class="title">Núcleo(s) do IABS responsavel pela possibilidade</h4>
+            </div>
+            <div class="content">
+                <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="form-group">
+                                    {#<label>Valor da possibilidade (R$):</label>#}
+                                    {#{{ avaliacaoDadosForm.valor_estimado }}#}
+                                </div>
+                            </div>
+                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <form method="POST" >
+                                {% csrf_token %}
+                                <input type="hidden" name="categoria_adequacao" value="2">
+                                <label>Adequação do(s) núcleo(s) cadastrado: </label>
+                                {{ novaAdequacao.adequacao }}
+                                <button type="submit" class="btn btn-info btn-fill btn-block btn-xs"><span class="ti-plus"></span></button>
+                            </form >
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label>Recomendação ou adequação cadastradas: </label>
+                            <div class="recomendacao-cadastrada">
+                                {% for recomendacao in adequacoes_nucleo %}
+                                <div class="item-recomendacao">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>To.: {{ recomendacao.user_avaliador }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>Data: {{ recomendacao.date_created|date:"d-m-Y" }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-12">
+                                            <small>{{ recomendacao.adequacao }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                    <div class="text-center">Nenhuma adequação cadastrada.</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-lg-12">
+        <div class="card">
+            <div class="header text-center">
+                <h4 class="title">Informações da(s) área(s) de atuação possibilidade</h4>
+            </div>
+            <div class="content">
+                <div class="row">
+                            <div class="col-lg-12 col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_localizacao_mundial">Localização</label>
+                                    {{ avaliacaoDadosForm.localizacao_mundial }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_localizacao_mundial">Área de atuação do projeto</label>
+                                    {{ avaliacaoDadosForm.localizacao_abrangencia }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="id_localizacao_mundial">Descrição da área de atuação</label>
+                                    {{ avaliacaoDadosForm.localizacao_descricao }}
+                                </div>
+                            </div>
+                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <form method="POST" >
+                                {% csrf_token %}
+                                <input type="hidden" name="categoria_adequacao" value="3">
+                                <label>Adequação das informações da(s) área(s): </label>
+                                {{ novaAdequacao.adequacao }}
+                                <button type="submit" class="btn btn-info btn-fill btn-block btn-xs"><span class="ti-plus"></span></button>
+                            </form >
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label>Recomendação ou adequação cadastradas: </label>
+                            <div class="recomendacao-cadastrada">
+                                {% for recomendacao in adequacoes_area %}
+                                <div class="item-recomendacao">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>To.: {{ recomendacao.user_avaliador }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-6">
+                                            <small><strong>Data: {{ recomendacao.date_created|date:"d-m-Y" }}</strong></small>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-12">
+                                            <small>{{ recomendacao.adequacao }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                    <div class="text-center">Nenhuma adequação cadastrada.</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock %}
+
+{% block base_java_script %}
+<script >
+    $(document).ready(function(){
+        $('#aprovar-possibilidade-js').on('click', function(){
+            if ('{{ request.user.email }}' == '{{ possibilidade.possibilidade_responsavel.email }}') {
+                $.notify({
+                    icon: 'ti-save',
+                    message: "<b>Aprovando</b> a Possibilidade {{ chave_pos }}"
+                },{
+                    type: 'success',
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'center'
+                    }
+                });
+                setTimeout(function(){
+                    window.location = "/projeto/{{ id_pos }}/possibilidade/{{ chave_pos }}/aprovar/";
+                }, 2000);
+            }
+            else {
+                $.notify({
+                    icon: 'ti-na',
+                    message: "Você <b>não é responsavel</b> pela Possibilidade, solicite que o responsável passe a possibilidade para você, para que você possa aprovar."
+                },{
+                    type: 'danger',
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'center'
+                    }
+                });
+            }
+        });
+    });
+</script >
+{% endblock %}
+

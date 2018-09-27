@@ -5,16 +5,35 @@
             <th>Chave</th>
             <th>Titulo</th>
             <th>Status</th>
+            <th>Responsável</th>
+            <th></th>
+            <th></th>
         </thead>
         <tbody>
             {% for item in projetoObj %}
                 {% if item.status.cod_status == 102001000 %}
                 <tr>
-                    <td>{{ item.date_created }}</td>
+                    <td>{{ item.date_created|date:"d-m-Y" }}</td>
                     <td>{{ item.chave }}</td>
                     <td>{{ item.titulo }}</td>
                     <td>{{ item.status.texto }}</td>
-                    <td><button type="button" class="btn btn-info btn-fill">Avaliar</button></td>
+                    <td>{{ item.possibilidade_responsavel.nome }}</td>
+                    <td>
+                        <a href="/projeto/{{ item.id }}/cadastro/{{ item.chave }}/dadosbasicos" >
+                            <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"
+                                    data-placement="top" title="ATUALIZAR" >
+                                <span class="ti-reload"></span>
+                            </button>
+                        </a >
+                    </td>
+                    <td>
+                        <a href="/projeto/{{ item.id }}/possibilidade/{{ item.chave }}/avaliar" >
+                            <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"
+                                    data-placement="top" title="AVALIAR" >
+                                <span class="ti-pencil"></span>
+                            </button>
+                        </a >
+                    </td>
                 </tr>
                 {% endif %}
             {% endfor %}

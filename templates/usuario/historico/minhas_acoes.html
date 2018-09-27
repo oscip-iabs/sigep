@@ -1,0 +1,43 @@
+{% extends "base/base-main.html" %}
+
+{% block name_page %} Meu historico de ações{% endblock %}
+
+{% block base_content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Ações realizadas no SIGEP</h4>
+                <p class="category">Todas suas ações estão cadastradas aqui abaixo.</p>
+            </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição da ação</th>
+                            <th>Tipo</th>
+                            <th>Chave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for acoes in myhistoric %}
+                        <tr>
+                            <td>{{ acoes.date_modificacao|date:"d-m-Y" }}</td>
+                            <td>{{ acoes.texto }}</td>
+                            <td>
+                                {% if acoes.tipo == 'CADASTRO_POSSIBILIDADE' %}Cadastro de possibilidade{% endif %}
+                            </td>
+                            <td>{{ acoes.projeto.chave }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

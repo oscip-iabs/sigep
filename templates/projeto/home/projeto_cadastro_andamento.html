@@ -10,7 +10,7 @@
             {% for item in projetoObj %}
                 {% if item.status.cod_status == 101002000 %}
                 <tr>
-                    <td>{{ item.date_created }}</td>
+                    <td>{{ item.date_created|date:"d-m-Y"}}</td>
                     <td>{{ item.chave }}</td>
                     <td>{{ item.titulo }}</td>
                     <td>{{ item.status.texto }}</td>
