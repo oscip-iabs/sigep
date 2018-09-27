@@ -47,6 +47,12 @@ class Projeto(models.Model):
     check_possibilidade_cadastro_nucleo      = models.NullBooleanField(default=False, blank=True)
     check_possibilidade_cadastro_localizacao = models.NullBooleanField(default=False, blank=True)
 
+    check_projeto_potencial_cadastro_basico = models.NullBooleanField(default=False, blank=True)
+    check_projeto_potencial_cadastro_financeiro = models.NullBooleanField(default=False, blank=True)
+    check_projeto_potencial_cadastro_nucleo = models.NullBooleanField(default=False, blank=True)
+    check_projeto_potencial_cadastro_localizacao = models.NullBooleanField(default=False, blank=True)
+    check_projeto_potencial_cadastro_localizacao = models.NullBooleanField(default=False, blank=True)
+
     localizacao_mundial     = models.IntegerField(null=False, default=0, verbose_name=u'Localização da possibilidade', choices=LOCAL_GLOBAL)
     localizacao_descricao   = models.TextField(max_length=5000, blank=True, null=True, verbose_name=u'Outras informações em relação a localização')
     localizacao_abrangencia = models.ForeignKey(Abrangencia_Atuacao, null=True)

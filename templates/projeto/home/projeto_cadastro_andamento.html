@@ -7,8 +7,7 @@
             <th>Status</th>
         </thead>
         <tbody>
-            {% for item in projetoObj %}
-                {% if item.status.cod_status == 101002000 %}
+            {% for item in possibilidade_andamento %}
                 <tr>
                     <td>{{ item.date_created|date:"d-m-Y"}}</td>
                     <td>{{ item.chave }}</td>
@@ -20,7 +19,12 @@
                         </a>
                     </td>
                 </tr>
-                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <pre><h5>Não existe nenhuma possibilidade com cadastro Iniciado/Andamento</h5></pre>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

@@ -31,10 +31,10 @@ class Usuario_Perfil(models.Model):
 
 class Notificacao_Usuario(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
-    titulo = models.CharField(max_length=200, blank=True, null=True,verbose_name=u"Titulo")
-    descricao = models.CharField(max_length=500, unique=True, verbose_name=u"Descricao")
-    tipo = models.CharField(max_length=14, unique=True, verbose_name=u"Tipo")
-    visualizada = models.BooleanField(default=False, verbose_name=u"Recomposição da Mata Ciliar")
+    titulo = models.CharField(max_length=200, blank=True, null=True, verbose_name=u"Titulo")
+    descricao = models.CharField(max_length=500, verbose_name=u"Descricao")
+    tipo = models.CharField(max_length=200, verbose_name=u"Tipo")
+    visualizada = models.BooleanField(default=False)
     referencia = models.IntegerField(null=True, blank=True, verbose_name=u"Projeto id")
 
     def __str__(self):

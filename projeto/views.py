@@ -31,9 +31,8 @@ def request_user(request):
 def inicio_projeto(request):
     user_email = request_user(request)
     projetoObj = Projeto.objects.all()
-
-
-
+    possibilidade_andamento = Projeto.objects.filter(status__in=[101001000, 101002000])
+    possibilidade_completa = Projeto.objects.filter(status=102001000)
 
     return render(request, 'projeto/home/home.html', locals())
 
@@ -235,7 +234,7 @@ def cadastro_finalizar_possibilidade(request, id_pos, chave_pos):
                 descricao='Você foi definido como responsável da possibilidade %s' % (chave_pos),
                 tipo='RESPONSAVEL_POSSIBILIDADE',
                 visualizada=False,
-                referencia=id_pos
+                referencia=int(id_pos)
             )
             notify_user.save()
 
@@ -293,20 +292,65 @@ def avaliar_possibilidade(request, id_pos, chave_pos):
 @login_required
 @user_passes_test(is_admin)
 def aprovar_possibilidade(request, id_pos, chave_pos):
-
+    status_aprovado = Geral_Status.objects.get(chave='CADASTRO_POSSIBILIDADE_APROVADO' , referencia='POSSIBILIDADE APROVADA')
     possibilidade = Projeto.objects.get(id=id_pos, chave=chave_pos)
     usuario = Usuario_Perfil.objects.get(email=request.user.email)
 
-    print 'possibilidade'
+    if possibilidade.possibilidade_responsavel.email == usuario.email:
+        Projeto.objects.filter(id=possibilidade.id).update(status=status_aprovado)
+    else:
+        print 'USUARIO NEGADO'
+
+    return redirect('/projeto/potencial')
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial(request):
+    potencial_novo = Projeto.objects.filter(status=20101000)
+
+    return render(request, 'projeto/potencial/home/home.html', locals(),)
 
 
-    #
-    # if possibilidade.possibilidade_responsavel.email == usuario.email:
-    #     print 'Usuario responsavel pela possibilidade'
-    # else:
-    #     print 'USUARIO NEGADO'
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_dadosbasicos(request, id_potencial):
+    TABS = 'BASICO'
+    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
-    return redirect('/projeto')
+    return render(request, 'projeto/potencial/cadastros/dadosbasicos.html', locals(),)
 
 
-    # return render(request, 'projeto/avaliacao_possibilidade/avaliacao_inicial.html', locals(), )
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_dadosfinanceiros(request, id_potencial):
+    TABS = 'FINANCEIRO'
+    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+
+    return render(request, 'projeto/potencial/cadastros/dadosfinanceiro.html', locals(),)
+
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_nucleo(request, id_potencial):
+    TABS = 'NUCLEO'
+    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+
+    return render(request, 'projeto/potencial/cadastros/nucleo.html', locals(),)
+
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_localizacao(request, id_potencial):
+    TABS = 'LOCALIZACAO'
+    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+
+    return render(request, 'projeto/potencial/cadastros/localizacao.html', locals(),)
+
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_documentos(request, id_potencial):
+    TABS = 'DOCUMENTOS'
+    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+
+    return render(request, 'projeto/potencial/cadastros/documentos.html', locals(),)

@@ -14,7 +14,7 @@
     <div class="col-lg-4 col-sm-12">
         <div class="card">
             <div class="content">
-        	<a href="{% url 'projeto:add_possibilidade' %}">
+        	<a href="{% url 'projeto:inicio' %}">
 	                <div class="row">
 	                    <div class="col-xs-5">
 	                        <div class="icon-big icon-warning text-center">
@@ -41,24 +41,24 @@
     <div class="col-lg-4 col-sm-12">
         <div class="card">
             <div class="content">
-            	<a href="">
+            	<a href="/projeto/potencial">
 	                <div class="row">
 	                    <div class="col-xs-5">
 	                        <div class="icon-big icon-success text-center">
-	                            <i class="ti-check-box"></i>
+	                            <i class="ti-medall-alt"></i>
 	                        </div>
 	                    </div>
 	                    <div class="col-xs-7">
 	                        <div class="numbers">
 	                            <p>Projeto</p>
-	                            Aprovado
+	                            Potencial
 	                        </div>
 	                    </div>
 	                </div>
 	                <div class="footer">
 	                    <hr />
 	                    <div class="stats">
-	                        <i class="ti-clip"></i> Andamento das possibilidade aprovada
+	                        <i class="ti-clip"></i> Andamento dos projetor potenciais.
 	                    </div>
 	                </div>
 	            </a>
@@ -98,8 +98,17 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Possibilidades de Projetos</h4>
-                    <p class="category">Abra o projeto para avaliar a possibilidade</p>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="title">Possibilidades de Projetos</h4>
+                            <p class="category">Abra o projeto para avaliar a possibilidade</p>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'projeto:add_possibilidade' %}">
+                            <button class="btn btn-success btn-fill btn-wd btn-block">Cadastrar nova possibilidade</button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <ul class="nav nav-tabs">
@@ -115,8 +124,8 @@
                         {% include 'projeto/home/projeto_cadastro_completo.html' %}
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
 

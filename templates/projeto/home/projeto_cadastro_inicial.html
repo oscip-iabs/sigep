@@ -5,10 +5,10 @@
             <th>Chave</th>
             <th>Titulo</th>
             <th>Status</th>
+            <th></th>
         </thead>
         <tbody>
             {% for item in projetoObj %}
-                {% if item.status.cod_status == 101001000 %}
                 <tr>
                     <td>{{ item.date_created }}</td>
                     <td>{{ item.chave }}</td>
@@ -20,7 +20,12 @@
                         </a>
                     </td>
                 </tr>
-                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <h3>Não existe nenhuma possibilidade com cadastro iniciado</h3>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

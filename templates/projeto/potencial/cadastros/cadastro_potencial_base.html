@@ -1,0 +1,134 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+	<link href="{% static "css/projeto/cadastro_projeto.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block name_page %} Cadastro de possibilidade projeto {% endblock %}
+
+{% block base_content %}
+
+    <div class="card">
+        <div class="header">
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    <h4 class="title">Finalize o cadastro do Porjeto Potencial <small>[{{ potencial_cadastro.chave }}]</small></h4>
+                    <p class="category">Preencha as abas até que todas elas estejam com o simbolo verde</p>
+                </div>
+                <div class="col-lg-6 col-xs-12"></div>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div class="tabbable-line">
+                        <ul class="nav nav-tabs ">
+                            <li {% if TABS == 'BASICO' %}class="active"{% endif %}>
+                                <a href="/projeto/potencial/{{ id_potencial }}/dadosbasicos/">
+                                    {% if potencial_cadastro.check_projeto_potencial_cadastro_basico %}
+                                    <span class="ti-save" style="color: #00A253;"></span>
+                                    {% else %}
+                                    <span class="ti-na" style="color: red;"></span>
+                                    {% endif %}
+                                    Dados Básicos
+                                </a>
+                            </li>
+                            <li {% if TABS == 'FINANCEIRO' %}class="active"{% endif %}>
+                                <a href="/projeto/potencial/{{ id_potencial }}/dadosfinanceiros/">
+                                    {% if potencial_cadastro.check_projeto_potencial_cadastro_financeiro %}
+                                    <span class="ti-save" style="color: #00A253;"></span>
+                                    {% else %}
+                                    <span class="ti-na" style="color: red;"></span>
+                                    {% endif %}
+                                    Dados Financeiros
+                                </a>
+                            </li>
+                            <li {% if TABS == 'NUCLEO' %}class="active"{% endif %}>
+                                <a href="/projeto/potencial/{{ id_potencial }}/nucleo/">
+                                    {% if potencial_cadastro.check_projeto_potencial_cadastro_nucleo %}
+                                    <span class="ti-save" style="color: #00A253;"></span>
+                                    {% else %}
+                                    <span class="ti-na" style="color: red;"></span>
+                                    {% endif %}
+                                    Nucleo
+                                </a>
+                            </li>
+                            <li {% if TABS == 'LOCALIZACAO' %}class="active"{% endif %}>
+                                <a href="/projeto/potencial/{{ id_potencial }}/localizacao/">
+                                    {% if potencial_cadastro.check_projeto_potencial_cadastro_localizacao %}
+                                    <span class="ti-save" style="color: #00A253;"></span>
+                                    {% else %}
+                                    <span class="ti-na" style="color: red;"></span>
+                                    {% endif %}
+                                    Localização
+                                </a>
+                            </li>
+                            <li {% if TABS == 'DOCUMENTOS' %}class="active"{% endif %}>
+                                <a href="/projeto/potencial/{{ id_potencial }}/documentos/">
+                                    {% if potencial_cadastro.check_projeto_potencial_cadastro_localizacao %}
+                                    <span class="ti-save" style="color: #00A253;"></span>
+                                    {% else %}
+                                    <span class="ti-na" style="color: red;"></span>
+                                    {% endif %}
+                                    Documentos
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="content">
+                    {% block base_cadastro_potencial %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block base_java_script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#id_valor_estimado').mask('000.000.000.000.000,00', {reverse: true});
+
+        setInterval(function(){
+            $('#finalizar-cadastro').toggleClass('piscar')
+        }, 1000);
+
+{#        {% if potencial_cadastro.check_possibilidade_cadastro_basico and potencial_cadastro.check_possibilidade_cadastro_financeiro and potencial_cadastro.check_possibilidade_cadastro_localizacao %}#}
+{#        $.notify({#}
+{#            icon: 'ti-bell',#}
+{#            title: 'Cadastro Finalizado',#}
+{#            message: 'Pronto, o cadastro da possibilidade foi completo, agora salve clicando em "Salvar Possibilidade" '#}
+{#        },{#}
+{#            element: 'body',#}
+{#            type: "warning",#}
+{#            allow_dismiss: true,#}
+{#            newest_on_top: false,#}
+{#            placement: {#}
+{#                from: "top",#}
+{#                align: "center"#}
+{#            },#}
+{#            offset: 20,#}
+{#            spacing: 10,#}
+{#            z_index: 1031,#}
+{#            delay: 5000,#}
+{#            timer: 1000,#}
+{#            mouse_over: null,#}
+{#            animate: {#}
+{#                enter: 'animated fadeInDown',#}
+{#                exit: 'animated fadeOutUp'#}
+{#            },#}
+{#            icon_type: 'class'#}
+{#        });#}
+{#        {% endif %}#}
+    });
+</script>
+
+{% endblock %}
