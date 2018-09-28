@@ -12,7 +12,7 @@ from projeto.utils import generate_project_key
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
     AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContatoPotencial, \
-    CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm
+    CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm, CadastroNucleoPotencialForm
 
 
 from django.contrib.auth.models import Group
@@ -337,7 +337,7 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Inicio do cadastro de um novo potencial',
-                tipo='CADASTRO_POTENCIAL',
+                tipo='CADASTRO_PROJETO_POTENCIAL',
                 projeto=projeto_obj,
                 modified_user=usuario
             )
@@ -367,7 +367,7 @@ def projeto_potencial_contato_dadosbasicos(request, id_potencial):
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Cadastro de um novo contato nos dados basicos do potencial',
-                tipo='CADASTRO_POTENCIAL',
+                tipo='CADASTRO_PROJETO_POTENCIAL',
                 projeto=projeto_obj.projeto,
                 modified_user=usuario
             )
@@ -389,7 +389,7 @@ def projeto_potencial_del_contato_dadosbasicos(request, id_potencial, id_contato
         historicProject = Historico_Projeto(
             date_modificacao=now,
             texto='Exclusão de Documento do potencial ' + potencial_contato.projeto.chave,
-            tipo='CADASTRO_POTENCIAL',
+            tipo='CADASTRO_PROJETO_POTENCIAL',
             projeto=potencial_contato.projeto,
             modified_user=usuario
         )
@@ -419,7 +419,7 @@ def projeto_potencial_dadosfinanceiros(request, id_potencial):
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Cadastro das informações financeiras da possibilidade ' + projeto_obj.chave,
-                tipo='CADASTRO_POTENCIAL',
+                tipo='CADASTRO_PROJETO_POTENCIAL',
                 projeto=projeto_obj,
                 modified_user=usuario
             )
@@ -435,6 +435,34 @@ def projeto_potencial_dadosfinanceiros(request, id_potencial):
 def projeto_potencial_nucleo(request, id_potencial):
     TABS = 'NUCLEO'
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+    check_nucleo = potencial_cadastro.check_projeto_potencial_cadastro_nucleo
+
+    formNucleo = CadastroNucleoPotencialForm(request.POST or None)
+
+    try:
+        nucleo_cadastrado = Nucleo_x_Projeto.objects.filter(projeto=potencial_cadastro)
+    except:
+        nucleo_empty = True
+
+    if request.method == 'POST':
+        if formNucleo.is_valid():
+            projeto_obj = formNucleo.save(commit=False)
+            projeto_check = Projeto.objects.filter(id=id_potencial).update(check_projeto_potencial_cadastro_nucleo=True)
+            projeto_obj.projeto = potencial_cadastro
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro do(s) Núcleo(s) do projeto potencial ' + potencial_cadastro.chave,
+                tipo='CADASTRO_PROJETO_POTENCIAL',
+                projeto=potencial_cadastro,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/potencial/%s/nucleo' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/nucleo.html', locals(),)
 
@@ -458,7 +486,7 @@ def projeto_potencial_localizacao(request, id_potencial):
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Cadastro da localização do projeto potencial ' + localizacao_obj.chave,
-                tipo='CADASTRO_POTENCIAL',
+                tipo='CADASTRO_PROJETO_POTENCIAL',
                 projeto=localizacao_obj,
                 modified_user=usuario
             )
@@ -500,7 +528,7 @@ def projeto_potencial_documentos(request, id_potencial):
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Cadastro do(s) Documento(s) do potencial ' + potencial_cadastro.chave,
-                tipo='CADASTRO_POTENCIAL',
+                tipo='CADASTRO_PROJETO_POTENCIAL',
                 projeto=potencial_cadastro,
                 modified_user=usuario
             )
@@ -524,7 +552,7 @@ def delete_potencial_documentos(request, id_potencial, id_documento):
         historicProject = Historico_Projeto(
             date_modificacao=now,
             texto='Exclusão de Documento do potencial ' + potencial_documento.projeto.chave,
-            tipo='CADASTRO_POTENCIAL',
+            tipo='CADASTRO_PROJETO_POTENCIAL',
             projeto=potencial_documento.projeto,
             modified_user=usuario
         )

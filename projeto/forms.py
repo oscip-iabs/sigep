@@ -226,6 +226,19 @@ class CadastroDadosFinanceiroPotencialForm(ModelForm):
                   'check_possibilidade_cadastro_financeiro',)
 
 
+class CadastroNucleoPotencialForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroNucleoPotencialForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Nucleo_x_Projeto
+        widgets = {
+            'nucleo' : forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('projeto', 'nucleo',)
+
+
 class CadastroDadosLocalizacaoPotencialForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CadastroDadosLocalizacaoPotencialForm, self).__init__(*args, **kwargs)
