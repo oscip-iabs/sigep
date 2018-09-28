@@ -14,7 +14,7 @@
         <div class="header">
             <div class="row">
                 <div class="col-lg-6 col-xs-12">
-                    <h4 class="title">Finalize o cadastro do Porjeto Potencial <small>[{{ potencial_cadastro.chave }}]</small></h4>
+                    <h4 class="title">Finalize o cadastro do Projeto Potencial <small>[{{ potencial_cadastro.chave }}]</small></h4>
                     <p class="category">Preencha as abas até que todas elas estejam com o simbolo verde</p>
                 </div>
                 <div class="col-lg-6 col-xs-12"></div>
@@ -71,7 +71,7 @@
                             </li>
                             <li {% if TABS == 'DOCUMENTOS' %}class="active"{% endif %}>
                                 <a href="/projeto/potencial/{{ id_potencial }}/documentos/">
-                                    {% if potencial_cadastro.check_projeto_potencial_cadastro_localizacao %}
+                                    {% if potencial_cadastro.check_projeto_potencial_cadastro_documento %}
                                     <span class="ti-save" style="color: #00A253;"></span>
                                     {% else %}
                                     <span class="ti-na" style="color: red;"></span>
@@ -96,6 +96,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('#id_valor_estimado').mask('000.000.000.000.000,00', {reverse: true});
+        $('#id_telefone').mask('(00)0000-0000');
 
         setInterval(function(){
             $('#finalizar-cadastro').toggleClass('piscar')

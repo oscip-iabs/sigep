@@ -19,10 +19,15 @@ urlpatterns = [
     url(r'^(?P<id_pos>[-\w\d]+)/possibilidade/(?P<chave_pos>[-\w\d]+)/aprovar/$',views.aprovar_possibilidade, name='aprovar_possibilidade'),
 
     url(r'^potencial/$', views.projeto_potencial, name='projeto_potencia'),
+
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/dadosbasicos/$', views.projeto_potencial_dadosbasicos, name='projeto_potencial_dadosbasicos'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/dadosbasicos/addcontato/$', views.projeto_potencial_contato_dadosbasicos, name='projeto_potencial_contato_dadosbasicos'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/dadosbasicos/deletecontato/(?P<id_contato>[-\w\d]+)$', views.projeto_potencial_del_contato_dadosbasicos, name='projeto_potencial_del_contato_dadosbasicos'),
+
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/dadosfinanceiros/$', views.projeto_potencial_dadosfinanceiros, name='projeto_potencial_dadosfinanceiros'),
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/nucleo/$', views.projeto_potencial_nucleo, name='projeto_potencial_nucleo'),
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/$', views.projeto_potencial_localizacao, name='projeto_potencial_localizacao'),
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/documentos/$', views.projeto_potencial_documentos, name='projeto_potencial_documentos'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/documentos/delete/(?P<id_documento>[-\w\d]+)$', views.delete_potencial_documentos, name='delete_potencial_documentos'),
 
 ]

@@ -2,7 +2,7 @@
 from django.forms import ModelForm
 from django import forms
 
-from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade
+from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato
 
 
 class InformacoesBasicasProjeto(ModelForm):
@@ -163,3 +163,78 @@ class AvaliacaoAdequacaoForm(ModelForm):
             'categoria',
             'projeto',
             'user_avaliador',)
+
+
+class CadastroDadosBasicosPotencialForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroDadosBasicosPotencialForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Projeto
+        widgets = {
+            'titulo'				: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
+            'apoiador'				: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
+            'periodo_execucao'		: forms.TextInput(attrs={'type':'number', 'class':'form-control border-input', 'required': True, 'step':'1',}),
+            'prazo_limite'			: forms.TextInput(attrs={'type':'date'  , 'class':'form-control border-input', 'required': True, 'placeholder': 'dd/mm/aaaa'}),
+            'tema_possibilidade'	: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
+            'descricao'				: forms.Textarea(attrs={'class': 'form-control border-input', 'maxlength': 10000, 'required': True}),
+            'projeto_nucleo'		: forms.Select(attrs={'class': 'form-control border-input', 'required': True, 'multiple':'multiple'}),
+        }
+
+        fields = ('titulo',
+            'apoiador',
+            'tema_possibilidade',
+            'prazo_limite',
+            'descricao',
+            'periodo_execucao',
+            'check_projeto_potencial_cadastro_basico',)
+
+
+class formContatoPotencial(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(formContatoPotencial, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Contato
+        widgets = {
+            'nome': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'telefone': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'email': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('nome',
+            'telefone',
+            'email',
+            'projeto')
+
+
+class CadastroDadosFinanceiroPotencialForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroDadosFinanceiroPotencialForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Projeto
+        widgets = {
+            'valor_estimado': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('valor_estimado',
+                  'check_possibilidade_cadastro_financeiro',)
+
+
+class CadastroDocumentoPotencialForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroDocumentoPotencialForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Documento
+        widgets = {
+            'nome': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'link': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'tipo': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('nome',
+            'link',
+            'tipo',
+            'projeto')

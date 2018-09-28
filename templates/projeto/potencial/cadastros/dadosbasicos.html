@@ -4,6 +4,139 @@
 
 {% block base_cadastro_potencial %}
 
-    <h1>CADASTRO POTENCIAL DADOS BASICOS</h1>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_default_1">
+            <h4 class="title">Cadastro de dados básicos</h4>
+            <p class="category">Informações básicas do projeto potencial</p>
 
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12 col-lg-12">
+                        <div class="form-group">
+                            <label>Título do projeto potencial</label>
+                            {{ formPotencial.titulo }}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-12">
+                        <div class="form-group">
+                            <label>Apoiador do projeto potencial</label>
+                            {{ formPotencial.apoiador }}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-7">
+                        <div class="form-group">
+                            <label>Tema do projeto potencial</label>
+                            {{ formPotencial.tema_possibilidade }}
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-lg-3">
+                        <div class="form-group">
+                            <label>Prazo limite</label>
+                            {{ formPotencial.prazo_limite }}
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-lg-2">
+                        <div class="form-group">
+                            <label>Periodo de execução</label>
+                            {{ formPotencial.periodo_execucao }}
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-lg-12">
+                        <div class="form-group">
+                            <label>Descrição resumida do projeto potencial</label>
+                            {{ formPotencial.descricao }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-info btn-fill btn-wd">Salvar Informações</button>
+                            <button type="button" class="btn btn-primary btn-fill btn-wd" data-toggle="modal"
+                                    data-target="#myModal">Adicionar contato</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Contato(s) inserido(s) no Projeto Potencial</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for contato in contatoPotencial %}
+                            <tr>
+                                <th>{{ forloop.counter }}</th>
+                                <td>{{ contato.nome }}</td>
+                                <td>{{ contato.email }}</td>
+                                <td>{{ contato.telefone }}</td>
+                                <td>
+                                    <a href="/projeto/potencial/{{ id_potencial }}/dadosbasicos/deletecontato/{{ contato.id }}" target="_blank" title="Excluir Contato">
+                                        <button class="btn btn-danger btn-fill btn-wd">Excluir</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <pre><h5>Não existe nenhum contato cadastrado neste projeto potencial</h5></pre>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog" >
+        <div class="modal-dialog ">
+            <form method="POST" action="/projeto/potencial/{{ id_potencial }}/dadosbasicos/addcontato/">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Adicionar contato</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" style="margin-left: -10px;">
+                                    <label>Nome</label>
+                                    {{ formContPotencial.nome }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Telefone</label>
+                                    {{ formContPotencial.telefone }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    {{ formContPotencial.email }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default btn-block">Adicionar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}
+

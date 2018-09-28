@@ -6,12 +6,13 @@ import datetime
 
 from iabs_main.models import Geral_Status
 from usuario.models import Usuario_Perfil, Notificacao_Usuario
-from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade
+from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato
 from projeto.utils import generate_project_key
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
-    AvaliacaoAdequacaoForm
+    AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContatoPotencial, \
+    CadastroDadosFinanceiroPotencialForm
 
 
 from django.contrib.auth.models import Group
@@ -311,13 +312,92 @@ def projeto_potencial(request):
     return render(request, 'projeto/potencial/home/home.html', locals(),)
 
 
+# Metodo para iniciar o cadasto da possibilidade
+# aqui faz o init dos dados na tabela projeto
 @login_required
 @user_passes_test(is_admin)
 def projeto_potencial_dadosbasicos(request, id_potencial):
     TABS = 'BASICO'
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
+    formPotencial = CadastroDadosBasicosPotencialForm(request.POST or None, instance=potencial_cadastro)
+    formContPotencial = formContatoPotencial(request.POST or None)
+
+    contatoPotencial = Contato.objects.filter(projeto=potencial_cadastro)
+
+    if request.method == 'POST':
+        if formPotencial.is_valid():
+
+            projeto_obj = formPotencial.save(commit=False)
+            projeto_obj.check_projeto_potencial_cadastro_basico = True
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Inicio do cadastro de um novo potencial',
+                tipo='CADASTRO_POTENCIAL',
+                projeto=projeto_obj,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/potencial/%s/dadosbasicos' % id_potencial)
+
     return render(request, 'projeto/potencial/cadastros/dadosbasicos.html', locals(),)
+
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_contato_dadosbasicos(request, id_potencial):
+    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+
+    formContPotencial = formContatoPotencial(request.POST or None)
+
+    if request.method == 'POST':
+        if formContPotencial.is_valid():
+
+            projeto_obj = formContPotencial.save(commit=False)
+            projeto_obj.projeto = potencial_cadastro
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro de um novo contato nos dados basicos do potencial',
+                tipo='CADASTRO_POTENCIAL',
+                projeto=projeto_obj.projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+    return redirect('/projeto/potencial/%s/dadosbasicos' % id_potencial)
+
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_del_contato_dadosbasicos(request, id_potencial, id_contato):
+    potencial_contato = Contato.objects.get(id=int(id_contato))
+
+    try:
+        potencial_contato.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Documento do potencial ' + potencial_contato.projeto.chave,
+            tipo='CADASTRO_POTENCIAL',
+            projeto=potencial_contato.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    return redirect('/projeto/potencial/%s/dadosbasicos' % id_potencial)
 
 
 @login_required
@@ -325,6 +405,27 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
 def projeto_potencial_dadosfinanceiros(request, id_potencial):
     TABS = 'FINANCEIRO'
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+
+    formFinanceiro = CadastroDadosFinanceiroPotencialForm(request.POST or None, instance=potencial_cadastro)
+
+    if request.method == 'POST':
+        if formFinanceiro.is_valid():
+            projeto_obj = formFinanceiro.save(commit=False)
+            projeto_obj.check_projeto_potencial_cadastro_financeiro = True
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro das informações financeiras da possibilidade ' + projeto_obj.chave,
+                tipo='CADASTRO_POSSIBILIDADE',
+                projeto=projeto_obj,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/potencial/%s/dadosfinanceiros' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/dadosfinanceiro.html', locals(),)
 
@@ -353,4 +454,61 @@ def projeto_potencial_documentos(request, id_potencial):
     TABS = 'DOCUMENTOS'
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
+    formDoc = CadastroDocumentoPotencialForm(request.POST or None)
+
+    try:
+        doc_cadastrado = Documento.objects.filter(projeto=potencial_cadastro)
+    except:
+        doc_empty = True
+
+    doc_potencial_cadastro = Documento.objects.filter(projeto=potencial_cadastro)
+
+    if not doc_potencial_cadastro:
+        potencial_cadastro.check_projeto_potencial_cadastro_documento = False
+        potencial_cadastro.save()
+
+    if request.method == 'POST':
+        if formDoc.is_valid():
+            projeto_obj = formDoc.save(commit=False)
+            projeto_check = Projeto.objects.filter(id=id_potencial).update(check_projeto_potencial_cadastro_documento=True)
+            projeto_obj.projeto = potencial_cadastro
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro do(s) Documento(s) do potencial ' + potencial_cadastro.chave,
+                tipo='CADASTRO_POTENCIAL',
+                projeto=potencial_cadastro,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/potencial/%s/documentos' % (id_potencial))
+
     return render(request, 'projeto/potencial/cadastros/documentos.html', locals(),)
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_potencial_documentos(request, id_potencial, id_documento):
+    potencial_documento = Documento.objects.get(id=int(id_documento))
+
+    try:
+        potencial_documento.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Documento do potencial ' + potencial_documento.projeto.chave,
+            tipo='CADASTRO_POTENCIAL',
+            projeto=potencial_documento.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    return redirect('/projeto/potencial/%s/documentos' % (id_potencial))

@@ -4,6 +4,39 @@
 
 {% block base_cadastro_potencial %}
 
-    <h1>CADASTRO POTENCIAL DADOS FINANCEIROS</h1>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_default_2">
+            <h4 class="title">Cadastro de dados financeiros</h4>
+            <p class="category">Informações dos dados financeiros do projeto potencial</p>
+        </div>
+    </div>
+
+    <br><br>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <h3 class="title">Informe o valor estimado do projeto potencial</h3>
+        </div>
+    </div>
+    <br><br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label>Valor (R$):</label>
+                    {{ formFinanceiro.valor_estimado }}
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-xs-12">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-info btn-fill btn-wd">Salvar Informação</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
 
 {% endblock %}
+

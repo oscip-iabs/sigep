@@ -1,9 +1,87 @@
 {% extends "projeto/potencial/cadastros/cadastro_potencial_base.html" %}
 {% load static %}
 
-
 {% block base_cadastro_potencial %}
+    <div class="tab-content">
 
-    <h1>CADASTRO POTENCIAL DOCUMENTOS</h1>
+        <div class="tab-pane active" id="tab_default_2">
+            <h4 class="title">Cadastro do(s) Documento(s) do projeto potencial</h4>
+        </div>
 
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="id_nucleo">Nome</label>
+                        {{ formDoc.nome }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="id_nucleo">Tipo</label>
+                        {{ formDoc.tipo }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="id_nucleo">Link</label>
+                        {{ formDoc.link }}
+                    </div>
+                </div>
+            </div>
+                <div class="col-lg-12 col-xs-12">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info btn-fill btn-wd">Salvar Documento</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Link(s) do(s) documento(s) inserido(s) no Projeto Potencial</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for docs in doc_cadastrado %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+                            <td>{{ docs.nome }} (
+                                {% if docs.tipo == 0 %}
+                                    Edital
+                                {% elif docs.tipo == 1 %}
+                                    Outros
+                                {% endif %}
+                                )</td>
+                            <td>
+                                <a href="{{ docs.link }}" target="_blank" title="Abrir documento">
+                                    <span class="ti-clipboard" style=""></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/projeto/potencial/{{ id_potencial }}/documentos/delete/{{ docs.id }}" target="_blank" title="Excluir documento">
+                                    <button class="btn btn-danger btn-fill btn-wd">Excluir</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <pre><h5>Não existe nenhum documento cadastrado neste projeto potencial</h5></pre>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
 {% endblock %}
