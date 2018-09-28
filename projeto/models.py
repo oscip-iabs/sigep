@@ -21,6 +21,14 @@ class Abrangencia_Atuacao(models.Model):
         return self.texto.encode('utf-8').strip()
 
 
+class Tipo_Contratacao(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    texto        = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.texto.encode('utf-8').strip()
+
+
 class Projeto(models.Model):
     LOCAL_GLOBAL = (
         (0, 'Nacional'),
@@ -38,7 +46,9 @@ class Projeto(models.Model):
     tema_possibilidade  = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Descreva o tema')
     prazo_limite        = models.DateField(default=datetime.date.today, blank=True, verbose_name=u'Data da publicação')
     descricao           = models.TextField(max_length=5000, blank=True, null=True,  verbose_name=u'Descrição resumida')
-    periodo_execucao    = models.IntegerField(null=True,    blank=True,             verbose_name=u'Informe o período em meses.')
+    periodo_execucao    = models.IntegerField(null=True, blank=True, verbose_name=u'Informe o período em meses.')
+    previsao_resultado  = models.DateField(default=datetime.date.today, blank=True, verbose_name=u'Data da previsão do resultado')
+    tipo_contratacao    = models.ForeignKey(Tipo_Contratacao, null=True, verbose_name=u'Tipo da contratação')
 
     status              = models.ForeignKey(Geral_Status, blank=True, null=True)
 

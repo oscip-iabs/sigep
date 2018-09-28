@@ -23,13 +23,10 @@ class Migration(migrations.Migration):
                 ('tipo', models.IntegerField(blank=True, choices=[(0, 'Edital'), (1, 'Outros')], default=0, verbose_name='Tipo do documento potencial')),
             ],
         ),
-        migrations.CreateModel(
-            name='Documento_x_Projeto',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('documento', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='projeto.Documento')),
-                ('projeto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='projeto.Projeto')),
-            ],
+        migrations.AddField(
+            model_name='documento',
+            name='projeto',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to='projeto.Projeto'),
         ),
     ]

@@ -12,7 +12,7 @@ from projeto.utils import generate_project_key
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
     AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContatoPotencial, \
-    CadastroDadosFinanceiroPotencialForm
+    CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm
 
 
 from django.contrib.auth.models import Group
@@ -419,7 +419,7 @@ def projeto_potencial_dadosfinanceiros(request, id_potencial):
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Cadastro das informações financeiras da possibilidade ' + projeto_obj.chave,
-                tipo='CADASTRO_POSSIBILIDADE',
+                tipo='CADASTRO_POTENCIAL',
                 projeto=projeto_obj,
                 modified_user=usuario
             )
@@ -444,6 +444,27 @@ def projeto_potencial_nucleo(request, id_potencial):
 def projeto_potencial_localizacao(request, id_potencial):
     TABS = 'LOCALIZACAO'
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+
+    formLocalizacao = CadastroDadosLocalizacaoPotencialForm(request.POST or None, instance=potencial_cadastro)
+
+    if request.method == 'POST':
+        if formLocalizacao.is_valid():
+            localizacao_obj = formLocalizacao.save(commit=False)
+            localizacao_obj.check_projeto_potencial_cadastro_localizacao = True
+            localizacao_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro da localização do projeto potencial ' + localizacao_obj.chave,
+                tipo='CADASTRO_POTENCIAL',
+                projeto=localizacao_obj,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/potencial/%s/localizacao' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/localizacao.html', locals(),)
 
