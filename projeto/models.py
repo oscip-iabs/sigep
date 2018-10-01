@@ -111,6 +111,12 @@ class Contato(models.Model):
         return self.nome.encode('utf-8').strip()
 
 
+class Equipe_Projeto(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    participante = models.ForeignKey(Usuario_Perfil, blank=True, null=True)
+    projeto      = models.ForeignKey(Projeto, blank=True, null=True)
+
+
 class Documento(models.Model):
     TIPO_DOCUMENTO = (
         (0, 'Edital'),
