@@ -175,19 +175,13 @@
                         </li>
                         -->
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="#" class="dropdown-toggle drop_notify" data-toggle="dropdown">
                                 <i class="ti-bell"></i>
-                                <p class="notification">4</p>
+                                <p class="notification notification_num"></p>
                                 <p>Notificações</p>
                                 <b class="caret"></b>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Notificações 1</a></li>
-                                <li><a href="#">Notificações 2</a></li>
-                                <li><a href="#">Notificações 3</a></li>
-                                <li><a href="#">Notificações 4</a></li>
-                                <li><a href="#">Outras Notificações</a></li>
-                            </ul>
+                            <ul class="dropdown-menu drop_field_notify"></ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -252,6 +246,9 @@
     <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
     
     <script src="https://s3.amazonaws.com/rural-sustentavel/static_portal/js/jquery.mask.js"></script>
+    <!-- Ajax notificações  -->
+    <script src="{% static "projeto/home/ajax_notificacao.js" %}"></script>
+
     <script type="text/javascript">
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();

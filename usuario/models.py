@@ -36,6 +36,7 @@ class Notificacao_Usuario(models.Model):
     tipo = models.CharField(max_length=200, verbose_name=u"Tipo")
     visualizada = models.BooleanField(default=False)
     referencia = models.IntegerField(null=True, blank=True, verbose_name=u"Projeto id")
+    modified_user = models.ForeignKey(Usuario_Perfil, null=True, blank=True)
 
     def __str__(self):
         return self.titulo.encode('utf-8').strip()
