@@ -1,3 +1,9 @@
 .card .numbers {
     color: #000000;
 }
+
+.tabbable-line > .nav-tabs > li {
+    margin-right: 2px;
+    width: 16% !important;
+    text-align: center;
+}

@@ -6,13 +6,15 @@ import datetime
 
 from iabs_main.models import Geral_Status
 from usuario.models import Usuario_Perfil, Notificacao_Usuario
-from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato
+from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato, \
+    Parceiro
 from projeto.utils import generate_project_key
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
     AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContatoPotencial, \
-    CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm, CadastroNucleoPotencialForm
+    CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm, CadastroNucleoPotencialForm, \
+    CadastroParceiroPotencialForm
 
 
 from django.contrib.auth.models import Group
@@ -323,6 +325,8 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
     formPotencial = CadastroDadosBasicosPotencialForm(request.POST or None, instance=potencial_cadastro)
     formContPotencial = formContatoPotencial(request.POST or None)
 
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
+
     contatoPotencial = Contato.objects.filter(projeto=potencial_cadastro)
 
     if request.method == 'POST':
@@ -408,6 +412,8 @@ def projeto_potencial_dadosfinanceiros(request, id_potencial):
 
     formFinanceiro = CadastroDadosFinanceiroPotencialForm(request.POST or None, instance=potencial_cadastro)
 
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
+
     if request.method == 'POST':
         if formFinanceiro.is_valid():
             projeto_obj = formFinanceiro.save(commit=False)
@@ -439,10 +445,16 @@ def projeto_potencial_nucleo(request, id_potencial):
 
     formNucleo = CadastroNucleoPotencialForm(request.POST or None)
 
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
+
     try:
         nucleo_cadastrado = Nucleo_x_Projeto.objects.filter(projeto=potencial_cadastro)
     except:
         nucleo_empty = True
+
+    if not nucleo_cadastrado:
+        potencial_cadastro.check_projeto_potencial_cadastro_nucleo = False
+        potencial_cadastro.save()
 
     if request.method == 'POST':
         if formNucleo.is_valid():
@@ -469,11 +481,62 @@ def projeto_potencial_nucleo(request, id_potencial):
 
 @login_required
 @user_passes_test(is_admin)
+def confirmar_potencial_nucleo(request, id_potencial):
+    try:
+        projeto_obj = Projeto.objects.get(id=id_potencial)
+        projeto_obj.check_projeto_potencial_cadastro_nucleo = True
+        projeto_obj.save()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Confirmação do(s) Núcleo(s) no projeto potencial ' + projeto_obj.chave,
+            tipo='CADASTRO_PROJETO_POTENCIAL',
+            projeto=projeto_obj,
+            modified_user=usuario
+        )
+        historicProject.save()
+
+    except:
+        print("Ops!")
+
+    return redirect('/projeto/potencial/%s/nucleo' % id_potencial)
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_potencial_nucleo(request, id_potencial, id_nucleo):
+    potencial_nucleo = Nucleo_x_Projeto.objects.get(id=int(id_nucleo))
+
+    try:
+        potencial_nucleo.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Núcleo do potencial ' + potencial_nucleo.projeto.chave,
+            tipo='CADASTRO_PROJETO_POTENCIAL',
+            projeto=potencial_nucleo.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    return redirect('/projeto/potencial/%s/nucleo' % (id_potencial))
+
+
+@login_required
+@user_passes_test(is_admin)
 def projeto_potencial_localizacao(request, id_potencial):
     TABS = 'LOCALIZACAO'
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
     formLocalizacao = CadastroDadosLocalizacaoPotencialForm(request.POST or None, instance=potencial_cadastro)
+
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
 
     if request.method == 'POST':
         if formLocalizacao.is_valid():
@@ -504,6 +567,8 @@ def projeto_potencial_documentos(request, id_potencial):
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
     formDoc = CadastroDocumentoPotencialForm(request.POST or None)
+
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
 
     try:
         doc_cadastrado = Documento.objects.filter(projeto=potencial_cadastro)
@@ -560,4 +625,116 @@ def delete_potencial_documentos(request, id_potencial, id_documento):
     except:
         print('Ops')
 
-    return redirect('/projeto/potencial/%s/documentos' % (id_potencial))
+    return redirect('/projeto/potencial/%s/documentos' % id_potencial)
+
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_potencial_parceiros(request, id_potencial):
+    TABS = 'PARCEIROS'
+    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
+    check_parceiro = potencial_cadastro.check_projeto_potencial_cadastro_parceiro
+
+    formParceiro = CadastroParceiroPotencialForm(request.POST or None)
+
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
+
+    try:
+        parceiro_cadastrado = Parceiro.objects.filter(projeto=potencial_cadastro)
+    except:
+        parceiro_empty = True
+
+    if not parceiro_cadastrado:
+        potencial_cadastro.check_projeto_potencial_cadastro_parceiro = False
+        potencial_cadastro.save()
+
+    if request.method == 'POST':
+        if formParceiro.is_valid():
+            projeto_obj = formParceiro.save(commit=False)
+            projeto_check = Projeto.objects.filter(id=id_potencial).update(check_projeto_potencial_cadastro_parceiro=True)
+            projeto_obj.projeto = potencial_cadastro
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro de Parceiro(s) do projeto potencial ' + potencial_cadastro.chave,
+                tipo='CADASTRO_PROJETO_POTENCIAL',
+                projeto=potencial_cadastro,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            return redirect('/projeto/potencial/%s/parceiros' % id_potencial)
+
+    return render(request, 'projeto/potencial/cadastros/parceiros.html', locals(),)
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_potencial_parceiros(request, id_potencial, id_parceiro):
+    potencial_parceiro = Parceiro.objects.get(id=int(id_parceiro))
+
+    try:
+        potencial_parceiro.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Parceiro do potencial ' + potencial_parceiro.projeto.chave,
+            tipo='CADASTRO_PROJETO_POTENCIAL',
+            projeto=potencial_parceiro.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    return redirect('/projeto/potencial/%s/parceiros' % id_potencial)
+
+
+# metodo para finalizar e definir responsavel pela possibilidade
+@login_required
+@user_passes_test(is_admin)
+def cadastro_finalizar_projeto_potencial(request, id_potencial, chave_potencial):
+    obj_projeto = Projeto.objects.get(id=id_potencial, chave=chave_potencial)
+
+    formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
+
+    if request.method == 'POST':
+        if formFinalizar.is_valid():
+            finalizar_obj = formFinalizar.save(commit=False)
+            statusConcluido = Geral_Status.objects.get(referencia='CADASTRO PROJETO POTENCIAL COMPLETO', chave='CADASTRO_PROJETO_POTENCIAL_CONCLUIDO')
+            finalizar_obj.status = statusConcluido
+            finalizar_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro do projeto potencial ' + obj_projeto.chave + ' foi finalizado',
+                tipo='CADASTRO_PROJETO_POTENCIAL',
+                projeto=obj_projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+            notify_user = Notificacao_Usuario(
+                date_created=now,
+                titulo='Projeto potencial %s na sua responsabilidade' % (chave_potencial),
+                descricao='Você foi definido como responsável da possibilidade %s' % (chave_potencial),
+                tipo='RESPONSAVEL_POSSIBILIDADE',
+                visualizada=False,
+                referencia=int(id_potencial)
+            )
+            notify_user.save()
+
+            print 'teste'
+
+            return redirect('/projeto/')
+
+    return render(request, 'projeto/potencial/parceiros.html', locals(), )
+
+

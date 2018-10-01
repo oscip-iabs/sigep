@@ -62,6 +62,7 @@ class Projeto(models.Model):
     check_projeto_potencial_cadastro_nucleo = models.NullBooleanField(default=False, blank=True)
     check_projeto_potencial_cadastro_localizacao = models.NullBooleanField(default=False, blank=True)
     check_projeto_potencial_cadastro_documento = models.NullBooleanField(default=False, blank=True)
+    check_projeto_potencial_cadastro_parceiro = models.NullBooleanField(default=False, blank=True)
 
     localizacao_mundial     = models.IntegerField(null=False, default=0, verbose_name=u'Localização da possibilidade', choices=LOCAL_GLOBAL)
     localizacao_descricao   = models.TextField(max_length=5000, blank=True, null=True, verbose_name=u'Outras informações em relação a localização')
@@ -127,6 +128,17 @@ class Documento(models.Model):
     nome         = models.CharField(max_length=100, blank=True, null=True)
     link         = models.CharField(max_length=100, blank=True, null=True)
     tipo         = models.IntegerField(null=False, blank=True, default=0, verbose_name=u'Tipo do documento potencial', choices=TIPO_DOCUMENTO)
+    projeto      = models.ForeignKey(Projeto, blank=True, null=True)
+
+    def __str__(self):
+        return self.nome.encode('utf-8').strip()
+
+
+class Parceiro(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    nome         = models.CharField(max_length=100, blank=True, null=True)
+    telefone     = models.CharField(max_length=100, blank=True, null=True)
+    email        = models.CharField(max_length=100, blank=True, null=True)
     projeto      = models.ForeignKey(Projeto, blank=True, null=True)
 
     def __str__(self):
