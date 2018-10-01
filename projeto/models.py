@@ -84,9 +84,6 @@ class Nucleo_x_Projeto(models.Model):
     projeto         = models.ForeignKey(Projeto, blank=True, null=True)
     nucleo          = models.ForeignKey(Nucleo, null=True)
 
-    def __str__(self):
-        return self.texto
-
 
 class Avaliacao_Possibilidade(models.Model):
     CATEGORIA_ADEQUACAO = (
