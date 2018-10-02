@@ -12,7 +12,7 @@ from projeto.utils import generate_project_key
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
-    AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContatoPotencial, \
+    AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContato, \
     CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm, CadastroNucleoPotencialForm, \
     CadastroParceiroPotencialForm
 
@@ -80,6 +80,9 @@ def cadastro_dados_basicos_possibilidade(request, id_pos, chave_pos):
     obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
     formPossibilidade = CadastroDadosBasicosForm(request.POST or None, instance=obj_projeto)
+    formContPossibilidade = formContato(request.POST or None)
+
+    contatoPossibilidade = Contato.objects.filter(projeto=obj_projeto)
 
     if request.method == 'POST':
         if formPossibilidade.is_valid():
@@ -100,8 +103,60 @@ def cadastro_dados_basicos_possibilidade(request, id_pos, chave_pos):
 
             return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
 
-
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_basicos.html', locals(), )
+
+
+@login_required
+@user_passes_test(is_admin)
+def cadastro_dados_basicos_possibilidade_contato(request, id_pos, chave_pos):
+    possibilidade_cadastro = Projeto.objects.get(id=int(id_pos))
+
+    formContPossibilidade = formContato(request.POST or None)
+
+    if request.method == 'POST':
+        if formContPossibilidade.is_valid():
+
+            projeto_obj = formContPossibilidade.save(commit=False)
+            projeto_obj.projeto = possibilidade_cadastro
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro de um novo contato nos dados basicos',
+                tipo='CADASTRO_POSSIBILIDADE',
+                projeto=projeto_obj.projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+    return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
+
+
+@login_required
+@user_passes_test(is_admin)
+def cadastro_dados_basicos_possibilidade_del_contato(request, id_pos, chave_pos, id_contato):
+    contato = Contato.objects.get(id=int(id_contato))
+
+    try:
+        contato.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Documento ' + contato.projeto.chave,
+            tipo='CADASTRO_POSSIBILIDADE',
+            projeto=contato.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
+
 
 # Dados bancarios iniciais da possibilidade
 # guia de cadastro inicial da possibilidade
@@ -342,7 +397,7 @@ def projeto_potencial(request):
     return render(request, 'projeto/potencial/home/home.html', locals(),)
 
 
-# Metodo para iniciar o cadasto do projeto potencialç
+# Metodo para iniciar o cadasto do projeto potencial
 @login_required
 @user_passes_test(is_admin)
 def projeto_potencial_dadosbasicos(request, id_potencial):
@@ -350,7 +405,7 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
     formPotencial = CadastroDadosBasicosPotencialForm(request.POST or None, instance=potencial_cadastro)
-    formContPotencial = formContatoPotencial(request.POST or None)
+    formContPotencial = formContato(request.POST or None)
 
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
 
@@ -384,7 +439,7 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
 def projeto_potencial_contato_dadosbasicos(request, id_potencial):
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
-    formContPotencial = formContatoPotencial(request.POST or None)
+    formContPotencial = formContato(request.POST or None)
 
     if request.method == 'POST':
         if formContPotencial.is_valid():

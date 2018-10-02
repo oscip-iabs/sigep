@@ -9,10 +9,16 @@ from . import views
 urlpatterns = [
     url(r'^$', views.inicio_projeto, name='inicio'),
     url(r'^adicionar_possibilidade/$', views.add_possibilidade, name='add_possibilidade'),
+
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/dadosbasicos/$',views.cadastro_dados_basicos_possibilidade, name='cadastro_dados_basicos_possibilidade'),
+    url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/dadosbasicos/addcontato/$',views.cadastro_dados_basicos_possibilidade_contato, name='cadastro_dados_basicos_possibilidade_contato'),
+    url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/dadosbasicos/deletecontato/(?P<id_contato>[-\w\d]+)$',views.cadastro_dados_basicos_possibilidade_del_contato, name='cadastro_dados_basicos_possibilidade_del_contato'),
+
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/dadosfinanceiros/$',views.cadastro_dados_financeiros_possibilidade, name='cadastro_dados_financeiros_possibilidade'),
+
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/nucleo/$',views.cadastro_nucleo_possibilidade, name='cadastro_nucleo_possibilidade'),
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/nucleo/delete/(?P<id_nucleo>[-\w\d]+)$',views.delete_possibilidade_nucleo, name='delete_possibilidade_nucleo'),
+
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/localizacao/$',views.cadastro_localizacao_possibilidade, name='cadastro_localizacao_possibilidade'),
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/finalizar/$',views.cadastro_finalizar_possibilidade, name='cadastro_finalizar_possibilidade'),
 
