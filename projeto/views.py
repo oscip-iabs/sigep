@@ -150,6 +150,10 @@ def cadastro_nucleo_possibilidade(request, id_pos, chave_pos):
     except:
         nucleo_empty = True
 
+    if not nucleo_cadastrado:
+        obj_projeto.check_possibilidade_cadastro_nucleo = False
+        obj_projeto.save()
+
     formNucleo = CadastroNucleoForm(request.POST or None)
 
     if request.method == 'POST':
@@ -173,6 +177,31 @@ def cadastro_nucleo_possibilidade(request, id_pos, chave_pos):
             return redirect('/projeto/%s/cadastro/%s/nucleo' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_nucleo.html', locals(), )
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_possibilidade_nucleo(request, id_pos, chave_pos, id_nucleo):
+    possibilidade_nucleo = Nucleo_x_Projeto.objects.get(id=int(id_nucleo))
+
+    try:
+        possibilidade_nucleo.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Núcleo da possibilidade ' + chave_pos,
+            tipo='CADASTRO_PROJETO_POTENCIAL',
+            projeto=possibilidade_nucleo.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    return redirect('/projeto/%s/cadastro/%s/nucleo' % (id_pos, chave_pos))
+
 
 # Informações referente a localizacao e area de atuacao
 # guia de cadastro inicial da possibilidade
@@ -314,8 +343,7 @@ def projeto_potencial(request):
     return render(request, 'projeto/potencial/home/home.html', locals(),)
 
 
-# Metodo para iniciar o cadasto da possibilidade
-# aqui faz o init dos dados na tabela projeto
+# Metodo para iniciar o cadasto do projeto potencialç
 @login_required
 @user_passes_test(is_admin)
 def projeto_potencial_dadosbasicos(request, id_potencial):
@@ -695,7 +723,7 @@ def delete_potencial_parceiros(request, id_potencial, id_parceiro):
     return redirect('/projeto/potencial/%s/parceiros' % id_potencial)
 
 
-# metodo para finalizar e definir responsavel pela possibilidade
+# metodo para finalizar e definir responsavel pelo projeto potencial
 @login_required
 @user_passes_test(is_admin)
 def cadastro_finalizar_projeto_potencial(request, id_potencial, chave_potencial):
