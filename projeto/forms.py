@@ -2,7 +2,7 @@
 from django.forms import ModelForm
 from django import forms
 
-from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato
+from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro
 
 
 class InformacoesBasicasProjeto(ModelForm):
