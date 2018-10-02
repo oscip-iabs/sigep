@@ -38,6 +38,12 @@ class Projeto(models.Model):
         (4, 'Municipal'),
     )
 
+    PRIORIDADE_PROJETO = (
+        (0, 'Alta'),
+        (1, 'Média'),
+        (2, 'Baixa'),
+    )
+
     date_created        = models.DateTimeField(auto_now_add=True)
     titulo              = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Descreva o título/Objetivo')
     apoiador            = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Instituição financiadora ou possível apoiador')
@@ -67,6 +73,9 @@ class Projeto(models.Model):
     localizacao_mundial     = models.IntegerField(null=False, default=0, verbose_name=u'Localização da possibilidade', choices=LOCAL_GLOBAL)
     localizacao_descricao   = models.TextField(max_length=5000, blank=True, null=True, verbose_name=u'Outras informações em relação a localização')
     localizacao_abrangencia = models.ForeignKey(Abrangencia_Atuacao, null=True)
+
+    prioridade_projeto       = models.IntegerField(null=False, default=0, verbose_name=u'Prioridade do Projeto', choices=PRIORIDADE_PROJETO)
+    justificativa_prioridade = models.CharField(max_length=1000, blank=True, null=True, verbose_name=u'Justificativa da Prioridade')
 
     possibilidade_responsavel = models.ForeignKey(Usuario_Perfil, null=True)
 
@@ -106,6 +115,7 @@ class Contato(models.Model):
     nome         = models.CharField(max_length=100, blank=True, null=True)
     email        = models.CharField(max_length=100, blank=True, null=True)
     telefone     = models.CharField(max_length=30, blank=True, null=True)
+    info_contato = models.CharField(max_length=100, blank=True, null=True)
     projeto      = models.ForeignKey(Projeto, blank=True, null=True)
 
     def __str__(self):

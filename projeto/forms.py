@@ -100,9 +100,14 @@ class FinalizarCadastroForm(ModelForm):
         model = Projeto
         widgets = {
             'possibilidade_responsavel': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+            'prioridade_projeto': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+            'justificativa_prioridade': forms.TextInput(attrs={'type':'text', 'class': 'form-control border-input', 'required': True}),
         }
 
+
         fields = ('possibilidade_responsavel',
+                  'prioridade_projeto',
+                  'justificativa_prioridade',
                   'status',)
 
 
@@ -204,11 +209,13 @@ class formContato(ModelForm):
             'nome': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'telefone': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'email': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'info_contato': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
         }
 
         fields = ('nome',
             'telefone',
             'email',
+            'info_contato',
             'projeto')
 
 

@@ -97,12 +97,21 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Definir Responsável</h4>
+                        <h4 class="modal-title">Definir Responsável e Prioridade</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
+                                <label for="id_nucleo">Responsável</label>
                                 {{ formFinalizar.possibilidade_responsavel }}
+                            </div>
+                            <div class="col-md-12">
+                                <label for="id_nucleo">Prioridade da Possibilidade</label>
+                                {{ formFinalizar.prioridade_projeto }}
+                            </div>
+                            <div class="col-md-12">
+                                <label for="id_nucleo">Justificativa</label>
+                                {{ formFinalizar.justificativa_prioridade }}
                             </div>
                         </div>
                     </div>

@@ -50,7 +50,7 @@
                         <div class="text-center">
                             <button type="submit" class="btn btn-info btn-fill btn-wd">Salvar Informações</button>
                             <button type="button" class="btn btn-primary btn-fill btn-wd" data-toggle="modal"
-                                    data-target="#myModal">Adicionar contato</button>
+                                    data-target="#myModalContato">Adicionar contato</button>
                         </div>
                     </div>
                 </div>
@@ -59,10 +59,15 @@
 
             <div class="row">
                 <div class="col-md-12">
+                    <h4 class="title">Contato(s) inserido(s) na Possibilidade</h4>
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th colspan="4">Contato(s) inserido(s) na Possibilidade</th>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>Informações</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -73,8 +78,9 @@
                                 <td>{{ contato.nome }}</td>
                                 <td>{{ contato.email }}</td>
                                 <td>{{ contato.telefone }}</td>
+                                <td>{{ contato.info_contato }}</td>
                                 <td>
-                                    <a href="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosbasicos/deletecontato/{{ contato.id }}" title="Excluir Contato">
+                                    <a href="/projeto/{{ id_pos }}/dadosbasicos/deletecontato/{{ contato.id }}/possibilidade" title="Excluir Contato">
                                         <button class="btn btn-danger btn-fill btn-wd">Excluir</button>
                                     </a>
                                 </td>
@@ -95,9 +101,9 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog" >
+    <div class="modal fade" id="myModalContato" role="dialog" >
         <div class="modal-dialog ">
-            <form method="POST" action="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/dadosbasicos/addcontato/">
+            <form method="POST" action="/projeto/{{ id_pos }}/dadosbasicos/addcontato/possibilidade">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
@@ -109,19 +115,25 @@
                             <div class="col-md-12">
                                 <div class="form-group" style="margin-left: -10px;">
                                     <label>Nome</label>
-                                    {{ formContPossibilidade.nome }}
+                                    {{ formContProjeto.nome }}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Telefone</label>
-                                    {{ formContPossibilidade.telefone }}
+                                    {{ formContProjeto.telefone }}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Email</label>
-                                    {{ formContPossibilidade.email }}
+                                    {{ formContProjeto.email }}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Informações do contato</label>
+                                    {{ formContProjeto.info_contato }}
                                 </div>
                             </div>
                         </div>

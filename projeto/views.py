@@ -80,7 +80,7 @@ def cadastro_dados_basicos_possibilidade(request, id_pos, chave_pos):
     obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
     formPossibilidade = CadastroDadosBasicosForm(request.POST or None, instance=obj_projeto)
-    formContPossibilidade = formContato(request.POST or None)
+    formContProjeto = formContato(request.POST or None)
 
     contatoPossibilidade = Contato.objects.filter(projeto=obj_projeto)
 
@@ -104,58 +104,6 @@ def cadastro_dados_basicos_possibilidade(request, id_pos, chave_pos):
             return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_basicos.html', locals(), )
-
-
-@login_required
-@user_passes_test(is_admin)
-def cadastro_dados_basicos_possibilidade_contato(request, id_pos, chave_pos):
-    possibilidade_cadastro = Projeto.objects.get(id=int(id_pos))
-
-    formContPossibilidade = formContato(request.POST or None)
-
-    if request.method == 'POST':
-        if formContPossibilidade.is_valid():
-
-            projeto_obj = formContPossibilidade.save(commit=False)
-            projeto_obj.projeto = possibilidade_cadastro
-            projeto_obj.save()
-
-            now = datetime.datetime.now()
-            usuario = Usuario_Perfil.objects.get(email=request.user.email)
-            historicProject = Historico_Projeto(
-                date_modificacao=now,
-                texto='Cadastro de um novo contato nos dados basicos',
-                tipo='CADASTRO_POSSIBILIDADE',
-                projeto=projeto_obj.projeto,
-                modified_user=usuario
-            )
-            historicProject.save()
-
-    return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
-
-
-@login_required
-@user_passes_test(is_admin)
-def cadastro_dados_basicos_possibilidade_del_contato(request, id_pos, chave_pos, id_contato):
-    contato = Contato.objects.get(id=int(id_contato))
-
-    try:
-        contato.delete()
-
-        now = datetime.datetime.now()
-        usuario = Usuario_Perfil.objects.get(email=request.user.email)
-        historicProject = Historico_Projeto(
-            date_modificacao=now,
-            texto='Exclusão de Documento ' + contato.projeto.chave,
-            tipo='CADASTRO_POSSIBILIDADE',
-            projeto=contato.projeto,
-            modified_user=usuario
-        )
-        historicProject.save()
-    except:
-        print('Ops')
-
-    return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
 
 
 # Dados bancarios iniciais da possibilidade
@@ -304,6 +252,7 @@ def cadastro_finalizar_possibilidade(request, id_pos, chave_pos):
 
             now = datetime.datetime.now()
             usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            user_notificacao = Usuario_Perfil.objects.get(id=int(request.POST.get('possibilidade_responsavel')))
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Cadastro da possibilidade ' + obj_projeto.chave + ' foi finalizado',
@@ -319,7 +268,8 @@ def cadastro_finalizar_possibilidade(request, id_pos, chave_pos):
                 descricao='Você foi definido como responsável da possibilidade %s' % (chave_pos),
                 tipo='RESPONSAVEL_POSSIBILIDADE',
                 visualizada=False,
-                referencia=int(id_pos)
+                referencia=int(id_pos),
+                modified_user=user_notificacao,
             )
             notify_user.save()
 
@@ -405,7 +355,7 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
     formPotencial = CadastroDadosBasicosPotencialForm(request.POST or None, instance=potencial_cadastro)
-    formContPotencial = formContato(request.POST or None)
+    formContProjeto = formContato(request.POST or None)
 
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
 
@@ -432,58 +382,6 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
             return redirect('/projeto/potencial/%s/dadosbasicos' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/dadosbasicos.html', locals(),)
-
-
-@login_required
-@user_passes_test(is_admin)
-def projeto_potencial_contato_dadosbasicos(request, id_potencial):
-    potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
-
-    formContPotencial = formContato(request.POST or None)
-
-    if request.method == 'POST':
-        if formContPotencial.is_valid():
-
-            projeto_obj = formContPotencial.save(commit=False)
-            projeto_obj.projeto = potencial_cadastro
-            projeto_obj.save()
-
-            now = datetime.datetime.now()
-            usuario = Usuario_Perfil.objects.get(email=request.user.email)
-            historicProject = Historico_Projeto(
-                date_modificacao=now,
-                texto='Cadastro de um novo contato nos dados basicos do potencial',
-                tipo='CADASTRO_PROJETO_POTENCIAL',
-                projeto=projeto_obj.projeto,
-                modified_user=usuario
-            )
-            historicProject.save()
-
-    return redirect('/projeto/potencial/%s/dadosbasicos' % id_potencial)
-
-
-@login_required
-@user_passes_test(is_admin)
-def projeto_potencial_del_contato_dadosbasicos(request, id_potencial, id_contato):
-    potencial_contato = Contato.objects.get(id=int(id_contato))
-
-    try:
-        potencial_contato.delete()
-
-        now = datetime.datetime.now()
-        usuario = Usuario_Perfil.objects.get(email=request.user.email)
-        historicProject = Historico_Projeto(
-            date_modificacao=now,
-            texto='Exclusão de Documento do potencial ' + potencial_contato.projeto.chave,
-            tipo='CADASTRO_PROJETO_POTENCIAL',
-            projeto=potencial_contato.projeto,
-            modified_user=usuario
-        )
-        historicProject.save()
-    except:
-        print('Ops')
-
-    return redirect('/projeto/potencial/%s/dadosbasicos' % id_potencial)
 
 
 @login_required
@@ -890,3 +788,75 @@ def visualizar_projeto_potencial(request, id_potencial, chave_projeto):
     all_parceiro = Parceiro.objects.filter(projeto=potencial_obj)
 
     return render(request, 'projeto/potencial/cadastros/visualizacao.html', locals(), )
+
+# metodo para adicionar um contato de um projeto(possibilidade e potencial)
+@login_required
+@user_passes_test(is_admin)
+def cadastro_dados_basicos_contato(request, id_proj, situacao_projeto):
+    obj_projeto = Projeto.objects.get(id=int(id_proj))
+
+    formContProjeto = formContato(request.POST or None)
+
+    if situacao_projeto == 'possibilidade':
+        tipo = 'CADASTRO_POSSIBILIDADE'
+    elif situacao_projeto == 'potencial':
+        tipo = 'CADASTRO_PROJETO_POTENCIAL'
+
+    if request.method == 'POST':
+        if formContProjeto.is_valid():
+
+            projeto_obj = formContProjeto.save(commit=False)
+            projeto_obj.projeto = obj_projeto
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro de um novo contato nos dados basicos',
+                tipo=tipo,
+                projeto=projeto_obj.projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+    if situacao_projeto == 'possibilidade':
+        return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_proj, obj_projeto.chave))
+    elif situacao_projeto == 'potencial':
+        return redirect('/projeto/potencial/%s/dadosbasicos' % id_proj)
+
+    return redirect('/')
+
+#metodo para excluir um contato de um projeto(possibilidade e potencial)
+@login_required
+@user_passes_test(is_admin)
+def delete_dados_basicos_contato(request, id_proj, id_contato, situacao_projeto):
+    contato = Contato.objects.get(id=int(id_contato))
+
+    if situacao_projeto == 'possibilidade':
+        tipo = 'CADASTRO_POSSIBILIDADE'
+    elif situacao_projeto == 'potencial':
+        tipo = 'CADASTRO_PROJETO_POTENCIAL'
+
+    try:
+        contato.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Documento do projeto ' + contato.projeto.chave,
+            tipo=tipo,
+            projeto=contato.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    if situacao_projeto == 'possibilidade':
+        return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_proj, contato.projeto.chave))
+    elif situacao_projeto == 'potencial':
+        return redirect('/projeto/potencial/%s/dadosbasicos' % id_proj)
+
+    return redirect('/')
