@@ -194,9 +194,9 @@ class CadastroDadosBasicosPotencialForm(ModelForm):
             'check_projeto_potencial_cadastro_basico',)
 
 
-class formContatoPotencial(ModelForm):
+class formContato(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(formContatoPotencial, self).__init__(*args, **kwargs)
+        super(formContato, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Contato
