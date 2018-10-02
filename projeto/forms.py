@@ -2,7 +2,7 @@
 from django.forms import ModelForm
 from django import forms
 
-from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato
+from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro
 
 
 class InformacoesBasicasProjeto(ModelForm):
@@ -272,4 +272,22 @@ class CadastroDocumentoPotencialForm(ModelForm):
         fields = ('nome',
             'link',
             'tipo',
+            'projeto')
+
+
+class CadastroParceiroPotencialForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroParceiroPotencialForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Parceiro
+        widgets = {
+            'nome': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'telefone': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'email': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('nome',
+            'telefone',
+            'email',
             'projeto')
