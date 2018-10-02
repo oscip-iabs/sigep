@@ -101,28 +101,28 @@ WSGI_APPLICATION = 'iabs.wsgi.application'
 
 ## Database
 # DATABASE DE PRODUÇÃO HEROKU
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'd6lc3kt1v1epg8',
-#         'HOST': 'ec2-54-227-252-237.compute-1.amazonaws.com',
-#         'PORT': '5432',
-#         'USER': 'cxzwqdsmsadsxj',
-#         'PASSWORD': '9fd1c2331dff235e3ba44e3daea1ab19494910bd2a22f2335de7fefa1dc60bde'
-#     }
-# }
-
-# DATABASE DE DESENVOLVIMENTO EM PRODUÇÃO
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sigep_iabs',
-        'USER': 'sigep_iabs',
-        'PASSWORD': 'sigep_iabs',
-        'HOST': '127.0.0.1',
+        'NAME': 'd6lc3kt1v1epg8',
+        'HOST': 'ec2-54-227-252-237.compute-1.amazonaws.com',
         'PORT': '5432',
+        'USER': 'cxzwqdsmsadsxj',
+        'PASSWORD': '9fd1c2331dff235e3ba44e3daea1ab19494910bd2a22f2335de7fefa1dc60bde'
     }
 }
+
+# DATABASE DE DESENVOLVIMENTO EM PRODUÇÃO
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'sigep_iabs',
+#         'USER': 'sigep_iabs',
+#         'PASSWORD': 'sigep_iabs',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
