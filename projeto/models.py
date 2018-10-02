@@ -115,6 +115,7 @@ class Equipe_Projeto(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     participante = models.ForeignKey(Usuario_Perfil, blank=True, null=True)
     projeto      = models.ForeignKey(Projeto, blank=True, null=True)
+    responsabilidade = models.CharField(max_length=100, blank=True, null=True)
 
 
 class Documento(models.Model):

@@ -6,7 +6,8 @@ import datetime
 
 from iabs_main.models import Geral_Status
 from usuario.models import Usuario_Perfil, Notificacao_Usuario
-from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato
+from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato, \
+    Equipe_Projeto
 from projeto.utils import generate_project_key
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
@@ -437,6 +438,9 @@ def projeto_potencial_nucleo(request, id_potencial):
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
     check_nucleo = potencial_cadastro.check_projeto_potencial_cadastro_nucleo
 
+    all_user = Usuario_Perfil.objects.all()
+    equipe_nucleo = Equipe_Projeto.objects.filter(projeto=int(id_potencial))
+
     formNucleo = CadastroNucleoPotencialForm(request.POST or None)
 
     try:
@@ -465,6 +469,61 @@ def projeto_potencial_nucleo(request, id_potencial):
             return redirect('/projeto/potencial/%s/nucleo' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/nucleo.html', locals(),)
+
+
+@login_required
+@user_passes_test(is_admin)
+def criar_integrante(request, id_potencial):
+
+    if request.method == 'POST':
+        try:
+            novo_participante = Usuario_Perfil(
+                nome=request.POST.get('nome'),
+                cpf=request.POST.get('cpf'),
+                email=request.POST.get('email'),
+                telefone=request.POST.get('telefone'),
+                idade=request.POST.get('idade'),
+                sexo=request.POST.get('sexo'),
+            )
+            novo_participante.save()
+        except:
+            return redirect('/projeto/potencial/%s/nucleo/' % (id_potencial,))
+
+    return redirect('/projeto/potencial/%s/nucleo/' % (id_potencial,))
+
+
+@login_required
+@user_passes_test(is_admin)
+def incluir_integrante_equipe(request, id_potencial):
+
+    if request.method == 'POST':
+        try:
+            user_id = request.POST.get('participante_equipe')
+            participante_equipe = Usuario_Perfil.objects.get(id=int(user_id))
+            projeto_potencial = Projeto.objects.get(id=int(id_potencial))
+
+            incluir_participante = Equipe_Projeto(
+                participante=participante_equipe,
+                projeto=projeto_potencial,
+                responsabilidade=request.POST.get('responsabilidade')
+            )
+            incluir_participante.save()
+        except:
+            return redirect('/projeto/potencial/%s/nucleo/' % (id_potencial,))
+
+    return redirect('/projeto/potencial/%s/nucleo/' % (id_potencial,))
+
+
+@login_required
+@user_passes_test(is_admin)
+def excluir_integrante_equipe(request, id_potencial, id_integrante):
+
+    try:
+        Equipe_Projeto.objects.filter(id=int(id_integrante)).delete()
+    except:
+        return redirect('/projeto/potencial/%s/nucleo/' % (id_potencial,))
+
+    return redirect('/projeto/potencial/%s/nucleo/' % (id_potencial,))
 
 
 @login_required

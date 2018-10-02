@@ -30,4 +30,8 @@ urlpatterns = [
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/documentos/$', views.projeto_potencial_documentos, name='projeto_potencial_documentos'),
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/documentos/delete/(?P<id_documento>[-\w\d]+)$', views.delete_potencial_documentos, name='delete_potencial_documentos'),
 
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/criar/integrante$', views.criar_integrante, name='criar_integrante'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/incluir/integrante$', views.incluir_integrante_equipe, name='incluir_integrante_equipe'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/excluir/(?P<id_integrante>[-\w\d]+)/integrante$', views.excluir_integrante_equipe, name='excluir_integrante_equipe'),
+
 ]
