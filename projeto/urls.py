@@ -42,4 +42,6 @@ urlpatterns = [
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/parceiros/$', views.projeto_potencial_parceiros, name='projeto_potencial_parceiros'),
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/parceiros/delete/(?P<id_parceiro>[-\w\d]+)$', views.delete_potencial_parceiros, name='delete_potencial_parceiros'),
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/cadastro_potencial/(?P<chave_potencial>[-\w\d]+)/finalizar/$',views.cadastro_finalizar_projeto_potencial, name='cadastro_finalizar_projeto_potencial'),
+
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/visualizar/(?P<chave_projeto>[-\w\d]+)/$',views.visualizar_projeto_potencial, name='visualizar_projeto_potencial'),
 ]

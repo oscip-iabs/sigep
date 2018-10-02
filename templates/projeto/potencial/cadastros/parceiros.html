@@ -52,10 +52,10 @@
                     <tbody>
                     {% for parceiro in parceiro_cadastrado %}
                         <tr>
-                            <th>{{ forloop.counter }}</th>
-                            <td>{{ parceiro.nome }} </td>
-                            <td>{{ parceiro.telefone }}</td>
-                            <td>{{ parceiro.email }}</td>
+                            <th><small>{{ forloop.counter }}</small></th>
+                            <td><small>{{ parceiro.nome }}</small></td>
+                            <td><small>{{ parceiro.telefone }}</small></td>
+                            <td><small>{{ parceiro.email }}</small></td>
                             <td>
                                 <a href="/projeto/potencial/{{ id_potencial }}/parceiros/delete/{{ parceiro.id }}" target="_blank" title="Excluir documento">
                                     <button class="btn btn-danger btn-fill btn-wd">Excluir</button>

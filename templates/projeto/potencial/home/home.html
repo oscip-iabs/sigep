@@ -16,45 +16,40 @@
 
 <div class="row">
     <div class="col-md-12">
+
         <div class="card">
             <div class="header">
-                <h4 class="title">Projetos Potenciais</h4>
-                <p class="category">Abra o projeto para preencher as informações adicionais</p>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Projetos Potenciais</h4>
+                        <p class="category">Abra o projeto para preencher as informações adicionais</p>
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
             </div>
 
-            <div class="content table-responsive table-full-width">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Titulo</th>
-                            <th>Chave</th>
-                            <th>Status</th>
-                            <th>Responsável</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for potencial in potencial_novo %}
-                            <tr>
-                                <td>{{ potencial.titulo }}</td>
-                                <td>{{ potencial.chave }}</td>
-                                <td>{{ potencial.status.texto }}</td>
-                                <td>{{ potencial.possibilidade_responsavel.nome }}</td>
-                                <td>
-                                    <a href="/projeto/potencial/{{ potencial.id }}/dadosbasicos">
-                                        <button class="btn btn-info btn-fill btn-wd">Completar cadastro</button>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center">
-                                    <pre><h5>Não existe nenhum projeto potencial cadastrado</h5></pre>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#cadastroRun">
+                        <span class="ti-pencil"></span> Projetos potenciais em andamento
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#cadastroDone">
+                        <span class="ti-check-box"></span> Projetos potenciais concluidos
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="cadastroRun" class="tab-pane fade in active">
+                    {% include 'projeto/potencial/home/projetos_potenciais_andamento.html' %}
+
+                </div>
+                <div id="cadastroDone" class="tab-pane fade">
+                    {% include 'projeto/potencial/home/projetos_potenciais_completo.html' %}
+                </div>
             </div>
         </div>
     </div>

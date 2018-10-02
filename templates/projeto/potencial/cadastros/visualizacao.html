@@ -1,0 +1,365 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block name_page %} Projetos {% endblock %}
+
+{% block base_content %}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Informações Básicas do Projeto</h4>
+{#                        <p class="category">Descrição do CARD</p>#}
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Título do projeto potencial</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.titulo }}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Apoiador do projeto potencial</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.apoiador }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tema do projeto potencial</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.tema_possibilidade }}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Prazo limite</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.prazo_limite }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Periodo de execução</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.periodo_execucao }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Previsão do Resultado</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.previsao_resultado }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Tipo da contratação</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.tipo_contratacao }}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Descrição resumida do projeto potencial</label>
+                            <div>
+                                <textarea rows="7" disabled style="width: 100%;">{{ potencial_obj.descricao }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12"><h4 class="title">Contatos</h4></div>
+                    <div class="col-md-12">
+                        <div class="content table-responsive table-full-width">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>E-mail</th>
+                                        <th>Telefone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for contatos in all_contatos %}
+                                        <tr>
+                                            <td>{{ contatos.nome }}</td>
+                                            <td>{{ contatos.email }}</td>
+                                            <td>{{ contatos.telefone }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <pre><h5>Não foi informado nenhum contato para esse projeto</h5></pre>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Informações Financeiras do Projeto</h4>
+{#                        <p class="category">Descrição do CARD</p>#}
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Valor do projeto potencial (R$):</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.valor_estimado }}" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Núcleo(s) e Equipe do projeto</h4>
+{#                        <p class="category">Descrição do CARD</p>#}
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12"><h4 class="title">Núcleo do projeto</h4></div>
+                    <div class="col-md-12">
+                        <div class="content table-responsive table-full-width">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome do Núcleo</th>
+                                        <th>Responsável</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for nucleos in all_nucleos %}
+                                        <tr>
+                                            <td>{{ nucleos.nucleo.texto }}</td>
+                                            <td>{{ nucleos.nucleo.responsavel }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td class="text-center">
+                                                <pre><h5>Não foi inserido núcleo nesse projeto</h5></pre>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12"><h4 class="title">Equipe do projeto</h4></div>
+                    <div class="col-md-12">
+                        <div class="content table-responsive table-full-width">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>E-mail</th>
+                                        <th>Telefone</th>
+                                        <th>Responsabilidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for equipe in all_equipe %}
+                                        <tr>
+                                            <td>{{ equipe.participante.nome }}</td>
+                                            <td>{{ equipe.participante.email }}</td>
+                                            <td>{{ equipe.participante.telefone }}</td>
+                                            <td>{{ equipe.responsabilidade }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td class="text-center">
+                                                <pre><h5>Não foi informado nenhum contato para esse projeto</h5></pre>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Local de atuação do projeto</h4>
+{#                        <p class="category">Descrição do CARD</p>#}
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Localização</label>
+                            <input type="text" class="form-control"
+                                {% if potencial_obj.localizacao_mundial == 0 %}value="Nacional"{% endif %}
+                                {% if potencial_obj.localizacao_mundial == 1 %}value="Internacional"{% endif %}
+                                {% if potencial_obj.localizacao_mundial == 2 %}value="Regional"{% endif %}
+                                {% if potencial_obj.localizacao_mundial == 3 %}value="Estadual"{% endif %}
+                                {% if potencial_obj.localizacao_mundial == 4 %}value="Municipal"{% endif %} disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Área de atuação do projeto</label>
+                            <input type="text" class="form-control" value="{{ potencial_obj.localizacao_abrangencia }}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Descrição da área de atuação</label>
+                            <textarea rows="7" disabled style="width: 100%;">{{ potencial_obj.localizacao_descricao }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Documentação do projeto</h4>
+{#                        <p class="category">Descrição do CARD</p>#}
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="card-body">
+
+                {% for docs in all_documentos %}
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label>Nome do documento</label>
+                            <input type="text" class="form-control" value="{{ docs.nome }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Tipo do documento</label>
+                            <input type="text" class="form-control"
+                                {% if docs.tipo == 0 %}value="Edital"{% endif %}
+                                {% if docs.tipo == 1 %}value="Outros"{% endif %} disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="{{ docs.link }}" target="_blank">
+                            <span class="ti-file" style="font-size: 54px;"></span>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Parceiros do projeto</h4>
+{#                        <p class="category">Descrição do CARD</p>#}
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-12"><h4 class="title"></h4></div>
+                    <div class="col-md-12">
+                        <div class="content table-responsive table-full-width">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>E-mail</th>
+                                        <th>Telefone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for parc_projeto in all_parceiro %}
+                                        <tr>
+                                            <td>{{ parc_projeto.nome }}</td>
+                                            <td>{{ parc_projeto.email }}</td>
+                                            <td>{{ parc_projeto.telefone }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td class="text-center">
+                                                <pre><h5>Não foi informado nenhum parceiro para esse projeto</h5></pre>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

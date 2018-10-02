@@ -102,6 +102,11 @@ def minhas_notificacoes(request):
 def visualizar_notificacao(request, id_notify):
     notify = Notificacao_Usuario.objects.get(id=id_notify)
     projeto_obj = Projeto.objects.get(id=notify.referencia)
-    Notificacao_Usuario.objects.filter(id=notify.id).update(visualizada=True)
+    # Notificacao_Usuario.objects.filter(id=notify.id).update(visualizada=True)
 
-    return redirect('/projeto/%s/possibilidade/%s/avaliar/' % (projeto_obj.id, projeto_obj.chave))
+    if projeto_obj.status.id == 102001000:
+        return redirect('/projeto/%s/possibilidade/%s/avaliar/' % (projeto_obj.id, projeto_obj.chave))
+    elif projeto_obj.status.id == 20201000:
+        return redirect('/projeto/%s/possibilidade/%s/avaliar/' % (projeto_obj.id, projeto_obj.chave))
+
+    return redirect('/')

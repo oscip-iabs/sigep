@@ -20,8 +20,6 @@ from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, C
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 
-
-
 def is_admin(user):
     return user.groups.filter(name='iabs_admin').exists()
 
@@ -339,6 +337,7 @@ def aprovar_possibilidade(request, id_pos, chave_pos):
 @user_passes_test(is_admin)
 def projeto_potencial(request):
     potencial_novo = Projeto.objects.filter(status=20101000)
+    potencial_completo = Projeto.objects.filter(status=20201000)
 
     return render(request, 'projeto/potencial/home/home.html', locals(),)
 
@@ -798,6 +797,7 @@ def cadastro_finalizar_projeto_potencial(request, id_potencial, chave_potencial)
 
             now = datetime.datetime.now()
             usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            user_notificacao = Usuario_Perfil.objects.get(id=int(request.POST.get('possibilidade_responsavel')))
             historicProject = Historico_Projeto(
                 date_modificacao=now,
                 texto='Cadastro do projeto potencial ' + obj_projeto.chave + ' foi finalizado',
@@ -813,16 +813,25 @@ def cadastro_finalizar_projeto_potencial(request, id_potencial, chave_potencial)
                 descricao='Você foi definido como responsável da possibilidade %s' % (chave_potencial),
                 tipo='RESPONSAVEL_POSSIBILIDADE',
                 visualizada=False,
-                referencia=int(id_potencial)
+                referencia=int(id_potencial),
+                modified_user=user_notificacao,
             )
             notify_user.save()
 
-            print 'teste'
-
-            return redirect('/projeto/')
-
-    return render(request, 'projeto/potencial/parceiros.html', locals(), )
-
-
+            return redirect('/projeto/potencial/')
 
     return redirect('/projeto/potencial/%s/documentos' % (id_potencial))
+
+
+@login_required
+@user_passes_test(is_admin)
+def visualizar_projeto_potencial(request, id_potencial, chave_projeto):
+    potencial_obj = Projeto.objects.get(id=id_potencial, chave=chave_projeto)
+
+    all_contatos = Contato.objects.filter(projeto=potencial_obj)
+    all_nucleos = Nucleo_x_Projeto.objects.filter(projeto=potencial_obj)
+    all_equipe = Equipe_Projeto.objects.filter(projeto=potencial_obj)
+    all_documentos = Documento.objects.filter(projeto=potencial_obj)
+    all_parceiro = Parceiro.objects.filter(projeto=potencial_obj)
+
+    return render(request, 'projeto/potencial/cadastros/visualizacao.html', locals(), )
