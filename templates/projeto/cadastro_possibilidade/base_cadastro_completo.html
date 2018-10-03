@@ -91,7 +91,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog">
             <form method="POST" action="/projeto/{{ id_pos }}/cadastro/{{ chave_pos }}/finalizar/">
                 {% csrf_token %}
                 <div class="modal-content">
@@ -102,16 +102,26 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="id_nucleo">Responsável</label>
-                                {{ formFinalizar.possibilidade_responsavel }}
+                                <div class="form-group">
+                                    <label>Responsável</label>
+                                    {{ formFinalizar.possibilidade_responsavel }}
+                                </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
-                                <label for="id_nucleo">Prioridade da Possibilidade</label>
-                                {{ formFinalizar.prioridade_projeto }}
+                                <div class="form-group">
+                                    <label>Prioridade da Possibilidade</label>
+                                    {{ formFinalizar.prioridade_projeto }}
+                                </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
-                                <label for="id_nucleo">Justificativa</label>
-                                {{ formFinalizar.justificativa_prioridade }}
+                                <div class="form-group">
+                                    <label>Justificativa</label>
+                                    {{ formFinalizar.justificativa_prioridade }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -166,3 +176,8 @@
 </script>
 
 {% endblock %}
+swal({
+                title: "Here's a message!",
+                buttonsStyling: false,
+                confirmButtonClass: "btn btn-success btn-fill"
+            });

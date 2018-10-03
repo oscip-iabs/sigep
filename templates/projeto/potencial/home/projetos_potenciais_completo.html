@@ -2,6 +2,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Prioridade</th>
                 <th>Titulo</th>
                 <th>Chave</th>
                 <th>Status</th>
@@ -12,6 +13,15 @@
         <tbody>
             {% for potencial_done in potencial_completo %}
                 <tr>
+                    <td class="text-center">
+                        {% if potencial_done.prioridade_projeto == 0 %}
+                            <span class="prioridade_alta justificativa" data-toggle="tooltip" data-placement="top" title="Prioridade Alta: {{ item.justificativa_prioridade }}"></span>
+                        {% elif potencial_done.prioridade_projeto == 1 %}
+                            <span class="prioridade_media justificativa" data-toggle="tooltip" data-placement="top" title="Prioridade Alta: {{ item.justificativa_prioridade }}"></span>
+                        {% elif potencial_done.prioridade_projeto == 2 %}
+                            <span class="prioridade_baixa justificativa"data-toggle="tooltip" data-placement="top" title="Prioridade Alta: {{ item.justificativa_prioridade }}"></span>
+                        {% endif %}
+                    </td>
                     <td>{{ potencial_done.titulo }}</td>
                     <td>{{ potencial_done.chave }}</td>
                     <td>{{ potencial_done.status.texto }}</td>
