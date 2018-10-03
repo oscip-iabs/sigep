@@ -110,7 +110,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="myModalFinalizar" role="dialog">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog">
             <form method="POST" action="/projeto/potencial/{{ id_potencial }}/cadastro_potencial/{{ potencial_cadastro.chave }}/finalizar/ ">
                 {% csrf_token %}
                 <div class="modal-content">
@@ -121,7 +121,26 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-                                {{ formFinalizar.possibilidade_responsavel }}
+                                <div class="form-group">
+                                    <label>Responsável</label>
+                                    {{ formFinalizar.possibilidade_responsavel }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Prioridade da Possibilidade</label>
+                                    {{ formFinalizar.prioridade_projeto }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Justificativa</label>
+                                    {{ formFinalizar.justificativa_prioridade }}
+                                </div>
                             </div>
                         </div>
                     </div>
