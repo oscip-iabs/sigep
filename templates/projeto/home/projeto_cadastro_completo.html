@@ -1,6 +1,9 @@
+
+
 <div class="content table-responsive table-full-width">
     <table class="table table-striped">
         <thead>
+            <th>Prioridade</th>
             <th>Data de Criação</th>
             <th>Chave</th>
             <th>Titulo</th>
@@ -12,6 +15,16 @@
         <tbody>
             {% for item in possibilidade_completa %}
                 <tr>
+                    <td class="text-center">
+                        {% if item.prioridade_projeto == 0 %}
+                            <hidden id="justificativa" value="{{ item.justificativa_prioridade }}"></hidden>
+                            <span class="prioridade_alta justificativa" data-toggle="tooltip" data-placement="top" title="Prioridade Alta: {{ item.justificativa_prioridade }}"></span>
+                        {% elif item.prioridade_projeto == 1 %}
+                            <span class="prioridade_media justificativa" data-toggle="tooltip" data-placement="top" title="Prioridade Média: {{ item.justificativa_prioridade }}"></span>
+                        {% elif item.prioridade_projeto == 2 %}
+                            <span class="prioridade_baixa justificativa" data-toggle="tooltip" data-placement="top" title="Prioridade Baixa: {{ item.justificativa_prioridade }}"></span>
+                        {% endif %}
+                    </td>
                     <td>{{ item.date_created|date:"d-m-Y" }}</td>
                     <td>{{ item.chave }}</td>
                     <td>{{ item.titulo }}</td>

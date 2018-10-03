@@ -33,7 +33,7 @@ def inicio_projeto(request):
     user_email = request_user(request)
     projetoObj = Projeto.objects.all()
     possibilidade_andamento = Projeto.objects.filter(status__in=[101001000, 101002000])
-    possibilidade_completa = Projeto.objects.filter(status=102001000)
+    possibilidade_completa = Projeto.objects.filter(status=102001000).order_by('prioridade_projeto')
 
     return render(request, 'projeto/home/home.html', locals())
 
@@ -342,7 +342,7 @@ def aprovar_possibilidade(request, id_pos, chave_pos):
 @user_passes_test(is_admin)
 def projeto_potencial(request):
     potencial_novo = Projeto.objects.filter(status=20101000)
-    potencial_completo = Projeto.objects.filter(status=20201000)
+    potencial_completo = Projeto.objects.filter(status=20201000).order_by('prioridade_projeto')
 
     return render(request, 'projeto/potencial/home/home.html', locals(),)
 

@@ -101,7 +101,7 @@ class FinalizarCadastroForm(ModelForm):
         widgets = {
             'possibilidade_responsavel': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
             'prioridade_projeto': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
-            'justificativa_prioridade': forms.TextInput(attrs={'type':'text', 'class': 'form-control border-input', 'required': True}),
+            'justificativa_prioridade': forms.Textarea(attrs={'class': 'form-control border-input', 'required': True}),
         }
 
 
