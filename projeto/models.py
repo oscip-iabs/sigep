@@ -145,12 +145,28 @@ class Documento(models.Model):
         return self.nome.encode('utf-8').strip()
 
 
+class Tipo_Instrumento(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    nome = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.nome.encode('utf-8').strip()
+
+
 class Parceiro(models.Model):
+    PRIORIDADE_SIM_NAO = (
+        ('SIM', 'Sim'),
+        ('NAO', 'Não'),
+    )
     date_created = models.DateTimeField(auto_now_add=True)
     nome         = models.CharField(max_length=100, blank=True, null=True)
+    nome_responsavel = models.CharField(max_length=150, blank=True, null=True)
     telefone     = models.CharField(max_length=100, blank=True, null=True)
     email        = models.CharField(max_length=100, blank=True, null=True)
     projeto      = models.ForeignKey(Projeto, blank=True, null=True)
+    formaliza_parceria = models.CharField(max_length=50, null=True, default='NAO', choices=PRIORIDADE_SIM_NAO, verbose_name=u'É necessário formalização de parceria ?')
+    existe_instrumento_formal = models.CharField(max_length=50, null=True, default='NAO', choices=PRIORIDADE_SIM_NAO, verbose_name=u'Já existe algum instrumento formal ?')
+    tipo_instrumento = models.ForeignKey(Tipo_Instrumento, default=1, null=True, verbose_name=u'Tipo de instrumento específico.')
 
     def __str__(self):
         return self.nome.encode('utf-8').strip()

@@ -290,11 +290,19 @@ class CadastroParceiroPotencialForm(ModelForm):
         model = Parceiro
         widgets = {
             'nome': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'nome_responsavel': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'telefone': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
-            'email': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'email': forms.TextInput(attrs={'type': 'email', 'class': 'form-control border-input', 'required': True}),
+            'formaliza_parceria': forms.RadioSelect(attrs={'name': 'radio1'}),
+            'existe_instrumento_formal': forms.RadioSelect(attrs={'class': 'check-cronograma'}),
+            'tipo_instrumento': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
         }
 
         fields = ('nome',
-            'telefone',
-            'email',
-            'projeto')
+                  'nome_responsavel',
+                  'telefone',
+                  'email',
+                  'projeto',
+                  'formaliza_parceria',
+                  'existe_instrumento_formal',
+                  'tipo_instrumento',)

@@ -11,27 +11,86 @@
         <form method="POST">
             {% csrf_token %}
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="id_nucleo">Nome</label>
+                        <label for="id_nucleo">Nome do parceiro</label>
                         {{ formParceiro.nome }}
+                    </div>
+                </div>
+{#            </div>#}
+{#            <div class="row">#}
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="id_nucleo">Nome responsável</label>
+                        {{ formParceiro.nome_responsavel }}
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="form-group">
                         <label for="id_nucleo">Telefone</label>
                         {{ formParceiro.telefone }}
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="form-group">
                         <label for="id_nucleo">E-mail</label>
                         {{ formParceiro.email }}
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>É necessário formalização de parceria ?</label>
+                    <div class="radio">
+                        <span class="icons">
+                            <span class="first-icon fa fa-circle-o fa-base"></span>
+                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+                        </span>
+                        <input type="radio" name="formaliza_parceria" value="SIM" required="" id="id_formaliza_parceria_0">
+                        <label for="radio1">SIM</label>
+                    </div>
+                    <div class="radio checked">
+                        <span class="icons">
+                            <span class="first-icon fa fa-circle-o fa-base"></span>
+                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+                        </span>
+                        <input type="radio" name="formaliza_parceria" value="NAO" required="" checked="" id="id_formaliza_parceria_1">
+                        <label for="radio1">NÃO</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <label>Já existe algum instrumento formal ?</label>
+                    <div class="radio">
+                        <span class="icons">
+                            <span class="first-icon fa fa-circle-o fa-base"></span>
+                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+                        </span>
+                        <input type="radio" name="existe_instrumento_formal" value="SIM" required="" id="id_existe_instrumento_formal_0">
+                        <label for="radio1">SIM</label>
+                    </div>
+                    <div class="radio checked">
+                        <span class="icons">
+                            <span class="first-icon fa fa-circle-o fa-base"></span>
+                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+                        </span>
+                        <input type="radio" name="existe_instrumento_formal" value="NAO" required="" checked="" id="id_existe_instrumento_formal_1">
+                        <label for="radio1">NÃO</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="radio">
+                        <label>Necessita de instrumento específico?</label>
+                        {{ formParceiro.tipo_instrumento }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-12 col-xs-12">
                     <div class="text-center">
                         <button type="submit" class="btn btn-info btn-fill btn-wd">Salvar Parceiro</button>
@@ -40,37 +99,76 @@
             </div>
         </form>
 
+        <style>
+            .table td:nth-child(2) { width: 300px; }
+            .table td:nth-child(3) { width: 300px; }
+            .table td:nth-child(4) { width: 150px; }
+            .table td:nth-child(5) { width: 250px; }
+
+        </style>
+
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Parceiro(s) inserido(s) no Projeto Potencial</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for parceiro in parceiro_cadastrado %}
-                        <tr>
-                            <th><small>{{ forloop.counter }}</small></th>
-                            <td><small>{{ parceiro.nome }}</small></td>
-                            <td><small>{{ parceiro.telefone }}</small></td>
-                            <td><small>{{ parceiro.email }}</small></td>
-                            <td>
-                                <a href="/projeto/potencial/{{ id_potencial }}/parceiros/delete/{{ parceiro.id }}" target="_blank" title="Excluir documento">
-                                    <button class="btn btn-danger btn-fill btn-wd">Excluir</button>
-                                </a>
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="5" class="text-center">
-                                <pre><h5>Não existe nenhum parceiro cadastrado neste projeto potencial</h5></pre>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <h4 class="title">Parceiro(s) inserido(s) no Projeto Potencial</h4>
+                <div class="table-responsive" style="overflow-x:auto;">
+                    <div style="width: 1500px;">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Nome</th>
+                                    <th>Responsável</th>
+                                    <th>Telefone</th>
+                                    <th>Email</th>
+                                    <th><small>Necessário formalização de parceria </small></th>
+                                    <th><small>Existe algum instrumento formal assinado</small></th>
+                                    <th><small>Instrumento específico necessário</small></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for parceiro in parceiro_cadastrado %}
+                                <tr>
+                                    <th><small>{{ forloop.counter }}</small></th>
+                                    <td><small>{{ parceiro.nome }}</small></td>
+                                    <td><small>{{ parceiro.nome_responsavel }}</small></td>
+                                    <td><small>{{ parceiro.telefone }}</small></td>
+                                    <td><small>{{ parceiro.email }}</small></td>
+                                    <td class="text-center">
+                                    <small>
+                                        {% if parceiro.formaliza_parceria == 'SIM' %}
+                                            <span class="ti-thumb-up" style="color:green;font-size: 22px;"></span>
+                                        {% else %}
+                                            <span class="ti-na" style="color:red;font-size: 22px;"></span>
+                                        {% endif %}
+                                    </small>
+                                    </td>
+                                    <td class="text-center">
+                                    <small>
+                                        {% if parceiro.existe_instrumento_formal == 'SIM' %}
+                                            <span class="ti-thumb-up" style="color:green;font-size: 22px;"></span>
+                                        {% else %}
+                                            <span class="ti-na" style="color:red;font-size: 22px;"></span>
+                                        {% endif %}
+                                    </small>
+                                    </td>
+                                    <td><small>{{ parceiro.tipo_instrumento.nome }}</small></td>
+                                    <td>
+                                        <a href="/projeto/potencial/{{ id_potencial }}/parceiros/delete/{{ parceiro.id }}" target="_blank" title="Excluir documento">
+                                            <span class="ti-close" style="color:red;"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <pre><h5>Não existe nenhum parceiro cadastrado neste projeto potencial</h5></pre>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
