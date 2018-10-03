@@ -30,6 +30,8 @@ class CadastroDadosBasicosForm(ModelForm):
         model = Projeto
         widgets = {
             'titulo'				: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
+            'titulo_abreviado'		: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
+            'origem_projeto'		: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
             'apoiador'				: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
             'periodo_execucao'		: forms.TextInput(attrs={'type':'number', 'class':'form-control border-input', 'required': True, 'step':'1',}),
             'prazo_limite'			: forms.TextInput(attrs={'type':'date'  , 'class':'form-control border-input', 'required': True, 'placeholder': 'dd/mm/aaaa'}),
@@ -39,6 +41,8 @@ class CadastroDadosBasicosForm(ModelForm):
         }
 
         fields = ('titulo',
+            'titulo_abreviado',
+            'origem_projeto',
             'apoiador',
             'tema_possibilidade',
             'prazo_limite',
@@ -273,12 +277,10 @@ class CadastroDocumentoPotencialForm(ModelForm):
         widgets = {
             'nome': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'link': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
-            'tipo': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
         }
 
         fields = ('nome',
             'link',
-            'tipo',
             'projeto')
 
 

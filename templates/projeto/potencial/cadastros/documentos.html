@@ -11,16 +11,10 @@
         <form method="POST">
             {% csrf_token %}
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="form-group">
-                        <label for="id_nucleo">Nome</label>
+                        <label for="id_nucleo">Nome / Descrição</label>
                         {{ formDoc.nome }}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label for="id_nucleo">Tipo</label>
-                        {{ formDoc.tipo }}
                     </div>
                 </div>
             </div>

@@ -522,8 +522,6 @@ def criar_integrante(request, id_potencial):
                 cpf=request.POST.get('cpf'),
                 email=request.POST.get('email'),
                 telefone=request.POST.get('telefone'),
-                idade=request.POST.get('idade'),
-                sexo=request.POST.get('sexo'),
             )
             novo_participante.save()
         except:

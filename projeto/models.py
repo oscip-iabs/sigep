@@ -43,11 +43,20 @@ class Projeto(models.Model):
         (1, 'Média'),
         (2, 'Baixa'),
     )
+    JUSTIFICATIVA_PADRAO = (
+        (1, 'Média'),
+        (2, 'Baixa'),
+        (3, 'Baixa'),
+        (4, 'Baixa'),
+    )
 
     date_created        = models.DateTimeField(auto_now_add=True)
     titulo              = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Descreva o título/Objetivo')
+    titulo_abreviado    = models.CharField(max_length=500, blank=True, null=True,  verbose_name=u'Descreva o título/Objetivo abreviado')
     apoiador            = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Instituição financiadora ou possível apoiador')
     chave               = models.CharField(max_length=15,   blank=True, null=True)
+    protocolo           = models.CharField(max_length=20,   blank=True, null=True)
+    origem_projeto      = models.CharField(max_length=20,   blank=True, null=True)
     valor_estimado      = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Valor estimado', help_text=u'Valor em R$')
     tema_possibilidade  = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Descreva o tema')
     prazo_limite        = models.DateField(default=datetime.date.today, blank=True, verbose_name=u'Data da publicação')
@@ -76,6 +85,7 @@ class Projeto(models.Model):
 
     prioridade_projeto       = models.IntegerField(null=False, default=0, verbose_name=u'Prioridade do Projeto', choices=PRIORIDADE_PROJETO)
     justificativa_prioridade = models.CharField(max_length=1000, blank=True, null=True, verbose_name=u'Justificativa da Prioridade')
+    justificativa_padrao     = models.IntegerField(null=False, default=0, verbose_name=u'Justificativa padrão do Projeto', choices=JUSTIFICATIVA_PADRAO)
 
     possibilidade_responsavel = models.ForeignKey(Usuario_Perfil, null=True)
 
@@ -123,10 +133,17 @@ class Contato(models.Model):
 
 
 class Equipe_Projeto(models.Model):
+    CATEGORIA_RESPONSABILIDADE = (
+        (0, 'Administrativo'),
+        (1, 'Financeiro'),
+        (2, 'Técnico'),
+        (3, 'Institucional'),
+    )
+
     date_created = models.DateTimeField(auto_now_add=True)
     participante = models.ForeignKey(Usuario_Perfil, blank=True, null=True)
     projeto      = models.ForeignKey(Projeto, blank=True, null=True)
-    responsabilidade = models.CharField(max_length=100, blank=True, null=True)
+    responsabilidade = models.IntegerField(null=False, blank=True, default=0, verbose_name=u'Categoria da responsavili', choices=CATEGORIA_RESPONSABILIDADE)
 
 
 class Documento(models.Model):
@@ -138,7 +155,6 @@ class Documento(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     nome         = models.CharField(max_length=100, blank=True, null=True)
     link         = models.CharField(max_length=100, blank=True, null=True)
-    tipo         = models.IntegerField(null=False, blank=True, default=0, verbose_name=u'Tipo do documento potencial', choices=TIPO_DOCUMENTO)
     projeto      = models.ForeignKey(Projeto, blank=True, null=True)
 
     def __str__(self):
@@ -163,6 +179,7 @@ class Parceiro(models.Model):
     nome_responsavel = models.CharField(max_length=150, blank=True, null=True)
     telefone     = models.CharField(max_length=100, blank=True, null=True)
     email        = models.CharField(max_length=100, blank=True, null=True)
+    homepage     = models.CharField(max_length=100, blank=True, null=True)
     projeto      = models.ForeignKey(Projeto, blank=True, null=True)
     formaliza_parceria = models.CharField(max_length=50, null=True, default='NAO', choices=PRIORIDADE_SIM_NAO, verbose_name=u'É necessário formalização de parceria ?')
     existe_instrumento_formal = models.CharField(max_length=50, null=True, default='NAO', choices=PRIORIDADE_SIM_NAO, verbose_name=u'Já existe algum instrumento formal ?')
