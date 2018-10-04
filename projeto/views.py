@@ -7,14 +7,15 @@ import datetime
 from iabs_main.models import Geral_Status
 from usuario.models import Usuario_Perfil, Notificacao_Usuario
 from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato, \
-    Parceiro, Equipe_Projeto
+    Parceiro, Equipe_Projeto, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
 from projeto.utils import generate_project_key
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
     AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContato, \
     CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm, CadastroNucleoPotencialForm, \
-    CadastroParceiroPotencialForm
+    CadastroParceiroPotencialForm, CadastroEstadoLocalizacaoForm, CadastroRegiaoLocalizacaoForm, \
+    CadastroMunicipioLocalizacaoForm, CadastroInternacionalLocalizacaoForm
 
 
 from django.contrib.auth.models import Group
@@ -210,30 +211,141 @@ def delete_possibilidade_nucleo(request, id_pos, chave_pos, id_nucleo):
 @user_passes_test(is_admin)
 def cadastro_localizacao_possibilidade(request, id_pos, chave_pos):
     TABS = 'LOCALIZACAO'
+
+    show_form_abrangencia = False
+    show_form_estado = False
+    show_form_regional = False
+    show_form_estadual = False
+    show_form_municipio = False
+    show_form_internacional = False
+
     obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
     formLocalizacao = CadastroDadosLocalizacaoForm(request.POST or None, instance=obj_projeto)
 
+    if not obj_projeto.localizacao_mundial == None:
+        show_form_abrangencia = True
+        # PROJETO NACIONAL
+        if obj_projeto.localizacao_mundial == 0:
+            formEstado = CadastroEstadoLocalizacaoForm(request.POST or None)
+            show_form_estado = True
+        # PROJETO INTERNACIONAL
+        elif obj_projeto.localizacao_mundial == 1:
+            formInternacional = CadastroInternacionalLocalizacaoForm(request.POST or None)
+            show_form_internacional = True
+        # PROJETO REGIONAL
+        elif obj_projeto.localizacao_mundial == 2:
+            formRegiao = CadastroRegiaoLocalizacaoForm(request.POST or None)
+            show_form_regional = True
+        # PROJETO ESTADUAL
+        elif obj_projeto.localizacao_mundial == 3:
+            formEstado = CadastroEstadoLocalizacaoForm(request.POST or None)
+            show_form_estadual = True
+        # PROJETO MUNICIPAL
+        elif obj_projeto.localizacao_mundial == 4:
+            formMunicipio = CadastroMunicipioLocalizacaoForm(request.POST or None)
+            show_form_municipio = True
+
+        allEstado = Estado_x_Projeto.objects.filter(projeto=obj_projeto)
+        allRegiao = Regiao_x_Projeto.objects.filter(projeto=obj_projeto)
+        allMunicipio = Municipio_x_Projeto.objects.filter(projeto=obj_projeto)
+        allPais = Pais_x_Projeto.objects.filter(projeto=obj_projeto)
+
     if request.method == 'POST':
         if formLocalizacao.is_valid():
             localizacao_obj = formLocalizacao.save(commit=False)
-            localizacao_obj.check_possibilidade_cadastro_localizacao = True
-            localizacao_obj.save()
 
-            now = datetime.datetime.now()
-            usuario = Usuario_Perfil.objects.get(email=request.user.email)
-            historicProject = Historico_Projeto(
-                date_modificacao=now,
-                texto='Cadastro da localização da possibilidade ' + obj_projeto.chave,
-                tipo='CADASTRO_POSSIBILIDADE',
-                projeto=obj_projeto,
-                modified_user=usuario
-            )
-            historicProject.save()
+            Estado_x_Projeto.objects.filter(projeto=obj_projeto).delete()
+            Regiao_x_Projeto.objects.filter(projeto=obj_projeto).delete()
+            Municipio_x_Projeto.objects.filter(projeto=obj_projeto).delete()
+            Pais_x_Projeto.objects.filter(projeto=obj_projeto).delete()
+
+            # localizacao_obj.check_possibilidade_cadastro_localizacao = True
+
+            localizacao_obj.save()
+            Projeto.objects.filter(id=id_pos, chave=chave_pos).update(check_possibilidade_cadastro_localizacao=False)
+
+
+            # now = datetime.datetime.now()
+            # usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            # historicProject = Historico_Projeto(
+            #     date_modificacao=now,
+            #     texto='Cadastro da localização da possibilidade ' + obj_projeto.chave,
+            #     tipo='CADASTRO_POSSIBILIDADE',
+            #     projeto=obj_projeto,
+            #     modified_user=usuario
+            # )
+            # historicProject.save()
 
             return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_localizacao.html', locals(), )
+
+
+
+@login_required
+@user_passes_test(is_admin)
+def localizacao_save_estado(request, id_pos, chave_pos):
+    obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+    formEstado = CadastroEstadoLocalizacaoForm(request.POST or None)
+    Projeto.objects.filter(id=id_pos, chave=chave_pos).update(check_possibilidade_cadastro_localizacao=True)
+
+    if request.method == 'POST':
+        if formEstado.is_valid():
+            estado_loc_obj = formEstado.save(commit=False)
+            estado_loc_obj.projeto = obj_projeto
+            estado_loc_obj.save()
+
+    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+
+
+@login_required
+@user_passes_test(is_admin)
+def localizacao_save_regiao(request, id_pos, chave_pos):
+    obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+    formRegiao = CadastroRegiaoLocalizacaoForm(request.POST or None)
+    Projeto.objects.filter(id=id_pos, chave=chave_pos).update(check_possibilidade_cadastro_localizacao=True)
+
+    if request.method == 'POST':
+        if formRegiao.is_valid():
+            regiao_loc_obj = formRegiao.save(commit=False)
+            regiao_loc_obj.projeto = obj_projeto
+            regiao_loc_obj.save()
+
+    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+
+
+@login_required
+@user_passes_test(is_admin)
+def localizacao_save_municipio(request, id_pos, chave_pos):
+    obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+    formMunicipio = CadastroMunicipioLocalizacaoForm(request.POST or None)
+    Projeto.objects.filter(id=id_pos, chave=chave_pos).update(check_possibilidade_cadastro_localizacao=True)
+
+    if request.method == 'POST':
+        if formMunicipio.is_valid():
+            municipio_loc_obj = formMunicipio.save(commit=False)
+            municipio_loc_obj.projeto = obj_projeto
+            municipio_loc_obj.save()
+
+    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+
+
+@login_required
+@user_passes_test(is_admin)
+def localizacao_save_pais(request, id_pos, chave_pos):
+    obj_projeto = Projeto.objects.get(id=id_pos, chave=chave_pos)
+    formPais = CadastroInternacionalLocalizacaoForm(request.POST or None)
+    Projeto.objects.filter(id=id_pos, chave=chave_pos).update(check_possibilidade_cadastro_localizacao=True)
+
+    if request.method == 'POST':
+        if formPais.is_valid():
+            pais_loc_obj = formPais.save(commit=False)
+            pais_loc_obj.projeto = obj_projeto
+            pais_loc_obj.save()
+
+    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+
 
 # metodo para finalizar e definir responsavel pela possibilidade
 @login_required

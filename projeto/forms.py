@@ -2,7 +2,8 @@
 from django.forms import ModelForm
 from django import forms
 
-from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro
+from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro, \
+    Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
 
 
 class InformacoesBasicasProjeto(ModelForm):
@@ -86,14 +87,68 @@ class CadastroDadosLocalizacaoForm(ModelForm):
         model = Projeto
         widgets = {
             'localizacao_mundial': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
-            'localizacao_abrangencia': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
             'localizacao_descricao': forms.Textarea(attrs={'class': 'form-control border-input textarea', 'required': True}),
         }
 
         fields = ('localizacao_mundial',
                   'localizacao_descricao',
-                  'localizacao_abrangencia',
                   'check_possibilidade_cadastro_localizacao',)
+
+
+class CadastroEstadoLocalizacaoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroEstadoLocalizacaoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Estado_x_Projeto
+        widgets = {
+            'estado_projeto': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('projeto',
+                  'estado_projeto',)
+
+
+class CadastroRegiaoLocalizacaoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroRegiaoLocalizacaoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Regiao_x_Projeto
+        widgets = {
+            'regiao_projeto': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('projeto',
+                  'regiao_projeto',)
+
+
+class CadastroMunicipioLocalizacaoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroMunicipioLocalizacaoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Municipio_x_Projeto
+        widgets = {
+            'municipio_projeto': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('projeto',
+                  'municipio_projeto',)
+
+
+class CadastroInternacionalLocalizacaoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CadastroInternacionalLocalizacaoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Pais_x_Projeto
+        widgets = {
+            'pais_projeto': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('projeto',
+                  'pais_projeto',)
 
 
 class FinalizarCadastroForm(ModelForm):
@@ -142,7 +197,6 @@ class AvaliacaoDadosDisabledForm(ModelForm):
             'descricao'				: forms.Textarea(attrs={'class': 'form-control border-input', 'maxlength': 10000, 'required': True}),
             'valor_estimado'        : forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'localizacao_mundial'   : forms.Select(attrs={'class': 'form-control border-input', 'required': True, 'disabled': True}),
-            'localizacao_abrangencia': forms.Select(attrs={'class': 'form-control border-input', 'required': True, 'disabled': True}),
             'localizacao_descricao' : forms.Textarea(attrs={'class': 'form-control border-input textarea', 'required': True, 'disabled': True}),
         }
 
@@ -154,8 +208,7 @@ class AvaliacaoDadosDisabledForm(ModelForm):
             'periodo_execucao',
             'valor_estimado',
             'localizacao_mundial',
-            'localizacao_descricao',
-            'localizacao_abrangencia',)
+            'localizacao_descricao',)
 
 
 class AvaliacaoAdequacaoForm(ModelForm):
@@ -258,13 +311,11 @@ class CadastroDadosLocalizacaoPotencialForm(ModelForm):
         model = Projeto
         widgets = {
             'localizacao_mundial': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
-            'localizacao_abrangencia': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
             'localizacao_descricao': forms.Textarea(attrs={'class': 'form-control border-input textarea', 'required': True}),
         }
 
         fields = ('localizacao_mundial',
                   'localizacao_descricao',
-                  'localizacao_abrangencia',
                   'check_projeto_potencial_cadastro_localizacao',)
 
 

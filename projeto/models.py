@@ -5,21 +5,11 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 
-from iabs_main.models import Geral_Status
+from iabs_main.models import Geral_Status, Pais, Regiao, Estado, Municipio
 from usuario.models import Usuario_Perfil
 
 import os
 import datetime
-
-
-class Abrangencia_Atuacao(models.Model):
-    date_created    = models.DateTimeField(auto_now_add=True)
-    texto           = models.CharField(max_length=1000, blank=True, null=True, verbose_name=u'Área de atuação do projeto')
-    descricao       = models.CharField(max_length=1000, blank=True, null=True, verbose_name=u'Descrição da área de atuação')
-
-    def __str__(self):
-        return self.texto.encode('utf-8').strip()
-
 
 class Tipo_Contratacao(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
@@ -79,15 +69,44 @@ class Projeto(models.Model):
     check_projeto_potencial_cadastro_documento = models.NullBooleanField(default=False, blank=True)
     check_projeto_potencial_cadastro_parceiro = models.NullBooleanField(default=False, blank=True)
 
-    localizacao_mundial     = models.IntegerField(null=False, default=0, verbose_name=u'Localização da possibilidade', choices=LOCAL_GLOBAL)
+
+
+
+    localizacao_mundial     = models.IntegerField(blank=True, null=True, verbose_name=u'Area de Abrangencia', choices=LOCAL_GLOBAL)
     localizacao_descricao   = models.TextField(max_length=5000, blank=True, null=True, verbose_name=u'Outras informações em relação a localização')
-    localizacao_abrangencia = models.ForeignKey(Abrangencia_Atuacao, null=True)
+
+
+
 
     prioridade_projeto       = models.IntegerField(null=False, default=0, verbose_name=u'Prioridade do Projeto', choices=PRIORIDADE_PROJETO)
     justificativa_prioridade = models.CharField(max_length=1000, blank=True, null=True, verbose_name=u'Justificativa da Prioridade')
     justificativa_padrao     = models.IntegerField(null=False, default=0, verbose_name=u'Justificativa padrão do Projeto', choices=JUSTIFICATIVA_PADRAO)
 
     possibilidade_responsavel = models.ForeignKey(Usuario_Perfil, null=True)
+
+
+class Estado_x_Projeto(models.Model):
+    date_created    = models.DateTimeField(auto_now_add=True)
+    projeto         = models.ForeignKey(Projeto, blank=True, null=True)
+    estado_projeto  = models.ForeignKey(Estado, null=True)
+
+
+class Regiao_x_Projeto(models.Model):
+    date_created    = models.DateTimeField(auto_now_add=True)
+    projeto         = models.ForeignKey(Projeto, blank=True, null=True)
+    regiao_projeto  = models.ForeignKey(Regiao, null=True)
+
+
+class Municipio_x_Projeto(models.Model):
+    date_created    = models.DateTimeField(auto_now_add=True)
+    projeto         = models.ForeignKey(Projeto, blank=True, null=True)
+    municipio_projeto  = models.ForeignKey(Municipio, null=True)
+
+
+class Pais_x_Projeto(models.Model):
+    date_created    = models.DateTimeField(auto_now_add=True)
+    projeto         = models.ForeignKey(Projeto, blank=True, null=True)
+    pais_projeto    = models.ForeignKey(Pais, null=True)
 
 
 class Nucleo(models.Model):
