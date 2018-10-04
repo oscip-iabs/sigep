@@ -7,14 +7,14 @@ import datetime
 from iabs_main.models import Geral_Status
 from usuario.models import Usuario_Perfil, Notificacao_Usuario
 from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato, \
-    Parceiro, Equipe_Projeto, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
+    Parceiro, Equipe_Projeto, Financeiro, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
 from projeto.utils import generate_project_key
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
     AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContato, \
     CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm, CadastroNucleoPotencialForm, \
-    CadastroParceiroPotencialForm, CadastroEstadoLocalizacaoForm, CadastroRegiaoLocalizacaoForm, \
+    CadastroParceiroPotencialForm, formGastosFinanceiro, CadastroEstadoLocalizacaoForm, CadastroRegiaoLocalizacaoForm, \
     CadastroMunicipioLocalizacaoForm, CadastroInternacionalLocalizacaoForm
 
 
@@ -117,6 +117,10 @@ def cadastro_dados_financeiros_possibilidade(request, id_pos, chave_pos):
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=obj_projeto)
     formFinanceiro = CadastroDadosFinanceiroForm(request.POST or None, instance=obj_projeto)
 
+    formGastos = formGastosFinanceiro(request.POST or None)
+
+    gastosPossibilidade = Financeiro.objects.filter(projeto=obj_projeto, fase_gasto='possibilidade')
+
     if request.method == 'POST':
         if formFinanceiro.is_valid():
             projeto_obj = formFinanceiro.save(commit=False)
@@ -137,6 +141,7 @@ def cadastro_dados_financeiros_possibilidade(request, id_pos, chave_pos):
             return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_financeiros.html', locals(), )
+
 
 # Nucleo da possibilidade, as possibilidades podem ter um ou mais nucleos
 # guia de cadastro inicial da possibilidade
@@ -503,8 +508,11 @@ def projeto_potencial_dadosfinanceiros(request, id_potencial):
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
 
     formFinanceiro = CadastroDadosFinanceiroPotencialForm(request.POST or None, instance=potencial_cadastro)
-
+    formGastos = formGastosFinanceiro(request.POST or None)
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
+
+    gastosPossibilidade = Financeiro.objects.filter(projeto=potencial_cadastro, fase_gasto='possibilidade')
+    gastosPotencial = Financeiro.objects.filter(projeto=potencial_cadastro, fase_gasto='potencial')
 
     if request.method == 'POST':
         if formFinanceiro.is_valid():
@@ -968,5 +976,80 @@ def delete_dados_basicos_contato(request, id_proj, id_contato, situacao_projeto)
         return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_proj, contato.projeto.chave))
     elif situacao_projeto == 'potencial':
         return redirect('/projeto/potencial/%s/dadosbasicos' % id_proj)
+
+    return redirect('/')
+
+
+# metodo para adicionar um gasto de um projeto(possibilidade e potencial)
+@login_required
+@user_passes_test(is_admin)
+def cadastro_dados_financeiros_gasto(request, id_proj, fase_projeto):
+    obj_projeto = Projeto.objects.get(id=int(id_proj))
+
+    formGasto = formGastosFinanceiro(request.POST or None)
+
+    if fase_projeto == 'possibilidade':
+        tipo = 'CADASTRO_POSSIBILIDADE'
+    elif fase_projeto == 'potencial':
+        tipo = 'CADASTRO_PROJETO_POTENCIAL'
+
+    if request.method == 'POST':
+        if formGasto.is_valid():
+
+            projeto_obj = formGasto.save(commit=False)
+            projeto_obj.projeto = obj_projeto
+            projeto_obj.fase_gasto = fase_projeto
+            projeto_obj.save()
+
+            now = datetime.datetime.now()
+            usuario = Usuario_Perfil.objects.get(email=request.user.email)
+            historicProject = Historico_Projeto(
+                date_modificacao=now,
+                texto='Cadastro de um novo gasto financeiro nos dados basicos',
+                tipo=tipo,
+                projeto=projeto_obj.projeto,
+                modified_user=usuario
+            )
+            historicProject.save()
+
+    if fase_projeto == 'possibilidade':
+        return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros' % (id_proj, obj_projeto.chave))
+    elif fase_projeto == 'potencial':
+        return redirect('/projeto/potencial/%s/dadosfinanceiros' % id_proj)
+
+    return redirect('/')
+
+
+#metodo para excluir um gasto de um projeto(possibilidade e potencial)
+@login_required
+@user_passes_test(is_admin)
+def delete_dados_financeiros_gasto(request, id_proj, id_gasto, fase_projeto):
+    gastoFinanceiro = Financeiro.objects.get(id=int(id_gasto))
+
+    if fase_projeto == 'possibilidade':
+        tipo = 'CADASTRO_POSSIBILIDADE'
+    elif fase_projeto == 'potencial':
+        tipo = 'CADASTRO_PROJETO_POTENCIAL'
+
+    try:
+        gastoFinanceiro.delete()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Gasto do projeto ' + gastoFinanceiro.projeto.chave,
+            tipo=tipo,
+            projeto=gastoFinanceiro.projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    if fase_projeto == 'possibilidade':
+        return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros' % (id_proj, gastoFinanceiro.projeto.chave))
+    elif fase_projeto == 'potencial':
+        return redirect('/projeto/potencial/%s/dadosfinanceiros' % id_proj)
 
     return redirect('/')

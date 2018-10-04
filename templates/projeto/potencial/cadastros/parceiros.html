@@ -33,10 +33,16 @@
                         {{ formParceiro.telefone }}
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-4">
                     <div class="form-group">
                         <label for="id_nucleo">E-mail</label>
                         {{ formParceiro.email }}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="id_nucleo">Homepage</label>
+                        {{ formParceiro.homepage }}
                     </div>
                 </div>
             </div>
@@ -120,6 +126,7 @@
                                     <th>Responsável</th>
                                     <th>Telefone</th>
                                     <th>Email</th>
+                                    <th>Homepage</th>
                                     <th><small>Necessário formalização de parceria </small></th>
                                     <th><small>Existe algum instrumento formal assinado</small></th>
                                     <th><small>Instrumento específico necessário</small></th>
@@ -133,6 +140,7 @@
                                     <td><small>{{ parceiro.nome_responsavel }}</small></td>
                                     <td><small>{{ parceiro.telefone }}</small></td>
                                     <td><small>{{ parceiro.email }}</small></td>
+                                    <td><small>{{ parceiro.homepage }}</small></td>
                                     <td class="text-center">
                                     <small>
                                         {% if parceiro.formaliza_parceria == 'SIM' %}

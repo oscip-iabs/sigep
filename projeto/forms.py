@@ -2,6 +2,7 @@
 from django.forms import ModelForm
 from django import forms
 
+from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro, Financeiro
 from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro, \
     Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
 
@@ -161,12 +162,14 @@ class FinalizarCadastroForm(ModelForm):
             'possibilidade_responsavel': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
             'prioridade_projeto': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
             'justificativa_prioridade': forms.Textarea(attrs={'class': 'form-control border-input', 'required': True}),
+            'justificativa_padrao': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
         }
 
 
         fields = ('possibilidade_responsavel',
                   'prioridade_projeto',
                   'justificativa_prioridade',
+                  'justificativa_padrao',
                   'status',)
 
 
@@ -234,7 +237,9 @@ class CadastroDadosBasicosPotencialForm(ModelForm):
     class Meta:
         model = Projeto
         widgets = {
-            'titulo'				: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
+            'titulo'				: forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'titulo_abreviado'      : forms.TextInput (attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'origem_projeto'		: forms.TextInput (attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'apoiador'				: forms.TextInput(attrs={'type':'text'  , 'class':'form-control border-input', 'required': True}),
             'periodo_execucao'		: forms.TextInput(attrs={'type':'number', 'class':'form-control border-input', 'required': True, 'step':'1',}),
             'prazo_limite'			: forms.TextInput(attrs={'type':'date'  , 'class':'form-control border-input', 'required': True, 'placeholder': 'dd/mm/aaaa'}),
@@ -246,6 +251,8 @@ class CadastroDadosBasicosPotencialForm(ModelForm):
         }
 
         fields = ('titulo',
+            'titulo_abreviado',
+            'origem_projeto',
             'apoiador',
             'tema_possibilidade',
             'prazo_limite',
@@ -256,6 +263,7 @@ class CadastroDadosBasicosPotencialForm(ModelForm):
             'check_projeto_potencial_cadastro_basico',)
 
 
+# tanto para cadastro da possibilidade como para de potencial
 class formContato(ModelForm):
     def __init__(self, *args, **kwargs):
         super(formContato, self).__init__(*args, **kwargs)
@@ -273,6 +281,25 @@ class formContato(ModelForm):
             'telefone',
             'email',
             'info_contato',
+            'projeto')
+
+
+# tanto para cadastro da possibilidade como para de potencial
+class formGastosFinanceiro(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(formGastosFinanceiro, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Financeiro
+        widgets = {
+            'date_gasto': forms.TextInput(attrs={'type': 'date', 'class': 'form-control border-input', 'required': True, 'placeholder': 'dd/mm/aaaa'}),
+            'descricao': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+            'valor': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('date_gasto',
+            'descricao',
+            'valor',
             'projeto')
 
 
@@ -346,6 +373,7 @@ class CadastroParceiroPotencialForm(ModelForm):
             'nome_responsavel': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'telefone': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input', 'required': True}),
             'email': forms.TextInput(attrs={'type': 'email', 'class': 'form-control border-input', 'required': True}),
+            'homepage': forms.TextInput(attrs={'type': 'text', 'class': 'form-control border-input'}),
             'formaliza_parceria': forms.RadioSelect(attrs={'name': 'radio1'}),
             'existe_instrumento_formal': forms.RadioSelect(attrs={'class': 'check-cronograma'}),
             'tipo_instrumento': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
@@ -355,6 +383,7 @@ class CadastroParceiroPotencialForm(ModelForm):
                   'nome_responsavel',
                   'telefone',
                   'email',
+                  'homepage',
                   'projeto',
                   'formaliza_parceria',
                   'existe_instrumento_formal',
