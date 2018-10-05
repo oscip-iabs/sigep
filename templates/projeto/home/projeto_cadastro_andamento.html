@@ -17,6 +17,12 @@
                         <a href="/projeto/{{ item.id }}/cadastro/{{ item.chave }}/dadosbasicos">
                             <button type="submit" class="btn btn-info btn-fill">Continuar</button>
                         </a>
+                        <a href="/projeto/{{ item.id }}/eliminar_projeto/possibilidade" >
+                            <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"
+                                    data-placement="top" title="Excluir" >
+                                <span class="ti-close"></span>
+                            </button>
+                        </a >
                     </td>
                 </tr>
             {% empty %}

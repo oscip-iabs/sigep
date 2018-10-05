@@ -5,43 +5,41 @@
                 <th>Prioridade</th>
                 <th>Titulo</th>
                 <th>Chave</th>
-                <th>Status</th>
                 <th>Responsável</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            {% for potencial in potencial_novo %}
+            {% for eliminado in possibilidade_eliminado %}
                 <tr>
                     <td class="text-center">
-                        {% if potencial.prioridade_projeto == 0 %}
+                        {% if eliminado.prioridade_projeto == 0 %}
                             <span class="prioridade_alta justificativa" data-toggle="tooltip" data-placement="top" title="Prioridade Alta: {{ potencial.justificativa_prioridade }}"></span>
-                        {% elif potencial.prioridade_projeto == 1 %}
+                        {% elif eliminado.prioridade_projeto == 1 %}
                             <span class="prioridade_media justificativa" data-toggle="tooltip" data-placement="top" title="Prioridade Alta: {{ potencial.justificativa_prioridade }}"></span>
-                        {% elif potencial.prioridade_projeto == 2 %}
+                        {% elif eliminado.prioridade_projeto == 2 %}
                             <span class="prioridade_baixa justificativa"data-toggle="tooltip" data-placement="top" title="Prioridade Alta: {{ potencial.justificativa_prioridade }}"></span>
                         {% endif %}
                     </td>
-                    <td>{{ potencial.titulo }}</td>
-                    <td>{{ potencial.chave }}</td>
-                    <td>{{ potencial.status.texto }}</td>
-                    <td>{{ potencial.possibilidade_responsavel.nome }}</td>
+                    <td>{{ eliminado.titulo }}</td>
+                    <td>{{ eliminado.chave }}</td>
+                    <td>{{ eliminado.possibilidade_responsavel.nome }}</td>
                     <td>
-                        <a href="/projeto/potencial/{{ potencial.id }}/dadosbasicos">
-                            <button class="btn btn-info btn-fill btn-wd">Completar cadastro</button>
-                        </a>
-                        <a href="/projeto/{{ potencial.id }}/eliminar_projeto/potencial" >
-                            <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"
-                                    data-placement="top" title="Excluir" >
-                                <span class="ti-close"></span>
-                            </button>
-                        </a >
+{#                        <a href="/projeto/potencial/{{ potencial.id }}/dadosbasicos">#}
+{#                            <button class="btn btn-info btn-fill btn-wd">Completar cadastro</button>#}
+{#                        </a>#}
+{#                        <a href="/projeto/{{ eliminado.id }}/eliminar_projeto/potencial" >#}
+{#                            <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"#}
+{#                                    data-placement="top" title="Excluir" >#}
+{#                                <span class="ti-close"></span>#}
+{#                            </button>#}
+{#                        </a >#}
                     </td>
                 </tr>
             {% empty %}
                 <tr>
                     <td colspan="5" class="text-center">
-                        <pre><h5>Não existe nenhum projeto potencial cadastrado</h5></pre>
+                        <pre><h5>Não existe nenhum projeto eliminado</h5></pre>
                     </td>
                 </tr>
             {% endfor %}

@@ -1,0 +1,57 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block name_page %} Projetos {% endblock %}
+
+{% block base_content %}
+
+
+<div class="row">
+    {% include 'projeto/potencial/home/opcoes_projetos.html' %}
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="title">Projetos Eliminados</h4>
+{#                        <p class="category">Projeto para preencher as informações adicionais</p>#}
+                        <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#eliminadoPos">
+                        <span class="ti-na"></span> Possibilidade de projetos eliminados
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#eliminadoPot">
+                        <span class="ti-na"></span> Projetos potenciais eliminados
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="eliminadoPos" class="tab-pane fade in active">
+                    {% include 'projeto/eliminado/home/eliminados_possibilidade.html' %}
+                </div>
+                <div id="eliminadoPot" class="tab-pane fade">
+                    {% include 'projeto/eliminado/home/eliminados_potencial.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

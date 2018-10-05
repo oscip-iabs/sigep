@@ -30,6 +30,12 @@
                         <a href="/projeto/potencial/{{ potencial_done.id }}/visualizar/{{ potencial_done.chave }}">
                             <button class="btn btn-info btn-fill btn-wd">Visualizar</button>
                         </a>
+                        <a href="/projeto/{{ potencial_done.id }}/eliminar_projeto/potencial" >
+                            <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"
+                                    data-placement="top" title="Excluir" >
+                                <span class="ti-close"></span>
+                            </button>
+                        </a >
                     </td>
                 </tr>
             {% empty %}

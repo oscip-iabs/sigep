@@ -455,6 +455,7 @@ def aprovar_possibilidade(request, id_pos, chave_pos):
 
     return redirect('/projeto/potencial')
 
+
 @login_required
 @user_passes_test(is_admin)
 def projeto_potencial(request):
@@ -1148,3 +1149,52 @@ def delete_dados_financeiros_gasto(request, id_proj, id_gasto, fase_projeto):
         return redirect('/projeto/potencial/%s/dadosfinanceiros' % id_proj)
 
     return redirect('/')
+
+
+#metodo para excluir um gasto de um projeto(possibilidade e potencial)
+@login_required
+@user_passes_test(is_admin)
+def eliminar_projeto(request, id_proj, fase_projeto):
+    obj_projeto = Projeto.objects.get(id=int(id_proj))
+
+    if fase_projeto == 'possibilidade':
+        tipo = 'ELIMINAR_POSSIBILIDADE'
+        referencia = 'ELIMINAR POSSIBILIDADE'
+    elif fase_projeto == 'potencial':
+        tipo = 'ELIMINAR_PROJETO_POTENCIAL'
+        referencia = 'ELIMINAR PROJETO POTENCIAL'
+
+    try:
+        statusConcluido = Geral_Status.objects.get(referencia=referencia,
+                                                   chave=tipo)
+        obj_projeto.status = statusConcluido
+        obj_projeto.save()
+
+        now = datetime.datetime.now()
+        usuario = Usuario_Perfil.objects.get(email=request.user.email)
+        historicProject = Historico_Projeto(
+            date_modificacao=now,
+            texto='Exclusão de Gasto do projeto ' + obj_projeto.chave,
+            tipo=tipo,
+            projeto=obj_projeto,
+            modified_user=usuario
+        )
+        historicProject.save()
+    except:
+        print('Ops')
+
+    if fase_projeto == 'possibilidade':
+        return redirect('/projeto')
+    elif fase_projeto == 'potencial':
+        return redirect('/projeto/potencial')
+
+    return redirect('/')
+
+
+@login_required
+@user_passes_test(is_admin)
+def projeto_eliminado(request):
+    possibilidade_eliminado = Projeto.objects.filter(status=20001000).order_by('prioridade_projeto')
+    potencial_eliminado = Projeto.objects.filter(status=20001001).order_by('prioridade_projeto')
+
+    return render(request, 'projeto/eliminado/home/home.html', locals(),)

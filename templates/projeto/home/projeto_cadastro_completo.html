@@ -10,7 +10,6 @@
             <th>Status</th>
             <th>Responsável</th>
             <th></th>
-            <th></th>
         </thead>
         <tbody>
             {% for item in possibilidade_completa %}
@@ -37,12 +36,16 @@
                                 <span class="ti-reload"></span>
                             </button>
                         </a >
-                    </td>
-                    <td>
                         <a href="/projeto/{{ item.id }}/possibilidade/{{ item.chave }}/avaliar" >
                             <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"
                                     data-placement="top" title="AVALIAR" >
                                 <span class="ti-pencil"></span>
+                            </button>
+                        </a >
+                        <a href="/projeto/{{ item.id }}/eliminar_projeto/possibilidade" >
+                            <button type="button" class="btn btn-info btn-fill" data-toggle="tooltip"
+                                    data-placement="top" title="Excluir" >
+                                <span class="ti-close"></span>
                             </button>
                         </a >
                     </td>
