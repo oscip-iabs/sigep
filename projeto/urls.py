@@ -62,5 +62,8 @@ urlpatterns = [
     url(r'^(?P<id_proj>[-\w\d]+)/dadosbasicos/addcontato/(?P<situacao_projeto>[-\w\d]+)$',views.cadastro_dados_basicos_contato, name='cadastro_dados_basicos_contato'),
     url(r'^(?P<id_proj>[-\w\d]+)/dadosbasicos/deletecontato/(?P<id_contato>[-\w\d]+)/(?P<situacao_projeto>[-\w\d]+)$',views.delete_dados_basicos_contato, name='delete_dados_basicos_contato'),
 
+    url(r'^(?P<id_proj>[-\w\d]+)/dadosfinanceiros/addgastofinanceiro/(?P<fase_projeto>[-\w\d]+)$',views.cadastro_dados_financeiros_gasto, name='cadastro_dados_financeiros_gasto'),
+    url(r'^(?P<id_proj>[-\w\d]+)/dadosfinanceiros/deletegastofinanceiro/(?P<id_gasto>[-\w\d]+)/(?P<fase_projeto>[-\w\d]+)$',views.delete_dados_financeiros_gasto, name='delete_dados_financeiros_gasto'),
+
 
 ]

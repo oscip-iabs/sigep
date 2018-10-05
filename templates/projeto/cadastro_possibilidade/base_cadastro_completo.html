@@ -120,6 +120,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Justificativa</label>
+                                    {{ formFinalizar.justificativa_padrao }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Descrição da Justificativa</label>
                                     {{ formFinalizar.justificativa_prioridade }}
                                 </div>
                             </div>
@@ -140,6 +148,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('#id_valor_estimado').mask('000.000.000.000.000,00', {reverse: true});
+        $('#id_valor').mask('000.000.000.000.000,00', {reverse: true});
 
         setInterval(function(){
             $('#finalizar-cadastro').toggleClass('piscar')

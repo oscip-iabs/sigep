@@ -34,10 +34,10 @@ class Projeto(models.Model):
         (2, 'Baixa'),
     )
     JUSTIFICATIVA_PADRAO = (
-        (1, 'Média'),
-        (2, 'Baixa'),
-        (3, 'Baixa'),
-        (4, 'Baixa'),
+        (1, 'Justificativa 01'),
+        (2, 'Justificativa 02'),
+        (3, 'Justificativa 03'),
+        (4, 'Justificativa 04'),
     )
 
     date_created        = models.DateTimeField(auto_now_add=True)
@@ -206,6 +206,19 @@ class Parceiro(models.Model):
 
     def __str__(self):
         return self.nome.encode('utf-8').strip()
+
+
+class Financeiro(models.Model):
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_gasto   = models.DateTimeField()
+    descricao    = models.CharField(max_length=1000, blank=True, null=True)
+    valor        = models.CharField(max_length=100, blank=True, null=True,  verbose_name=u'Valor estimado', help_text=u'Valor em R$')
+    projeto      = models.ForeignKey(Projeto, blank=True, null=True)
+    fase_gasto   = models.CharField(max_length=50, null=True, verbose_name=u'Fase do projeto')
+
+    def __str__(self):
+        return self.descricao.encode('utf-8').strip()
 
 
 class Historico_Projeto(models.Model):
