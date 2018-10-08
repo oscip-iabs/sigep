@@ -2,9 +2,8 @@
 from django.forms import ModelForm
 from django import forms
 
-from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro, Financeiro
 from projeto.models import Projeto, Nucleo_x_Projeto, Avaliacao_Possibilidade, Documento, Contato, Parceiro, \
-    Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
+    Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto, Financeiro, Parceiro_x_Projeto
 
 
 class InformacoesBasicasProjeto(ModelForm):
@@ -384,7 +383,21 @@ class CadastroParceiroPotencialForm(ModelForm):
                   'telefone',
                   'email',
                   'homepage',
-                  'projeto',
                   'formaliza_parceria',
                   'existe_instrumento_formal',
                   'tipo_instrumento',)
+
+
+class ParceiroCadastradoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ParceiroCadastradoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Parceiro_x_Projeto
+
+        widgets = {
+            'parceiro': forms.Select(attrs={'class': 'form-control border-input', 'required': True}),
+        }
+
+        fields = ('parceiro',
+                  'projeto')

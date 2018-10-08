@@ -199,13 +199,18 @@ class Parceiro(models.Model):
     telefone     = models.CharField(max_length=100, blank=True, null=True)
     email        = models.CharField(max_length=100, blank=True, null=True)
     homepage     = models.CharField(max_length=100, blank=True, null=True)
-    projeto      = models.ForeignKey(Projeto, blank=True, null=True)
     formaliza_parceria = models.CharField(max_length=50, null=True, default='NAO', choices=PRIORIDADE_SIM_NAO, verbose_name=u'É necessário formalização de parceria ?')
     existe_instrumento_formal = models.CharField(max_length=50, null=True, default='NAO', choices=PRIORIDADE_SIM_NAO, verbose_name=u'Já existe algum instrumento formal ?')
     tipo_instrumento = models.ForeignKey(Tipo_Instrumento, default=1, null=True, verbose_name=u'Tipo de instrumento específico.')
 
     def __str__(self):
-        return self.nome.encode('utf-8').strip()
+        return self.nome.encode('utf-8').strip()+" ("+self.nome_responsavel.encode('utf-8')+")"
+
+
+class Parceiro_x_Projeto(models.Model):
+    date_created    = models.DateTimeField(auto_now_add=True)
+    projeto         = models.ForeignKey(Projeto, blank=True, null=True)
+    parceiro        = models.ForeignKey(Parceiro, null=True)
 
 
 class Financeiro(models.Model):
