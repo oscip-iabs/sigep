@@ -22,8 +22,10 @@ from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, C
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 
+
 def is_admin(user):
     return user.groups.filter(name='iabs_admin').exists()
+
 
 def request_user(request):
     return request.user.email

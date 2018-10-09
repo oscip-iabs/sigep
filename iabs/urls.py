@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^usuario/', include('usuario.urls', namespace='usuario', app_name='usuario')),
     url(r'^iabs/', include('iabs_main.urls', namespace='iabs', app_name='iabs')),
     url(r'^projeto/', include('projeto.urls', namespace='projeto', app_name='projeto')),
-    
+    url(r'^modelo/', include('modelo.urls', namespace='modelo', app_name='modelo')),
+
 
 ]
