@@ -208,7 +208,7 @@ class Parceiro(models.Model):
     tipo_instrumento = models.ForeignKey(Tipo_Instrumento, default=1, null=True, verbose_name=u'Tipo de instrumento específico.')
 
     def __str__(self):
-        return self.nome.encode('utf-8').strip()+" ("+self.nome_responsavel.encode('utf-8')+")"
+        return self.nome.encode('utf-8').strip()
 
 
 class Parceiro_x_Projeto(models.Model):

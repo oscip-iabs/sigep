@@ -54,7 +54,12 @@
                         <tr>
                             <th>{{ forloop.counter }}</th>
                             <td>{{ equipe.participante.nome }}</td>
-                            <td>{{ equipe.responsabilidade }}</td>
+                            <td>
+                                {% if equipe.responsabilidade == 0 %}Administrativo{% endif %}
+                                {% if equipe.responsabilidade == 1 %}Financeiro{% endif %}
+                                {% if equipe.responsabilidade == 2 %}Técnico{% endif %}
+                                {% if equipe.responsabilidade == 3 %}Institucional{% endif %}
+                            </td>
                             <td>
                                 <a href="/projeto/potencial/{{ id_potencial }}/excluir/{{ equipe.id }}/integrante" style="color: red;">
                                     <span class="ti-close"></span>
@@ -144,7 +149,15 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Responsabilidade do integrante</label>
-                                    <input type="text" class="form-control" name="responsabilidade" placeholder="Responsabilidade do integrante" required>
+
+                                    <select class="form-control" name="responsabilidade" required>
+                                      <option value="" >Selecione</option>
+                                      <option value="0" >Administrativo</option>
+                                      <option value="1" >Financeiro</option>
+                                      <option value="2" >Técnico</option>
+                                      <option value="3" >Institucional</option>
+                                    </select>
+
                                 </div>
                             </div>
                         </div>

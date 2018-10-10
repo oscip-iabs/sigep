@@ -7,11 +7,10 @@ import datetime
 from iabs_main.models import Geral_Status
 from usuario.models import Usuario_Perfil, Notificacao_Usuario
 from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato, \
-    Parceiro, Equipe_Projeto, Financeiro, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
-from projeto.utils import generate_project_key, generate_protocolo
     Parceiro, Equipe_Projeto, Financeiro, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto, \
     Parceiro_x_Projeto
-from projeto.utils import generate_project_key
+
+from projeto.utils import generate_project_key, generate_protocolo
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
@@ -453,6 +452,8 @@ def aprovar_possibilidade(request, id_pos, chave_pos):
     possibilidade = Projeto.objects.get(id=id_pos, chave=chave_pos)
     usuario = Usuario_Perfil.objects.get(email=request.user.email)
 
+    generate_protocolo(possibilidade)
+
     if possibilidade.possibilidade_responsavel.email == usuario.email:
         Projeto.objects.filter(id=possibilidade.id).update(status=status_aprovado)
     else:
@@ -890,12 +891,9 @@ def delete_potencial_documentos(request, id_potencial, id_documento):
 def projeto_potencial_parceiros(request, id_potencial):
     TABS = 'PARCEIROS'
     potencial_cadastro = Projeto.objects.get(id=int(id_potencial))
-    check_parceiro = potencial_cadastro.check_projeto_potencial_cadastro_parceiro
 
     formParceiro = CadastroParceiroPotencialForm(request.POST or None)
-
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
-
     formParceirosCadastrados = ParceiroCadastradoForm(request.POST or None)
 
     try:
@@ -904,8 +902,7 @@ def projeto_potencial_parceiros(request, id_potencial):
         parceiro_empty = True
 
     if not parceiro_cadastrado:
-        potencial_cadastro.check_projeto_potencial_cadastro_parceiro = False
-        potencial_cadastro.save()
+        Projeto.objects.filter(id=int(id_potencial)).update(check_projeto_potencial_cadastro_parceiro=False)
 
     if request.method == 'POST':
         if formParceiro.is_valid():
