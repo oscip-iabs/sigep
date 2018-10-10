@@ -1,0 +1,97 @@
+{% extends "base/base-main.html" %}
+{% load static %}
+
+{% block base_content_css %}
+	<link href="{% static "css/projeto/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block name_page %} Modelos de documentos {% endblock %}
+
+{% block base_content %}
+
+
+<div class="row">
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="content">
+                <a href="{% url 'modelo:inicio' %}">
+	                <div class="row">
+	                    <div class="col-xs-5">
+	                        <div class="icon-big icon-info text-center">
+	                            <i class="ti-file"></i>
+	                        </div>
+	                    </div>
+	                    <div class="col-xs-7">
+	                        <div class="numbers">
+	                            <p>Modelo</p>
+	                            CND's
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="footer">
+	                    <hr />
+	                    <div class="stats">
+	                        <i class="ti-download"></i> Baixar modelo
+	                    </div>
+	                </div>
+	            </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="content">
+            	<a href="{% url 'modelo:inicio' %}">
+	                <div class="row">
+	                    <div class="col-xs-5">
+	                        <div class="icon-big icon-success text-center">
+	                            <i class="ti-medall-alt"></i>
+	                        </div>
+	                    </div>
+	                    <div class="col-xs-7">
+	                        <div class="numbers">
+	                            <p>Modelo</p>
+	                            Declarações
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="footer">
+	                    <hr />
+	                    <div class="stats">
+	                        <i class="ti-download"></i> Baixar modelo
+	                    </div>
+	                </div>
+	            </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="content">
+                <a href="{% url 'modelo:inicio' %}">
+	                <div class="row">
+	                    <div class="col-xs-5">
+	                        <div class="icon-big icon-warning text-center">
+	                            <i class="ti-marker-alt"></i>
+	                        </div>
+	                    </div>
+	                    <div class="col-xs-7">
+	                        <div class="numbers">
+	                            <p>Modelo de</p>
+	                            Edital
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="footer">
+	                    <hr />
+	                    <div class="stats">
+	                        <i class="ti-download"></i> Baixar modelo
+	                    </div>
+	                </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

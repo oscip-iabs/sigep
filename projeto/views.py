@@ -9,20 +9,25 @@ from usuario.models import Usuario_Perfil, Notificacao_Usuario
 from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato, \
     Parceiro, Equipe_Projeto, Financeiro, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
 from projeto.utils import generate_project_key, generate_protocolo
+    Parceiro, Equipe_Projeto, Financeiro, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto, \
+    Parceiro_x_Projeto
+from projeto.utils import generate_project_key
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
     AvaliacaoAdequacaoForm, CadastroDadosBasicosPotencialForm, CadastroDocumentoPotencialForm, formContato, \
     CadastroDadosFinanceiroPotencialForm, CadastroDadosLocalizacaoPotencialForm, CadastroNucleoPotencialForm, \
     CadastroParceiroPotencialForm, formGastosFinanceiro, CadastroEstadoLocalizacaoForm, CadastroRegiaoLocalizacaoForm, \
-    CadastroMunicipioLocalizacaoForm, CadastroInternacionalLocalizacaoForm
+    CadastroMunicipioLocalizacaoForm, CadastroInternacionalLocalizacaoForm, ParceiroCadastradoForm
 
 
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 
+
 def is_admin(user):
     return user.groups.filter(name='iabs_admin').exists()
+
 
 def request_user(request):
     return request.user.email
@@ -390,6 +395,8 @@ def cadastro_finalizar_possibilidade(request, id_pos, chave_pos):
             )
             notify_user.save()
 
+            print 'teste'
+
             return redirect('/projeto/')
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_localizacao.html', locals(), )
@@ -412,11 +419,6 @@ def avaliar_possibilidade(request, id_pos, chave_pos):
     avaliacaoDadosForm = AvaliacaoDadosDisabledForm(request.POST or None, instance=possibilidade)
 
     novaAdequacao = AvaliacaoAdequacaoForm(request.POST or None)
-
-    estado_projeto = Estado_x_Projeto.objects.filter(projeto=possibilidade)
-    regiao_projeto = Regiao_x_Projeto.objects.filter(projeto=possibilidade)
-    municipio_projeto = Municipio_x_Projeto.objects.filter(projeto=possibilidade)
-    pais_projeto = Pais_x_Projeto.objects.filter(projeto=possibilidade)
 
     if request.method == 'POST':
         if novaAdequacao.is_valid():
@@ -452,7 +454,6 @@ def aprovar_possibilidade(request, id_pos, chave_pos):
     usuario = Usuario_Perfil.objects.get(email=request.user.email)
 
     if possibilidade.possibilidade_responsavel.email == usuario.email:
-        generate_protocolo(possibilidade)
         Projeto.objects.filter(id=possibilidade.id).update(status=status_aprovado)
     else:
         print 'USUARIO NEGADO'
@@ -895,8 +896,10 @@ def projeto_potencial_parceiros(request, id_potencial):
 
     formFinalizar = FinalizarCadastroForm(request.POST or None, instance=potencial_cadastro)
 
+    formParceirosCadastrados = ParceiroCadastradoForm(request.POST or None)
+
     try:
-        parceiro_cadastrado = Parceiro.objects.filter(projeto=potencial_cadastro)
+        parceiro_cadastrado = Parceiro_x_Projeto.objects.filter(projeto=potencial_cadastro)
     except:
         parceiro_empty = True
 
@@ -906,10 +909,16 @@ def projeto_potencial_parceiros(request, id_potencial):
 
     if request.method == 'POST':
         if formParceiro.is_valid():
-            projeto_obj = formParceiro.save(commit=False)
+            parceiro_obj = formParceiro.save(commit=False)
+            parceiro_obj.save()
+
+            saveParceiroProjeto = Parceiro_x_Projeto(
+                parceiro=parceiro_obj,
+                projeto=potencial_cadastro
+            )
+            saveParceiroProjeto.save()
+
             projeto_check = Projeto.objects.filter(id=id_potencial).update(check_projeto_potencial_cadastro_parceiro=True)
-            projeto_obj.projeto = potencial_cadastro
-            projeto_obj.save()
 
             now = datetime.datetime.now()
             usuario = Usuario_Perfil.objects.get(email=request.user.email)
@@ -929,8 +938,25 @@ def projeto_potencial_parceiros(request, id_potencial):
 
 @login_required
 @user_passes_test(is_admin)
-def delete_potencial_parceiros(request, id_potencial, id_parceiro):
-    potencial_parceiro = Parceiro.objects.get(id=int(id_parceiro))
+def vincular_parceiro(request, id_potencial):
+    obj_projeto = Projeto.objects.get(id=id_potencial)
+    formParceirosCadastrados = ParceiroCadastradoForm(request.POST or None)
+
+    if request.method == 'POST':
+        if formParceirosCadastrados.is_valid():
+            parceiro_obj = formParceirosCadastrados.save(commit=False)
+            parceiro_obj.projeto = obj_projeto
+            parceiro_obj.save()
+            obj_projeto.check_projeto_potencial_cadastro_parceiro = True
+            obj_projeto.save()
+
+    return redirect('/projeto/potencial/%s/parceiros' % id_potencial)
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_potencial_parceiros(request, id_potencial, id_parceiro_projeto):
+    potencial_parceiro = Parceiro_x_Projeto.objects.get(id=int(id_parceiro_projeto))
 
     try:
         potencial_parceiro.delete()
