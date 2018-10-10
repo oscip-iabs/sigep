@@ -41,11 +41,15 @@ class Projeto(models.Model):
     )
 
     date_created        = models.DateTimeField(auto_now_add=True)
+
+    num_protocolo = models.IntegerField(null=True, blank=True)
+    ano_protocolo = models.IntegerField(null=True, blank=True)
+    protocolo = models.CharField(max_length=10, blank=True, null=True, unique=True)
+
     titulo              = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Descreva o título/Objetivo')
     titulo_abreviado    = models.CharField(max_length=500, blank=True, null=True,  verbose_name=u'Descreva o título/Objetivo abreviado')
     apoiador            = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Instituição financiadora ou possível apoiador')
     chave               = models.CharField(max_length=15,   blank=True, null=True)
-    protocolo           = models.CharField(max_length=20,   blank=True, null=True)
     origem_projeto      = models.CharField(max_length=20,   blank=True, null=True)
     valor_estimado      = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Valor estimado', help_text=u'Valor em R$')
     tema_possibilidade  = models.CharField(max_length=1000, blank=True, null=True,  verbose_name=u'Descreva o tema')

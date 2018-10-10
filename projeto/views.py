@@ -8,7 +8,7 @@ from iabs_main.models import Geral_Status
 from usuario.models import Usuario_Perfil, Notificacao_Usuario
 from projeto.models import Projeto, Nucleo_x_Projeto, Historico_Projeto, Avaliacao_Possibilidade, Documento, Contato, \
     Parceiro, Equipe_Projeto, Financeiro, Estado_x_Projeto, Regiao_x_Projeto, Municipio_x_Projeto, Pais_x_Projeto
-from projeto.utils import generate_project_key
+from projeto.utils import generate_project_key, generate_protocolo
 
 from projeto.forms import InformacoesBasicasProjeto, CadastroDadosBasicosForm, CadastroNucleoForm, \
     CadastroDadosFinanceiroForm, CadastroDadosLocalizacaoForm, FinalizarCadastroForm, AvaliacaoDadosDisabledForm, \
@@ -390,8 +390,6 @@ def cadastro_finalizar_possibilidade(request, id_pos, chave_pos):
             )
             notify_user.save()
 
-            print 'teste'
-
             return redirect('/projeto/')
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_localizacao.html', locals(), )
@@ -414,6 +412,11 @@ def avaliar_possibilidade(request, id_pos, chave_pos):
     avaliacaoDadosForm = AvaliacaoDadosDisabledForm(request.POST or None, instance=possibilidade)
 
     novaAdequacao = AvaliacaoAdequacaoForm(request.POST or None)
+
+    estado_projeto = Estado_x_Projeto.objects.filter(projeto=possibilidade)
+    regiao_projeto = Regiao_x_Projeto.objects.filter(projeto=possibilidade)
+    municipio_projeto = Municipio_x_Projeto.objects.filter(projeto=possibilidade)
+    pais_projeto = Pais_x_Projeto.objects.filter(projeto=possibilidade)
 
     if request.method == 'POST':
         if novaAdequacao.is_valid():
@@ -449,6 +452,7 @@ def aprovar_possibilidade(request, id_pos, chave_pos):
     usuario = Usuario_Perfil.objects.get(email=request.user.email)
 
     if possibilidade.possibilidade_responsavel.email == usuario.email:
+        generate_protocolo(possibilidade)
         Projeto.objects.filter(id=possibilidade.id).update(status=status_aprovado)
     else:
         print 'USUARIO NEGADO'

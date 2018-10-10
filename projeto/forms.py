@@ -186,7 +186,6 @@ class AvaliacaoDadosDisabledForm(ModelForm):
             self.fields['descricao'].widget.attrs['readonly'] = True
             self.fields['valor_estimado'].widget.attrs['readonly'] = True
             self.fields['localizacao_mundial'].widget.attrs['readonly'] = True
-            self.fields['localizacao_abrangencia'].widget.attrs['readonly'] = True
             self.fields['localizacao_descricao'].widget.attrs['readonly'] = True
 
     class Meta:

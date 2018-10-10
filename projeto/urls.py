@@ -18,11 +18,11 @@ urlpatterns = [
 
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/localizacao/$',views.cadastro_localizacao_possibilidade, name='cadastro_localizacao_possibilidade'),
 
-    # url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/estado$',views.localizacao_save_estado, name='localizacao_save_estado'),
-    # url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/regiao$',views.localizacao_save_regiao, name='localizacao_save_regiao'),
-    # url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/municipio$',views.localizacao_save_municipio, name='localizacao_save_municipio'),
-    # url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/pais$',views.localizacao_save_pais, name='localizacao_save_pais'),
-    #
+    url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/estado$',views.localizacao_save_estado, name='localizacao_save_estado'),
+    url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/regiao$',views.localizacao_save_regiao, name='localizacao_save_regiao'),
+    url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/municipio$',views.localizacao_save_municipio, name='localizacao_save_municipio'),
+    url(r'^(?P<id_pos>[-\w\d]+)/(?P<chave_pos>[-\w\d]+)/localizacao/save/pais$',views.localizacao_save_pais, name='localizacao_save_pais'),
+
 
     url(r'^(?P<id_pos>[-\w\d]+)/cadastro/(?P<chave_pos>[-\w\d]+)/finalizar/$',views.cadastro_finalizar_possibilidade, name='cadastro_finalizar_possibilidade'),
 
