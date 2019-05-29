@@ -53,7 +53,7 @@
             {#AREA DE ABRANGENCIA SELECIONADA COMO "NACIONAL"#}
             {% if show_form_abrangencia %}
                 {% if show_form_estado %}
-                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/estado">
+                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/estado/">
                 {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-10 col-xs-12">
@@ -73,7 +73,7 @@
             {#AREA DE ABRANGENCIA SELECIONADA COMO "REGIONAL"#}
             {% if show_form_abrangencia %}
                 {% if show_form_regional %}
-                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/regiao">
+                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/regiao/">
                 {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-10 col-xs-12">
@@ -93,7 +93,7 @@
             {#AREA DE ABRANGENCIA SELECIONADA COMO "ESTADUAL"#}
             {% if show_form_abrangencia %}
                 {% if show_form_estadual %}
-                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/estado">
+                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/estado/">
                 {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-10 col-xs-12">
@@ -113,7 +113,7 @@
             {#AREA DE ABRANGENCIA SELECIONADA COMO "MUNICIPAL"#}
             {% if show_form_abrangencia %}
                 {% if show_form_municipio %}
-                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/municipio">
+                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/municipio/">
                 {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-10 col-xs-12">
@@ -133,7 +133,7 @@
             {#AREA DE ABRANGENCIA SELECIONADA COMO "INTERNACIONAL"#}
             {% if show_form_abrangencia %}
                 {% if show_form_internacional %}
-                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/pais">
+                <form method="POST" action="/projeto/potencial/{{ id_potencial }}/localizacao/save/pais/">
                 {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-10 col-xs-12">

@@ -286,7 +286,7 @@ def cadastro_localizacao_possibilidade(request, id_pos, chave_pos):
             # )
             # historicProject.save()
 
-            return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+            return redirect('/projeto/%s/cadastro/%s/localizacao/' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_localizacao.html', locals(), )
 
@@ -305,7 +305,7 @@ def localizacao_save_estado(request, id_pos, chave_pos):
             estado_loc_obj.projeto = obj_projeto
             estado_loc_obj.save()
 
-    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+    return redirect('/projeto/%s/cadastro/%s/localizacao/' % (id_pos, chave_pos))
 
 
 @login_required
@@ -321,7 +321,7 @@ def localizacao_save_regiao(request, id_pos, chave_pos):
             regiao_loc_obj.projeto = obj_projeto
             regiao_loc_obj.save()
 
-    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+    return redirect('/projeto/%s/cadastro/%s/localizacao/' % (id_pos, chave_pos))
 
 
 @login_required
@@ -337,7 +337,7 @@ def localizacao_save_municipio(request, id_pos, chave_pos):
             municipio_loc_obj.projeto = obj_projeto
             municipio_loc_obj.save()
 
-    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+    return redirect('/projeto/%s/cadastro/%s/localizacao/' % (id_pos, chave_pos))
 
 
 @login_required
@@ -353,7 +353,7 @@ def localizacao_save_pais(request, id_pos, chave_pos):
             pais_loc_obj.projeto = obj_projeto
             pais_loc_obj.save()
 
-    return redirect('/projeto/%s/cadastro/%s/localizacao' % (id_pos, chave_pos))
+    return redirect('/projeto/%s/cadastro/%s/localizacao/' % (id_pos, chave_pos))
 
 
 # metodo para finalizar e definir responsavel pela possibilidade
@@ -748,7 +748,7 @@ def projeto_potencial_localizacao(request, id_potencial):
             localizacao_obj.save()
             Projeto.objects.filter(id=id_potencial).update(check_projeto_potencial_cadastro_localizacao=False)
 
-            return redirect('/projeto/potencial/%s/localizacao' % id_potencial)
+            return redirect('/projeto/potencial/%s/localizacao/' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/localizacao.html', locals(), )
 
@@ -767,7 +767,7 @@ def localizacao_potencial_save_estado(request, id_potencial):
             estado_loc_obj.projeto = obj_projeto
             estado_loc_obj.save()
 
-    return redirect('/projeto/potencial/%s/localizacao' % id_potencial)
+    return redirect('/projeto/potencial/%s/localizacao/' % id_potencial)
 
 
 @login_required
@@ -783,7 +783,7 @@ def localizacao_potencial_save_regiao(request, id_potencial):
             regiao_loc_obj.projeto = obj_projeto
             regiao_loc_obj.save()
 
-    return redirect('/projeto/potencial/%s/localizacao' % id_potencial)
+    return redirect('/projeto/potencial/%s/localizacao/' % id_potencial)
 
 
 @login_required
@@ -799,7 +799,7 @@ def localizacao_potencial_save_municipio(request, id_potencial):
             municipio_loc_obj.projeto = obj_projeto
             municipio_loc_obj.save()
 
-    return redirect('/projeto/potencial/%s/localizacao' % id_potencial)
+    return redirect('/projeto/potencial/%s/localizacao/' % id_potencial)
 
 
 @login_required
@@ -815,7 +815,7 @@ def localizacao_potencial_save_pais(request, id_potencial):
             pais_loc_obj.projeto = obj_projeto
             pais_loc_obj.save()
 
-    return redirect('/projeto/potencial/%s/localizacao' % id_potencial)
+    return redirect('/projeto/potencial/%s/localizacao/' % id_potencial)
 
 
 @login_required

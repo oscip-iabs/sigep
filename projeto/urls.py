@@ -40,10 +40,10 @@ urlpatterns = [
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/nucleo/delete/(?P<id_nucleo>[-\w\d]+)$', views.delete_potencial_nucleo, name='projeto_potencial_nucleo'),
 
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/$', views.projeto_potencial_localizacao, name='projeto_potencial_localizacao'),
-    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/estado$',views.localizacao_potencial_save_estado, name='localizacao_potencial_save_estado'),
-    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/regiao$',views.localizacao_potencial_save_regiao, name='localizacao_potencial_save_regiao'),
-    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/municipio$',views.localizacao_potencial_save_municipio, name='localizacao_potencial_save_municipio'),
-    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/pais$',views.localizacao_potencial_save_pais, name='localizacao_potencial_save_pais'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/estado/$',views.localizacao_potencial_save_estado, name='localizacao_potencial_save_estado'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/regiao/$',views.localizacao_potencial_save_regiao, name='localizacao_potencial_save_regiao'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/municipio/$',views.localizacao_potencial_save_municipio, name='localizacao_potencial_save_municipio'),
+    url(r'^potencial/(?P<id_potencial>[-\w\d]+)/localizacao/save/pais/$',views.localizacao_potencial_save_pais, name='localizacao_potencial_save_pais'),
 
 
     url(r'^potencial/(?P<id_potencial>[-\w\d]+)/documentos/$', views.projeto_potencial_documentos, name='projeto_potencial_documentos'),
