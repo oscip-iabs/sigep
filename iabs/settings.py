@@ -32,7 +32,7 @@ SECRET_KEY = '&9tydww#hu5)chp8*vax_-2u8@#^etjmvpo=33*k0-4)0(m!!3'
 DEBUG = True
 # DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['iabs.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['iabs.herokuapp.com', 'localhost', '*']
 
 
 # Application definition
@@ -172,4 +172,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_URL = '/usuario/login'
 
-APPEND_SLASH=False
+# APPEND_SLASH=False

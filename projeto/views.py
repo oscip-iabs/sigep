@@ -72,7 +72,7 @@ def add_possibilidade(request):
 
             historicProject.save()
 
-            return redirect('/projeto')
+            return redirect('/projeto/')
 
     return render(request, 'projeto/cadastro_possibilidade/possibilidade_inicio.html', locals(),)
 
@@ -106,7 +106,7 @@ def cadastro_dados_basicos_possibilidade(request, id_pos, chave_pos):
             )
             historicProject.save()
 
-            return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_pos, chave_pos))
+            return redirect('/projeto/%s/cadastro/%s/dadosbasicos/' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_basicos.html', locals(), )
 
@@ -142,7 +142,7 @@ def cadastro_dados_financeiros_possibilidade(request, id_pos, chave_pos):
             )
             historicProject.save()
 
-            return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros' % (id_pos, chave_pos))
+            return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros/' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_financeiros.html', locals(), )
 
@@ -185,7 +185,7 @@ def cadastro_nucleo_possibilidade(request, id_pos, chave_pos):
             )
             historicProject.save()
 
-            return redirect('/projeto/%s/cadastro/%s/nucleo' % (id_pos, chave_pos))
+            return redirect('/projeto/%s/cadastro/%s/nucleo/' % (id_pos, chave_pos))
 
     return render(request, 'projeto/cadastro_possibilidade/cadastro_comp_dados_nucleo.html', locals(), )
 
@@ -211,7 +211,7 @@ def delete_possibilidade_nucleo(request, id_pos, chave_pos, id_nucleo):
     except:
         print('Ops')
 
-    return redirect('/projeto/%s/cadastro/%s/nucleo' % (id_pos, chave_pos))
+    return redirect('/projeto/%s/cadastro/%s/nucleo/' % (id_pos, chave_pos))
 
 
 # Informações referente a localizacao e area de atuacao
@@ -439,7 +439,7 @@ def avaliar_possibilidade(request, id_pos, chave_pos):
             )
             historicProject.save()
 
-            return redirect('/projeto/%s/possibilidade/%s/avaliar' % (id_pos, chave_pos))
+            return redirect('/projeto/%s/possibilidade/%s/avaliar/' % (id_pos, chave_pos))
 
 
     return render(request, 'projeto/avaliacao_possibilidade/avaliacao_inicial.html', locals(), )
@@ -459,7 +459,7 @@ def aprovar_possibilidade(request, id_pos, chave_pos):
     else:
         print 'USUARIO NEGADO'
 
-    return redirect('/projeto/potencial')
+    return redirect('/projeto/potencial/')
 
 
 @login_required
@@ -503,7 +503,7 @@ def projeto_potencial_dadosbasicos(request, id_potencial):
             )
             historicProject.save()
 
-            return redirect('/projeto/potencial/%s/dadosbasicos' % id_potencial)
+            return redirect('/projeto/potencial/%s/dadosbasicos/' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/dadosbasicos.html', locals(),)
 
@@ -538,7 +538,7 @@ def projeto_potencial_dadosfinanceiros(request, id_potencial):
             )
             historicProject.save()
 
-            return redirect('/projeto/potencial/%s/dadosfinanceiros' % id_potencial)
+            return redirect('/projeto/potencial/%s/dadosfinanceiros/' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/dadosfinanceiro.html', locals(),)
 
@@ -584,7 +584,7 @@ def projeto_potencial_nucleo(request, id_potencial):
             )
             historicProject.save()
 
-            return redirect('/projeto/potencial/%s/nucleo' % id_potencial)
+            return redirect('/projeto/potencial/%s/nucleo/' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/nucleo.html', locals(),)
 
@@ -611,7 +611,7 @@ def confirmar_potencial_nucleo(request, id_potencial):
     except:
         print("Ops!")
 
-    return redirect('/projeto/potencial/%s/nucleo' % id_potencial)
+    return redirect('/projeto/potencial/%s/nucleo/' % id_potencial)
 
 
 @login_required
@@ -635,7 +635,7 @@ def delete_potencial_nucleo(request, id_potencial, id_nucleo):
     except:
         print('Ops')
 
-    return redirect('/projeto/potencial/%s/nucleo' % (id_potencial))
+    return redirect('/projeto/potencial/%s/nucleo/' % (id_potencial))
 
 
 @login_required
@@ -857,7 +857,7 @@ def projeto_potencial_documentos(request, id_potencial):
             )
             historicProject.save()
 
-            return redirect('/projeto/potencial/%s/documentos' % (id_potencial))
+            return redirect('/projeto/potencial/%s/documentos/' % (id_potencial))
 
     return render(request, 'projeto/potencial/cadastros/documentos.html', locals(),)
 
@@ -883,7 +883,7 @@ def delete_potencial_documentos(request, id_potencial, id_documento):
     except:
         print('Ops')
 
-    return redirect('/projeto/potencial/%s/documentos' % id_potencial)
+    return redirect('/projeto/potencial/%s/documentos/' % id_potencial)
 
 
 @login_required
@@ -928,7 +928,7 @@ def projeto_potencial_parceiros(request, id_potencial):
             )
             historicProject.save()
 
-            return redirect('/projeto/potencial/%s/parceiros' % id_potencial)
+            return redirect('/projeto/potencial/%s/parceiros/' % id_potencial)
 
     return render(request, 'projeto/potencial/cadastros/parceiros.html', locals(),)
 
@@ -947,7 +947,7 @@ def vincular_parceiro(request, id_potencial):
             obj_projeto.check_projeto_potencial_cadastro_parceiro = True
             obj_projeto.save()
 
-    return redirect('/projeto/potencial/%s/parceiros' % id_potencial)
+    return redirect('/projeto/potencial/%s/parceiros/' % id_potencial)
 
 
 @login_required
@@ -971,7 +971,7 @@ def delete_potencial_parceiros(request, id_potencial, id_parceiro_projeto):
     except:
         print('Ops')
 
-    return redirect('/projeto/potencial/%s/parceiros' % id_potencial)
+    return redirect('/projeto/potencial/%s/parceiros/' % id_potencial)
 
 
 # metodo para finalizar e definir responsavel pelo projeto potencial
@@ -1014,7 +1014,7 @@ def cadastro_finalizar_projeto_potencial(request, id_potencial, chave_potencial)
 
             return redirect('/projeto/potencial/')
 
-    return redirect('/projeto/potencial/%s/documentos' % (id_potencial))
+    return redirect('/projeto/potencial/%s/documentos/' % (id_potencial))
 
 
 @login_required
@@ -1062,9 +1062,9 @@ def cadastro_dados_basicos_contato(request, id_proj, situacao_projeto):
             historicProject.save()
 
     if situacao_projeto == 'possibilidade':
-        return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_proj, obj_projeto.chave))
+        return redirect('/projeto/%s/cadastro/%s/dadosbasicos/' % (id_proj, obj_projeto.chave))
     elif situacao_projeto == 'potencial':
-        return redirect('/projeto/potencial/%s/dadosbasicos' % id_proj)
+        return redirect('/projeto/potencial/%s/dadosbasicos/' % id_proj)
 
     return redirect('/')
 
@@ -1096,9 +1096,9 @@ def delete_dados_basicos_contato(request, id_proj, id_contato, situacao_projeto)
         print('Ops')
 
     if situacao_projeto == 'possibilidade':
-        return redirect('/projeto/%s/cadastro/%s/dadosbasicos' % (id_proj, contato.projeto.chave))
+        return redirect('/projeto/%s/cadastro/%s/dadosbasicos/' % (id_proj, contato.projeto.chave))
     elif situacao_projeto == 'potencial':
-        return redirect('/projeto/potencial/%s/dadosbasicos' % id_proj)
+        return redirect('/projeto/potencial/%s/dadosbasicos/' % id_proj)
 
     return redirect('/')
 
@@ -1136,9 +1136,9 @@ def cadastro_dados_financeiros_gasto(request, id_proj, fase_projeto):
             historicProject.save()
 
     if fase_projeto == 'possibilidade':
-        return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros' % (id_proj, obj_projeto.chave))
+        return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros/' % (id_proj, obj_projeto.chave))
     elif fase_projeto == 'potencial':
-        return redirect('/projeto/potencial/%s/dadosfinanceiros' % id_proj)
+        return redirect('/projeto/potencial/%s/dadosfinanceiros/' % id_proj)
 
     return redirect('/')
 
@@ -1171,9 +1171,9 @@ def delete_dados_financeiros_gasto(request, id_proj, id_gasto, fase_projeto):
         print('Ops')
 
     if fase_projeto == 'possibilidade':
-        return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros' % (id_proj, gastoFinanceiro.projeto.chave))
+        return redirect('/projeto/%s/cadastro/%s/dadosfinanceiros/' % (id_proj, gastoFinanceiro.projeto.chave))
     elif fase_projeto == 'potencial':
-        return redirect('/projeto/potencial/%s/dadosfinanceiros' % id_proj)
+        return redirect('/projeto/potencial/%s/dadosfinanceiros/' % id_proj)
 
     return redirect('/')
 
@@ -1211,9 +1211,9 @@ def eliminar_projeto(request, id_proj, fase_projeto):
         print('Ops')
 
     if fase_projeto == 'possibilidade':
-        return redirect('/projeto')
+        return redirect('/projeto/')
     elif fase_projeto == 'potencial':
-        return redirect('/projeto/potencial')
+        return redirect('/projeto/potencial/')
 
     return redirect('/')
 
